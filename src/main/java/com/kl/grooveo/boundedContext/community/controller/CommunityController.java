@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.Principal;
 import java.util.List;
 
 @RequestMapping("/community")
@@ -27,6 +26,13 @@ public class CommunityController {
         List<Community> communityList = this.communityService.getList();
         model.addAttribute("communityList", communityList);
         return "usr/community/list";
+    }
+
+    @GetMapping(value = "/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Long id) throws Exception {
+        Community community = this.communityService.getMoreInformation(id);
+        model.addAttribute("community", community);
+        return "usr/community/detail";
     }
 
     @GetMapping("/create")

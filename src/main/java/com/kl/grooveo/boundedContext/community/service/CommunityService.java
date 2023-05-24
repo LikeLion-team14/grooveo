@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -14,6 +15,15 @@ public class CommunityService {
     private final CommunityRepository communityRepository;
     public List<Community> getList() {
         return this.communityRepository.findAll();
+    }
+
+    public Community getMoreInformation(Long id) throws Exception{
+        Optional<Community> community = this.communityRepository.findById(id);
+        if (community.isPresent()) {
+            return community.get();
+        } else {
+            throw new Exception();
+        }
     }
 
     public void create(String title, String category, String content, String user) {
