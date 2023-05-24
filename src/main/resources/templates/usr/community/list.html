@@ -1,0 +1,20 @@
+<table>
+  <thead>
+  <tr>
+    <th>번호</th>
+    <th>카테고리</th>
+    <th>제목</th>
+    <th>글쓴이</th>
+    <th>날짜</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="community : ${communityList}">
+    <td th:text="${community.id}"></td>
+    <td th:text="${community.category}"></td>
+    <td th:text="${community.title}"></td>
+    <td th:text="${community.author}"></td>
+    <td th:text="${community.createDate}"></td>
+  </tr>
+  </tbody>
+</table>
