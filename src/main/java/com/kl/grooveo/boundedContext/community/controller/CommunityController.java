@@ -5,7 +5,6 @@ import com.kl.grooveo.boundedContext.community.form.CommunityForm;
 import com.kl.grooveo.boundedContext.community.service.CommunityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
@@ -25,26 +23,26 @@ public class CommunityController {
     private final CommunityService communityService;
 
     @GetMapping("/list")
-    public String list(Model model) {
+    public String showList(Model model) {
         List<Community> communityList = this.communityService.getList();
         model.addAttribute("communityList", communityList);
         return "usr/community/list";
     }
 
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Long id) throws Exception {
+    public String showMoreDetail(Model model, @PathVariable("id") Long id) throws Exception {
         Community community = this.communityService.getMoreInformation(id);
         model.addAttribute("community", community);
         return "usr/community/detail";
     }
 
     @GetMapping("/create")
-    public String questionCreate(Model model, CommunityForm communityForm) {
+    public String communityCreate(Model model, CommunityForm communityForm) {
         return "usr/community/form";
     }
 
     @PostMapping("/create")
-    public String questionCreate(Model model, @Valid CommunityForm communityForm, BindingResult bindingResult) {
+    public String communityCreate(Model model, @Valid CommunityForm communityForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "usr/community/form";
         }
@@ -55,7 +53,7 @@ public class CommunityController {
     }
 
     @GetMapping("/delete/{id}")
-    public String questionDelete(Principal principal, @PathVariable("id") Long id) throws Exception {
+    public String communityDelete(Principal principal, @PathVariable("id") Long id) throws Exception {
         Community community = this.communityService.getCommunity(id);
 //        if (!community.getAuthor().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
@@ -65,7 +63,7 @@ public class CommunityController {
     }
 
     @GetMapping("/modify/{id}")
-    public String questionModify(CommunityForm communityForm, @PathVariable("id") Long id, Principal principal) throws Exception {
+    public String communityModify(CommunityForm communityForm, @PathVariable("id") Long id, Principal principal) throws Exception {
         Community community = this.communityService.getCommunity(id);
 //        if(!community.getAuthor().getUsername().equals(principal.getName())) {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
@@ -77,7 +75,7 @@ public class CommunityController {
     }
 
     @PostMapping("/modify/{id}")
-    public String questionModify(@Valid CommunityForm communityForm, BindingResult bindingResult,
+    public String communityModify(@Valid CommunityForm communityForm, BindingResult bindingResult,
                                  Principal principal, @PathVariable("id") Long id) throws Exception {
         if (bindingResult.hasErrors()) {
             return "usr/community/form";
