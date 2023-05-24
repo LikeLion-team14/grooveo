@@ -1,0 +1,18 @@
+<div>
+  <h3>게시글 등록</h3>
+  <form th:object="${communityForm}" method="post">
+    <div>
+      <label for="title" class="form-label">제목</label><br/>
+      <input type="text" th:field="*{title}" class="form-control">
+    </div>
+    <div>
+      <label for="category" class="form-label">카테고리</label><br/>
+      <input type="text" th:field="*{category}" class="form-control">
+    </div>
+    <div>
+      <label for="content" class="form-label">내용</label><br/>
+      <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
+    </div>
+    <input type="submit" value="저장하기">
+  </form>
+</div>

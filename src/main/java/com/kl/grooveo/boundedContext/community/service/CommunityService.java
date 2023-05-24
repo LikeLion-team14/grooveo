@@ -5,6 +5,7 @@ import com.kl.grooveo.boundedContext.community.repository.CommunityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -13,5 +14,15 @@ public class CommunityService {
     private final CommunityRepository communityRepository;
     public List<Community> getList() {
         return this.communityRepository.findAll();
+    }
+
+    public void create(String title, String category, String content, String user) {
+        Community community = new Community();
+        community.setTitle(title);
+        community.setContent(content);
+        community.setAuthor(user);
+        community.setCreateDate(LocalDateTime.now());
+        community.setCategory(category);
+        this.communityRepository.save(community);
     }
 }
