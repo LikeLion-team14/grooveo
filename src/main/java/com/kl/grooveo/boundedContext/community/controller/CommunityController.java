@@ -5,6 +5,7 @@ import com.kl.grooveo.boundedContext.community.form.CommunityForm;
 import com.kl.grooveo.boundedContext.community.service.CommunityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequestMapping("/community")
@@ -49,5 +52,15 @@ public class CommunityController {
 
         this.communityService.create(communityForm.getTitle(), communityForm.getCategory(), communityForm.getContent(), author);
         return "redirect:/community/list";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String questionDelete(Principal principal, @PathVariable("id") Long id) throws Exception {
+        Community community = this.communityService.getCommunity(id);
+//        if (!community.getAuthor().getUsername().equals(principal.getName())) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+//        }
+        this.communityService.delete(community);
+        return "redirect:/community";
     }
 }

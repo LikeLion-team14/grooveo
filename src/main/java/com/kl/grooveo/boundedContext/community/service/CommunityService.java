@@ -35,4 +35,17 @@ public class CommunityService {
         community.setCategory(category);
         this.communityRepository.save(community);
     }
+
+    public Community getCommunity(Long id) throws Exception {
+        Optional<Community> community = this.communityRepository.findById(id);
+        if (community.isPresent()) {
+            return community.get();
+        } else {
+            throw new Exception();
+        }
+    }
+
+    public void delete(Community community) {
+        this.communityRepository.delete(community);
+    }
 }
