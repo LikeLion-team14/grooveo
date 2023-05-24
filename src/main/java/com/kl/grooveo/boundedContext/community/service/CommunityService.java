@@ -48,4 +48,12 @@ public class CommunityService {
     public void delete(Community community) {
         this.communityRepository.delete(community);
     }
+
+    public void modify(Community community, String title, String category, String content, String user) {
+        community.setTitle(title);
+        community.setContent(content);
+        community.setModifyDate(LocalDateTime.now());
+        community.setCategory(category);
+        this.communityRepository.save(community);
+    }
 }
