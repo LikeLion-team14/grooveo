@@ -139,6 +139,12 @@
             form.email.focus();
             return;
         }
+        // 비밀번호 != 비밀번호 재확인
+        if (form.confirmPassword.value !== form.memberPassword.value) {
+            form.confirmPassword.focus();
+            toastWarning('비밀번호와 비밀번호 확인이 다릅니다.');
+            return;
+        }
 
         form.submit();
     }
