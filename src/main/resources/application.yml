@@ -1,6 +1,10 @@
 server:
   port: 8080 # 포트번호 8080
 spring:
+  mvc:
+    hiddenmethod:      # @DeleteMapping 사용 위해
+      filter:
+        enabled: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/grooveo__dev?serverTimezone=Asia/Seoul
