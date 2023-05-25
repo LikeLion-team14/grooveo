@@ -1,0 +1,225 @@
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <title>회원가입</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">
+    <script src="/resource/common/common.js"></script>
+</head>
+
+<body>
+
+<!-- 데이지 UI 불러오기 -->
+<link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css"/>
+<!-- 테일윈드 불러오기 -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+    function JoinForm__submit(form) {
+        // username 이(가) 올바른지 체크
+        form.memberId.value = form.memberId.value.trim(); // 입력란의 입력값에 있을지 모르는 좌우공백제거
+
+        if (form.memberId.value.length === 0) {
+            toastWarning('아이디를 입력해주세요.');
+            form.memberId.focus();
+            return;
+        }
+
+        if (form.memberId.value.length < 3) {
+            toastWarning('아이디를 3자 이상 입력해주세요.');
+            form.memberId.focus();
+            return;
+        }
+        if (form.memberId.value.length > 30) {
+            toastWarning('아이디를 30자 이하 입력해주세요.');
+            form.memberId.focus();
+            return;
+        }
+
+        // password 이(가) 올바른지 체크
+        form.memberPassword.value = form.memberPassword.value.trim();
+
+        if (form.memberPassword.value.length === 0) {
+            form.memberPassword.focus();
+            toastWarning('비밀번호를 입력해주세요.');
+            return;
+        }
+
+        if (form.memberPassword.value.length < 4) {
+            toastWarning('비밀번호를 4자 이상 입력해주세요.');
+            form.memberPassword.focus();
+            return;
+        }
+
+        if (form.memberPassword.value.length > 30) {
+            toastWarning('비밀번호를 30자 이하 입력해주세요.');
+            form.memberPassword.focus();
+            return;
+        }
+
+        // confirmPassword 이(가) 올바른지 체크
+        form.confirmPassword.value = form.confirmPassword.value.trim();
+
+        if (form.confirmPassword.value.length === 0) {
+            form.confirmPassword.focus();
+            toastWarning('비밀번호 확인을 입력해주세요.');
+            return;
+        }
+
+        if (form.confirmPassword.value.length < 4) {
+            toastWarning('비밀번호 확인을 4자 이상 입력해주세요.');
+            form.confirmPassword.focus();
+            return;
+        }
+
+        if (form.confirmPassword.value.length > 30) {
+            toastWarning('비밀번호 확인을 30자 이하 입력해주세요.');
+            form.confirmPassword.focus();
+            return;
+        }
+
+        // name 이(가) 올바른지 체크
+        form.name.value = form.name.value.trim();
+
+        if (form.name.value.length === 0) {
+            form.memberPassword.focus();
+            toastWarning('이름을 입력해주세요.');
+            return;
+        }
+
+        if (form.name.value.length < 2) {
+            toastWarning('이름을 2자 이상 입력해주세요.');
+            form.name.focus();
+            return;
+        }
+
+        if (form.name.value.length > 10) {
+            toastWarning('이름을 10자 이하 입력해주세요.');
+            form.name.focus();
+            return;
+        }
+
+        // nickName 이(가) 올바른지 체크
+        form.nickName.value = form.nickName.value.trim();
+
+        if (form.nickName.value.length === 0) {
+            form.nickName.focus();
+            toastWarning('닉네임을 입력해주세요.');
+            return;
+        }
+
+        if (form.nickName.value.length < 2) {
+            toastWarning('닉네임을 2자 이상 입력해주세요.');
+            form.nickName.focus();
+            return;
+        }
+
+        if (form.nickName.value.length > 10) {
+            toastWarning('닉네임을 10자 이하 입력해주세요.');
+            form.nickName.focus();
+            return;
+        }
+
+        // email 이(가) 올바른지 체크
+        if (form.email.value.length === 0) {
+            form.email.focus();
+            toastWarning('이메일을 입력해주세요.');
+            return;
+        }
+
+        if (isValidEmail(form.email.value) === false) {
+            toastWarning('이메일 형식으로 입력해주세요.');
+            form.email.focus();
+            return;
+        }
+
+        if (form.email.value.length > 30) {
+            toastWarning('이메일 총길이가 30자 이하로 입력해주세요.');
+            form.email.focus();
+            return;
+        }
+
+        form.submit();
+    }
+
+    function isValidEmail(email) {
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return regex.test(email);
+    }
+</script>
+
+<div class="max-w-2xl w-full px-4">
+    <h1 class="mb-4">
+        <i class="fa-solid fa-user-plus"></i>
+        회원가입
+    </h1>
+
+    <form th:action method="POST" class="flex flex-col gap-6" onsubmit="JoinForm__submit(this); return false;">
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">아이디</span>
+            </label>
+            <input type="text" name="memberId" placeholder="아이디" class="input input-bordered" autofocus/>
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">비빌번호</span>
+            </label>
+            <input type="password" name="memberPassword" placeholder="비빌번호" class="input input-bordered"/>
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">비빌번호 확인</span>
+            </label>
+            <input type="password" name="confirmPassword" placeholder="비빌번호 확인" class="input input-bordered"/>
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">이름</span>
+            </label>
+            <input type="text" name="name" placeholder="이름" class="input input-bordered" autofocus/>
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">닉네임</span>
+            </label>
+            <input type="text" name="nickName" placeholder="닉네임" class="input input-bordered" autofocus/>
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">이메일</span>
+            </label>
+            <input type="text" name="email" maxlength="30" placeholder="이메일" class="input input-bordered">
+        </div>
+
+        <button id="btn-join-1" class="btn btn-block btn-primary gap-1">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>회원가입</span>
+        </button>
+
+        <a href="/oauth2/authorization/kakao" class="btn btn-block btn-outline gap-1">
+            <i class="fa-solid fa-comment text-[color:#ffe812]"></i>
+            <span>카카오 로그인</span>
+        </a>
+
+        <a href="/oauth2/authorization/naver" class="btn btn-block btn-outline gap-1">
+            <i class="fa-solid fa-n text-[color:#2DB400]"></i>
+            <span>네이버 로그인</span>
+        </a>
+
+        <a href="/oauth2/authorization/google" class="btn btn-block btn-outline gap-1">
+            <i class="fa-brands fa-google text-[color:#ff4000]"></i>
+            <span>구글 로그인</span>
+        </a>
+    </form>
+</div>
+
+</body>
+
+</html>
