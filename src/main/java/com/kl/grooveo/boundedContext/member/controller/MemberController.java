@@ -7,6 +7,7 @@ import com.kl.grooveo.boundedContext.member.entity.JoinForm;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +22,13 @@ public class MemberController {
     private final MemberService memberService;
     private final Rq rq;
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
     public String showJoin() {
         return "/member/join";
     }
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     public String join(@Valid JoinForm joinForm) {
         RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(),
@@ -38,9 +41,9 @@ public class MemberController {
         return rq.redirectWithMsg("/member/login", joinRs);
     }
 
-
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login() {
-        return "/member/login";
+        return "member/login";
     }
 }
