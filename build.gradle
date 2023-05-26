@@ -32,6 +32,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 }
 
 tasks.named('test') {
