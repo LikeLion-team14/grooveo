@@ -15,8 +15,8 @@ import lombok.experimental.SuperBuilder;
 public class Member extends BaseEntity {
 
     @Column(unique = true)
-    private String memberId;
-    private String memberPassword;
+    private String username;
+    private String password;
     private String name;
     @Column(unique = true)
     private String nickName;

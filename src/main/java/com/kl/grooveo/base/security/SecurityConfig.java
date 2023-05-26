@@ -15,11 +15,11 @@ public class SecurityConfig {
         http
                 .formLogin(
                         formLogin -> formLogin
-                                .loginPage("/usr/member/login")
+                                .loginPage("/member/login")
                 )
                 .logout(
                         logout -> logout
-                                .logoutUrl("/usr/member/logout")
+                                .logoutUrl("/member/logout")
                 );
 
         return http.build();

@@ -19,21 +19,21 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public Optional<Member> findByMemberId(String memberId) {
-        return memberRepository.findByMemberId(memberId);
+    public Optional<Member> findByUsername(String username) {
+        return memberRepository.findByUsername(username);
     }
 
     @Transactional
-    public RsData<Member> join(String memberId, String memberPassword, String name, String nickName, String email) {
+    public RsData<Member> join(String username, String password, String name, String nickName, String email) {
 
-        if(findByMemberId(memberId).isPresent()) {
-            return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(memberId));
+        if (findByUsername(username).isPresent()) {
+            return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(username));
         }
 
         Member member = Member
                 .builder()
-                .memberId(memberId)
-                .memberPassword(passwordEncoder.encode(memberPassword))
+                .username(username)
+                .password(passwordEncoder.encode(password))
                 .name(name)
                 .nickName(nickName)
                 .email(email)

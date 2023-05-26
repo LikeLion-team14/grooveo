@@ -28,11 +28,8 @@ public class MemberController {
 
     @PostMapping("/join")
     public String join(@Valid JoinForm joinForm) {
-        RsData<Member> joinRs = memberService.join(joinForm.getMemberId(), joinForm.getMemberPassword(),
+        RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(),
                 joinForm.getName(), joinForm.getNickName(), joinForm.getEmail());
-        if (!joinForm.getMemberPassword().equals(joinForm.getConfirmPassword())) {
-            return rq.historyBack("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-        }
 
         if (joinRs.isFail()) {
             return rq.historyBack(joinRs);

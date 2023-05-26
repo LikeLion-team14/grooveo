@@ -12,11 +12,11 @@ public class JoinForm {
 
     @NotBlank
     @Size(min = 3, max = 30)
-    private String memberId;
+    private String username;
 
     @NotBlank
     @Size(min = 3, max = 30)
-    private String memberPassword;
+    private String password;
 
     @NotBlank
     @Size(min = 3, max = 30)
