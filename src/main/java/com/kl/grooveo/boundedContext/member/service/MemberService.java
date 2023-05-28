@@ -60,7 +60,7 @@ public class MemberService {
             return RsData.of("S-2", "로그인 되었습니다.", opMember.get());
         }
 
-        return join(providerTypeCode, username, "", "", "", "");
+        return join(providerTypeCode, username, "", "", null, null);
     }
 
 }

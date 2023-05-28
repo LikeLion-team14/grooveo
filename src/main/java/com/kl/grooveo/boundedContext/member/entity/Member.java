@@ -29,7 +29,6 @@ public class Member extends BaseEntity {
     private String email;
     @Builder.Default
     private String role = "user";
-
     private String providerTypeCode;
 
     public List<? extends GrantedAuthority> getGrantedAuthorities() {
