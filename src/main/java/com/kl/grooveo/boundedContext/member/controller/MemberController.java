@@ -3,20 +3,19 @@ package com.kl.grooveo.boundedContext.member.controller;
 import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.member.entity.Member;
-import com.kl.grooveo.boundedContext.member.entity.JoinForm;
+import com.kl.grooveo.boundedContext.member.form.JoinForm;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/usr/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -25,7 +24,7 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
     public String showJoin() {
-        return "/member/join";
+        return "usr/member/join";
     }
 
     @PreAuthorize("isAnonymous()")
@@ -38,12 +37,12 @@ public class MemberController {
             return rq.historyBack(joinRs);
         }
 
-        return rq.redirectWithMsg("/member/login", joinRs);
+        return rq.redirectWithMsg("/usr/member/login", joinRs);
     }
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String login() {
-        return "member/login";
+        return "usr/member/login";
     }
 }

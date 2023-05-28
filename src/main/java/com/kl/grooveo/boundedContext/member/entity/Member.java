@@ -7,6 +7,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,5 +29,17 @@ public class Member extends BaseEntity {
     private String email;
     @Builder.Default
     private String role = "user";
+    private String providerTypeCode;
 
+    public List<? extends GrantedAuthority> getGrantedAuthorities() {
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+
+        grantedAuthorities.add(new SimpleGrantedAuthority("user"));
+
+        if ("admin".equals(username)) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
+        }
+
+        return grantedAuthorities;
+    }
 }

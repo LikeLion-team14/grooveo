@@ -13,11 +13,12 @@ import java.util.Optional;
 @Service
 public class CommunityService {
     private final CommunityRepository communityRepository;
+
     public List<Community> getList() {
         return this.communityRepository.findAll();
     }
 
-    public Community getMoreInformation(Long id) throws Exception{
+    public Community getMoreInformation(Long id) throws Exception {
         Optional<Community> community = this.communityRepository.findById(id);
         if (community.isPresent()) {
             return community.get();

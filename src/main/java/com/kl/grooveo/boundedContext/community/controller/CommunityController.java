@@ -73,7 +73,7 @@ public class CommunityController {
 
     @PostMapping("/modify/{id}")
     public String communityModify(@Valid CommunityForm communityForm, BindingResult bindingResult,
-                                 Principal principal, @PathVariable("id") Long id) throws Exception {
+                                  Principal principal, @PathVariable("id") Long id) throws Exception {
         if (bindingResult.hasErrors()) {
             return "usr/community/form";
         }
