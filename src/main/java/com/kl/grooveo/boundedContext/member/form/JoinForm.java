@@ -1,4 +1,4 @@
-package com.kl.grooveo.boundedContext.member.entity;
+package com.kl.grooveo.boundedContext.member.form;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
