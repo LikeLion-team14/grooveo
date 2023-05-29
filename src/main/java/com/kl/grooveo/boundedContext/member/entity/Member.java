@@ -42,4 +42,8 @@ public class Member extends BaseEntity {
 
         return grantedAuthorities;
     }
+
+    public void modifyPassword(String password) {
+        this.password = password;
+    }
 }

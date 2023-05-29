@@ -80,4 +80,20 @@ public class MemberService {
         return RsData.of("S-1", "등록하신 이메일로 아이디를 발송했습니다.");
     }
 
+    @Transactional
+    public RsData findUserPassword(String username, String email) {
+        Optional<Member> opActor = memberRepository.findByUsernameAndEmail(username, email);
+        if (opActor.isEmpty()) {
+            return RsData.of("F-1", "등록된 아이디를 찾을 수 없습니다.");
+        }
+        Member actor = opActor.get();
+        // 임시비밀번호
+        String temporaryPassword = emailService.sendTemporaryPassword(actor);
+        // 임시비밀번호 인코딩
+        String password = passwordEncoder.encode(temporaryPassword);
+        // 임시비밀번호로 비밀번호 변경
+        actor.modifyPassword(password);
+
+        return RsData.of("S-1", "등록하신 이메일로 임시비밀번호를 발송했습니다.");
+    }
 }
