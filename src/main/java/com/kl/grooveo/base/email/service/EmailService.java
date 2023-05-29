@@ -29,4 +29,18 @@ public class EmailService {
         javaMailSender.send(simpleMailMessage);
     }
 
+    public void sendUsername(Member member) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
+        simpleMailMessage.setTo(member.getEmail());
+
+        simpleMailMessage.setSubject("아이디 찾기");
+
+        simpleMailMessage.setText(("""
+                안녕하세요 'Grooveo'입니다."
+                회원님이 요청하신 아이디 찾기 안내 메시지를 보내드립니다.
+                회원님의 아이디는 다음과 같습니다: [%s]. 감사합니다.""").formatted(member.getUsername()));
+
+        javaMailSender.send(simpleMailMessage);
+    }
 }
