@@ -1,0 +1,32 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+
+<head>
+  <title></title>
+</head>
+
+<body>
+
+<main layout:fragment="main">
+  <div class="flex flex-col align-center mx-auto w-4/6">
+    <span class="text-3xl font-bold">게시글 등록</span>
+    <form th:action="@{/community/freedomPost/create}" th:object="${freedomPostForm}" method="post">
+      <div>
+        <label for="title" class="form-label text-lg">제목</label><br/>
+        <input type="text" placeholder="Type here" class="input input-bordered input-primary w-full max-w-ls" th:field="*{title}">
+      </div>
+      <div>
+        <label for="category" class="form-label text-lg">카테고리</label><br/>
+        <input type="text" placeholder="Type here" class="input input-bordered input-primary w-full max-w-ls" th:field="*{category}">
+      </div>
+      <div>
+        <label for="content" class="form-label text-lg">내용</label><br/>
+        <textarea class="textarea textarea-primary w-full max-w-ls" placeholder="content" th:field="*{content}" rows="10"></textarea>
+      </div>
+      <button type="submit" class="btn btn-block btn-primary gap-1"><span>저장하기</span></button>
+    </form>
+  </div>
+</main>
+</body>
+
+</html>
+

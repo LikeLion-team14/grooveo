@@ -3,8 +3,7 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- 제이쿼리 불러오기 -->
@@ -27,26 +26,29 @@
 <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css"/>
 <!-- 테일윈드 불러오기 -->
 <script src="https://cdn.tailwindcss.com"></script>
-<div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li th:if="${@rq.logout}"><a href="/"><i
-                class="fa-solid fa-arrow-right-to-bracket"></i> HOME</a>
-        </li>
-        <li th:if="${@rq.logout}"><a href="/usr/member/login"><i
-                class="fa-solid fa-arrow-right-to-bracket"></i> 로그인</a>
-        </li>
-        <li th:if="${@rq.logout}"><a href="/usr/member/join"><i
-                class="fa-solid fa-arrow-right-to-bracket"></i> 회원가입</a>
-        </li>
-        <li th:if="${@rq.login}">
-            <a href="javascript:" onclick="$(this).next().submit();">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃
-            </a>
-            <form class="!hidden" hidden th:action="|/usr/member/logout|" method="POST"></form>
-        </li>
 
-    </ul>
+<div class="navbar bg-primary max-w-7xl mx-auto bg-base-100 text-primary-content rounded-box m-3">
+    <div class="flex-1 px-2 lg:flex-none">
+        <a class="text-lg font-bold" href="/">Grooveo</a>
+    </div>
+    <div class="flex justify-end flex-1 px-2">
+        <div class="flex items-stretch">
+            <a th:if="${@rq.logout}" class="btn btn-ghost rounded-btn" href="/usr/member/join">회원가입</a>
+            <a th:if="${@rq.logout}" class="btn btn-ghost rounded-btn" href="/usr/member/login">로그인</a>
+            <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="javascript:" onclick="$(this).next().submit();">로그아웃</a>
+            <form class="!hidden" hidden th:action="|/usr/member/logout|" method="POST"></form>
+
+            <div class="dropdown dropdown-end">
+                <label tabindex="0" class="btn btn-ghost rounded-btn">커뮤니티</label>
+                <ul tabindex="0" class="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
+                    <li><a href="/community/freedomPost/list" style="color: black;">국외음악</a></li>
+                    <li><a href="/community/freedomPost/list" style="color: black;">국내음악</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+
 <main layout:fragment="main"></main>
 
 <script th:inline="javascript">
