@@ -21,7 +21,6 @@ public class NotProd {
             @Transactional
             public void run(String... args) throws Exception {
                 Member memberUser1 = memberService.join("user1", "1234", "유저1", "유유", "uu@naver.com").getData();
-
             }
         };
     }
