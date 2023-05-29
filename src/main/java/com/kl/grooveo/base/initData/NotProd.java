@@ -20,7 +20,7 @@ public class NotProd {
             @Override
             @Transactional
             public void run(String... args) throws Exception {
-                Member memberUser1 = memberService.join("user1", "1234", "유저1", "유유", "uu@naver.com").getData();
+                Member memberUser1 = memberService.join("user1", "1234", "유저1", "유저1입니다", null).getData();
             }
         };
     }

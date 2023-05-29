@@ -3,6 +3,7 @@ package com.kl.grooveo.boundedContext.member.controller;
 import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.member.entity.Member;
+import com.kl.grooveo.boundedContext.member.form.FindUsernameForm;
 import com.kl.grooveo.boundedContext.member.form.JoinForm;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import jakarta.validation.Valid;
@@ -44,5 +45,23 @@ public class MemberController {
     @GetMapping("/login")
     public String login() {
         return "usr/member/login";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/findUsername")
+    public String showFindId() {
+        return "usr/member/findUsername";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/findUsername")
+    public String findId(@Valid FindUsernameForm findUsernameForm) {
+        RsData findIdRs = memberService.findUsername(findUsernameForm.getEmail());
+
+        if (findIdRs.isFail()) {
+            return rq.historyBack(findIdRs);
+        }
+
+        return rq.redirectWithMsg("/usr/member/login", findIdRs);
     }
 }

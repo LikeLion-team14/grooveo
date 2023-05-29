@@ -1,5 +1,6 @@
 package com.kl.grooveo.boundedContext.member.service;
 
+import com.kl.grooveo.base.email.service.EmailService;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.repository.MemberRepository;
@@ -17,8 +18,8 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -49,6 +50,10 @@ public class MemberService {
 
         memberRepository.save(member);
 
+        if (member.getEmail() != null) {
+            emailService.sendRegistrationEmail(member);
+        }
+
         return RsData.of("S-1", "회원가입이 완료되었습니다.", member);
     }
 
@@ -61,6 +66,18 @@ public class MemberService {
         }
 
         return join(providerTypeCode, username, "", "", null, null);
+    }
+
+    public RsData findUsername(String email) {
+        Optional<Member> opActor = memberRepository.findByEmail(email);
+
+        if (opActor.isEmpty()) {
+            return RsData.of("F-1", "등록된 아이디를 찾을 수 없습니다.");
+        }
+
+        emailService.sendUsername(opActor.get());
+
+        return RsData.of("S-1", "등록하신 이메일로 아이디를 발송했습니다.");
     }
 
 }
