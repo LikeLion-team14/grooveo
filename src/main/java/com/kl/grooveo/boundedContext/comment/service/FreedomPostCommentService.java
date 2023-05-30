@@ -6,9 +6,15 @@ import com.kl.grooveo.boundedContext.comment.repository.FreedomPostCommentReposi
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -34,5 +40,13 @@ public class FreedomPostCommentService {
 
     public void delete(FreedomPostComment freedomPostComment) {
         this.freedomPostCommentRepository.delete(freedomPostComment);
+    }
+
+    public Page<FreedomPostComment> getList(FreedomPost freedomPost, int commentPage) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+
+        Pageable pageable = PageRequest.of(commentPage, 5, Sort.by(sorts));
+        return this.freedomPostCommentRepository.findAllByFreedomPost(freedomPost, pageable);
     }
 }

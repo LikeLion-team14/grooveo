@@ -13,13 +13,11 @@ import com.kl.grooveo.boundedContext.reply.entity.FreedomPostReply;
 import com.kl.grooveo.boundedContext.reply.service.FreedomPostReplyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/reply")
 @RequiredArgsConstructor
@@ -33,23 +31,27 @@ public class FreedomPostReplyController {
 
     @PostMapping("/create/{id}")
     public String create(Model model, @PathVariable("id") Long id,
-                                    @Valid ReplyForm replyForm,
+                                    @Valid ReplyForm replyForm, @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
                                     BindingResult bindingResult, CommentForm commentForm) {
+
         FreedomPostComment freedomPostComment = this.freedomPostCommentService.getComment(id);
         Member member = this.memberService.findByUsername(rq.getMember().getUsername()).orElseThrow(
                 () -> new DataNotFoundException("해당 유저를 찾을 수 없습니다.")
         );
 
         FreedomPost freedomPost = freedomPostComment.getFreedomPost();
+        Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("freedomPost", freedomPost);
+            model.addAttribute("commentPaging", commentPaging);
             return "usr/community/freedomPost/detail";
         }
 
         FreedomPostReply freedomPostReply = this.freedomPostReplyService.create(freedomPostComment, replyForm.getContent(), member);
-        return String.format("redirect:/community/freedomPost/detail/%s?#reply-%s", freedomPostReply.getFreedomPostComment().getFreedomPost().getId(), freedomPostReply.getFreedomPostComment().getId());
-
+        model.addAttribute("commentPaging", commentPaging);
+        return String.format("redirect:/community/freedomPost/detail/%s?commentPage=%s#reply-%s",
+                freedomPostReply.getFreedomPostComment().getFreedomPost().getId(), commentPage, freedomPostReply.getFreedomPostComment().getId());
     }
 
     @DeleteMapping("/{id}")

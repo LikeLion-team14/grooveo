@@ -26,12 +26,14 @@
         <form th:action="@{|/comment/create/${freedomPost.id}|}" th:object="${commentForm}" method="post">
             <textarea class="textarea textarea-primary w-full max-w-ls form-control" placeholder="content"
                       th:field="*{content}" rows="4"></textarea>
+            <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
             <input type="submit" class="btn btn-primary" value="댓글 등록">
         </form>
 
         <!-- 댓글의 갯수 표시 -->
         <h5 th:text="|${#lists.size(freedomPost.commentList)}개의 댓글이 있습니다.|"></h5>
-        <div class="card w-full bg-base-100 shadow-xl my-2" th:each="comment : ${freedomPost.commentList}">
+        <!-- 댓글 반복 시작 -->
+        <div class="card w-full bg-base-100 shadow-xl my-2" th:each="comment : ${commentPaging}">
             <div class="card-body">
                 <p th:text="${comment.content}"></p>
                 <div class="card-actions justify-end">
@@ -50,7 +52,7 @@
                         <input type="hidden" name="_method" value="delete">
                     </form>
                 </div>
-                <!-- 댓글 등록 창-->
+                <!-- 답글 등록 창-->
                 <div class="comment-answer-block" style="display: none" th:id="${comment.id}"
                      th:classappend="|cm_${comment.getId()}|">
                     <a th:id="|comment-${comment.id}|"></a>
@@ -59,6 +61,7 @@
                               class="my-3">
                             <textarea class="textarea textarea-primary w-full max-w-ls form-control" placeholder="content"
                                       th:field="*{content}" rows="4"></textarea>
+                            <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
                             <input type="submit" class="btn btn-primary" value="답글 등록">
                         </form>
                     </div>
@@ -68,13 +71,13 @@
                         <li th:each="i: ${#numbers.sequence(comment.getReplyList().size()-1, 0, -1)}"
                             class="comment-item list-group-item"
                             th:with="reply=${comment.getReplyList().get(i)}">
-                            <div class="d-flex flex-column">
-                                <div class="d-flex flex-shrink-0">
+                            <div>
+                                <div class="flex flex-shrink-0">
                                     <div>⎿</div>
                                     <div class="p-2 w-100 flex-shrink-1" th:text="${reply.content}"></div>
                                 </div>
 
-                                <div class="d-flex justify-content-end">
+                                <div class="flex justify-end">
                                     <a class="btn btn-sm btn-outline-secondary"
                                        href="javascript:void(0);"
                                        onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
@@ -89,9 +92,39 @@
                 </div>
             </div>
         </div>
+        <!-- 페이징처리 시작 -->
+        <div th:if="${!commentPaging.isEmpty()}" class="flex justify-center mt-2">
+            <div class="btn-group pagination">
+                <a class="page-link btn btn-outline btn-primary" th:disabled="${!commentPaging.hasPrevious} ? 'disabled'"
+                   href="javascript:void(0)" th:data-page="${(commentPaging.number)-1}">
+                    <span>이전</span>
+                </a>
+                <a th:text="${page}" class="page-link btn btn-outline btn-primary"
+                   th:each="page: ${#numbers.sequence(0, (commentPaging.totalPages)-1)}"
+                   th:if="${page >= (commentPaging.number)-5 and page <= commentPaging.number+5}"
+                   href="javascript:void(0)"
+                   th:data-page="${page}"></a>
+                <a class="page-link btn btn-outline btn-primary" th:disabled="${!commentPaging.hasNext} ? 'disabled'"
+                   href="javascript:void(0)" th:data-page="${commentPaging.number+1}">
+                    <span>다음</span>
+                </a>
+            </div>
+        </div>
+        <!-- 페이징처리 끝 -->
+        <!-- 댓글 페이징처리 끝 -->
+        <form th:action="@{|/community/freedomPost/detail/${freedomPost.id}#comment-start|}" method="get" id="commentForm">
+            <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">
+        </form>
     </div>
 
     <script layout:fragment="script" type='text/javascript'>
+        const page_elements = document.getElementsByClassName("page-link");
+        Array.from(page_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                document.getElementById('commentPage').value = this.dataset.page;
+                document.getElementById('commentForm').submit();
+            });
+        });
 
         const comment_answer_elements = document.getElementsByClassName("comment-answer");
         const block_answer = document.getElementsByClassName("comment-answer-block");

@@ -7,25 +7,41 @@
 <body>
 
 <main layout:fragment="main">
-    <div class="flex flex-col align-center mx-auto w-4/6">
-        <span th:if="${boardType == 1}" class="text-2xl font-bold">국외 게시판</span>
-        <span th:if="${boardType == 2}" class="text-2xl font-bold">국내 게시판</span>
-        <div class="flex flex-row justify-between">
+    <div class="flex flex-col align-center mx-auto w-4/6 my-3">
+        <span th:if="${boardType == 1}" class="text-3xl font-bold">국외 게시판</span>
+        <span th:if="${boardType == 2}" class="text-3xl font-bold">국내 게시판</span>
+        <div class="flex flex-row justify-between mt-3">
             <form th:action>
                 <div class="btn-group">
-                    <input type="radio" name="options" data-title="전체" value="" class="btn" checked onclick="$(this).closest('form').submit();"/>
-                    <input type="radio" id="c2" name="options" data-title="음악" value="c2" class="btn" onclick="$(this).closest('form').submit();"/>
-                    <input type="radio" id="c3" name="options" data-title="리뷰" value="c3" class="btn" onclick="$(this).closest('form').submit();"/>
-                    <input type="radio" id="c4" name="options" data-title="가사 해석" value="c4" class="btn" onclick="$(this).closest('form').submit();"/>
-                    <input type="radio" id="c5" name="options" data-title="인증/후기" value="c5" class="btn" onclick="$(this).closest('form').submit();"/>
+                    <input type="radio" name="options" data-title="전체" value="" class="btn" checked
+                           onclick="$(this).closest('form').submit();"/>
+                    <input type="radio" id="c2" name="options" data-title="음악" value="c2" class="btn"
+                           onclick="$(this).closest('form').submit();"/>
+                    <input type="radio" id="c3" name="options" data-title="리뷰" value="c3" class="btn"
+                           onclick="$(this).closest('form').submit();"/>
+                    <input type="radio" id="c4" name="options" data-title="가사 해석" value="c4" class="btn"
+                           onclick="$(this).closest('form').submit();"/>
+                    <input type="radio" id="c5" name="options" data-title="인증/후기" value="c5" class="btn"
+                           onclick="$(this).closest('form').submit();"/>
                 </div>
             </form>
             <a th:href="@{|/community/freedomPost/create|}" class="btn btn-primary">글쓰기</a>
         </div>
 
+        <div class="col-6">
+            <div class="input-group">
+                <input type="text" id="search_kw" class="form-control border-2" th:value="${kw}">
+                <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+            </div>
+        </div>
+
+        <form th:action="@{|/community/freedomPost/${boardType}/list|}" method="get" id="searchForm">
+            <input type="hidden" id="kw" name="kw" th:value="${kw}">
+            <input type="hidden" id="page" name="page" th:value="${paging.number}">
+        </form>
 
         <script>
-            window.onload = function() {
+            window.onload = function () {
                 const urlParams = new URL(location.href).searchParams;
                 const options = urlParams.get('options');
                 $("#" + options).prop("checked", true);
@@ -43,19 +59,60 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="freedomPost : ${freedomPostList}">
-                <td th:text="${freedomPost.id}"></td>
+            <tr class="text-center" th:each="freedomPost, loop : ${paging}">
+                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                 <td th:text="${freedomPost.categoryDisplayName()}"></td>
-                <td>
-                    <a th:href="@{|/community/freedomPost/detail/${freedomPost.id}|}"
-                       th:text="${freedomPost.title}"></a>
+                <td class="text-left">
+                    <label for="subject">
+                        <a id="subject" th:href="@{|/community/freedomPost/detail/${freedomPost.id}|}"
+                           th:text="${freedomPost.title}"></a>
+                    </label>
                 </td>
                 <td th:text="${freedomPost.author.username}"></td>
-                <td th:text="${freedomPost.createDate}"></td>
+                <td>
+                    <span th:text="${freedomPost.getAfterPost()}"></span>
+                    <i th:if="${freedomPost.afterPost.endsWith('전')}" class="fa-solid fa-fire text-red-500"></i></td>
             </tr>
             </tbody>
         </table>
+        <!-- 페이징처리 시작 -->
+        <div th:if="${!paging.isEmpty()}" class="flex justify-center mt-2">
+            <div class="btn-group pagination">
+                <a class="page-link btn btn-outline btn-primary" th:disabled="${!paging.hasPrevious} ? 'disabled'"
+                   href="javascript:void(0)" th:data-page="${(paging.number)-1}">
+                    <span>이전</span>
+                </a>
+                <a th:text="${page}" class="page-link btn btn-outline btn-primary"
+                   th:each="page: ${#numbers.sequence(0, (paging.totalPages)-1)}"
+                   th:if="${page >= (paging.number)-5 and page <= paging.number+5}"
+                   href="javascript:void(0)"
+                   th:data-page="${page}"></a>
+                <a class="page-link btn btn-outline btn-primary" th:disabled="${!paging.hasNext} ? 'disabled'"
+                   href="javascript:void(0)" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </div>
+        </div>
+        <!-- 페이징처리 끝 -->
     </div>
+
+
+    <script>
+        const page_elements = document.getElementsByClassName("page-link");
+        Array.from(page_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                document.getElementById('page').value = this.dataset.page;
+                document.getElementById('searchForm').submit();
+            });
+        });
+        const btn_search = document.getElementById("btn_search");
+        btn_search.addEventListener('click', function () {
+            document.getElementById('kw').value = document.getElementById('search_kw').value;
+            document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+            document.getElementById('searchForm').submit();
+        });
+    </script>
+
 </main>
 </body>
 

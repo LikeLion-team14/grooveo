@@ -5,9 +5,10 @@ import com.kl.grooveo.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,5 +50,17 @@ public class FreedomPost {
             case "c4" -> "가사 해석";
             default -> "인증/후기";
         };
+    }
+
+    public String getAfterPost() {
+        long diff = ChronoUnit.SECONDS.between(getCreateDate(), LocalDateTime.now());
+        if (diff < 60) return "방금 전";
+        else if (diff < 3600) {
+            return (diff / 60) + "분 전";
+        }
+        else if (diff < 86400) {
+            return (diff / 60 / 60) + "시간 전";
+        }
+        else return getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 }

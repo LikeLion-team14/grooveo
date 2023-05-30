@@ -22,13 +22,13 @@
     <div class="flex flex-col align-center mx-auto w-4/6">
         <span class="text-3xl font-bold">게시글 등록</span>
         <form th:action th:object="${freedomPostForm}" method="post">
-            <div>
-                <label for="title" class="form-label text-lg">제목</label><br/>
-                <input type="text" placeholder="Type here" class="input input-bordered input-primary w-full max-w-ls"
+            <div class="mt-2">
+                <label for="title" class="form-label text-xl">제목</label><br/>
+                <input type="text" placeholder="Type here" class="input input-bordered input-primary w-full max-w-ls my-1"
                        th:field="*{title}">
             </div>
-            <div>
-                <label for="category" class="form-label text-lg">카테고리</label><br/>
+            <div class="mt-2">
+                <label for="category" class="form-label text-xl my-1">카테고리</label><br/>
                 <select id="category" onchange="changeFn()">
                     <option value="c2" selected>음악</option>
                     <option value="c3">리뷰</option>
@@ -37,8 +37,8 @@
                 </select>
                 <input type="hidden" id="ct" th:field="*{category}">
             </div>
-            <div>
-                <label for="content" class="form-label text-lg">내용</label><br/>
+            <div class="mt-2">
+                <label for="content" class="form-label text-xl my-1">내용</label><br/>
                 <textarea class="textarea textarea-primary w-full max-w-ls" placeholder="content" th:field="*{content}"
                           rows="10"></textarea>
             </div>

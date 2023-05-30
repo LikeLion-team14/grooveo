@@ -11,13 +11,11 @@ import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/comment")
 @RequiredArgsConstructor
@@ -30,13 +28,17 @@ public class FreedomPostCommentController {
 
     @PostMapping("/create/{id}")
     public String create(Model model, @PathVariable("id") Long id,
+                         @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
                          @Valid CommentForm commentForm, BindingResult bindingResult, ReplyForm replyForm) {
 
         FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
         Member member = memberService.findByUsername(rq.getMember().getUsername()).orElseThrow();
 
+        Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage);
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("freedomPost", freedomPost);
+            model.addAttribute("commentPaging", commentPaging);
             return "usr/community/freedomPost/detail";
         }
 

@@ -1,6 +1,8 @@
 package com.kl.grooveo.boundedContext.community.controller;
 
 import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
+import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.form.CommentForm;
@@ -8,26 +10,28 @@ import com.kl.grooveo.boundedContext.form.FreedomPostForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("/community/freedomPost")
 @RequiredArgsConstructor
 @Controller
 public class FreedomPostController {
     private final FreedomPostService freedomPostService;
+    private final FreedomPostCommentService freedomPostCommentService;
     private final Rq rq;
     static int boardTypeCode;
 
     @GetMapping("/{boardType}/list")
-    public String showList(Model model, @PathVariable("boardType") Integer boardType, CategoryForm categoryForm) {
-        List<FreedomPost> freedomPostList = this.freedomPostService.getList(boardType, categoryForm.options);
-        model.addAttribute("freedomPostList", freedomPostList);
+    public String showList(Model model, @PathVariable("boardType") Integer boardType, @RequestParam(value="page", defaultValue="0") int page,
+                           @RequestParam(value = "kw", defaultValue = "") String kw, CategoryForm categoryForm) {
+        Page<FreedomPost> paging = this.freedomPostService.getList(boardType, categoryForm.options, kw, page);
         model.addAttribute("boardType", boardType);
+        model.addAttribute("paging", paging);
+        model.addAttribute("kw", kw);
         boardTypeCode = boardType;
 
         return "usr/community/freedomPost/list";
@@ -39,9 +43,14 @@ public class FreedomPostController {
     }
 
     @GetMapping(value = "/detail/{id}")
-    public String showMoreDetail(Model model, @PathVariable("id") Long id, CommentForm commentForm) {
+    public String showMoreDetail(Model model, @PathVariable("id") Long id,
+                                 @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm) {
         FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
+
+        Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage);
+        model.addAttribute("commentPaging", commentPaging);
         model.addAttribute("freedomPost", freedomPost);
+
         return "usr/community/freedomPost/detail";
     }
 
