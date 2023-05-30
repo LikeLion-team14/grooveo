@@ -7,6 +7,7 @@ import com.kl.grooveo.boundedContext.form.CommentForm;
 import com.kl.grooveo.boundedContext.form.FreedomPostForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,12 +21,21 @@ import java.util.List;
 public class FreedomPostController {
     private final FreedomPostService freedomPostService;
     private final Rq rq;
+    static int boardTypeCode;
 
-    @GetMapping("/list")
-    public String showList(Model model) {
-        List<FreedomPost> freedomPostList = this.freedomPostService.getList();
+    @GetMapping("/{boardType}/list")
+    public String showList(Model model, @PathVariable("boardType") Integer boardType, CategoryForm categoryForm) {
+        List<FreedomPost> freedomPostList = this.freedomPostService.getList(boardType, categoryForm.options);
         model.addAttribute("freedomPostList", freedomPostList);
+        model.addAttribute("boardType", boardType);
+        boardTypeCode = boardType;
+
         return "usr/community/freedomPost/list";
+    }
+
+    @Setter
+    public static class CategoryForm {
+        private String options = "";
     }
 
     @GetMapping(value = "/detail/{id}")
@@ -46,8 +56,8 @@ public class FreedomPostController {
             return "usr/community/freedomPost/form";
         }
 
-        this.freedomPostService.create(freedomPostForm.getTitle(), freedomPostForm.getCategory(), freedomPostForm.getContent(), rq.getMember());
-        return "redirect:/community/freedomPost/list";
+        this.freedomPostService.create(boardTypeCode, freedomPostForm.getTitle(), freedomPostForm.getCategory(), freedomPostForm.getContent(), rq.getMember());
+        return String.format("redirect:/community/freedomPost/%d/list", boardTypeCode);
     }
 
     @DeleteMapping("/{id}")
@@ -57,7 +67,7 @@ public class FreedomPostController {
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
 //        }
         this.freedomPostService.delete(freedomPost);
-        return "redirect:/community/freedomPost/list";
+        return String.format("redirect:/community/freedomPost/%d/list", boardTypeCode);
     }
 
     @GetMapping("/modify/{id}")

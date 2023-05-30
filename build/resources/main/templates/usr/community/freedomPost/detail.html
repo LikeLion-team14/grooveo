@@ -1,0 +1,123 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+<main layout:fragment="main">
+    <div class="flex flex-col align-center mx-auto w-4/6">
+        <span class="text-3xl font-bold" th:text="${freedomPost.title}"></span>
+        <span class="text-xl font-bold" th:text="${freedomPost.category}"></span>
+        <div class="w-full max-w-ls" th:text="${freedomPost.content}"></div>
+        <button class="btn btn-block btn-primary gap-1" onclick="if(confirm('정말로 삭제하시겠습니까?')) $(this).next().submit();">
+            삭제
+        </button>
+        <form hidden th:action="@{|/community/freedomPost/${freedomPost.id}|}" method="POST">
+            <input type="hidden" name="_method" value="delete">
+        </form>
+        <button class="btn btn-block btn-primary gap-1"
+                th:onclick="|location.href='@{/community/freedomPost/modify/} + ${freedomPost.id}'|">수정
+        </button>
+
+        <span class="text-xl font-bold">댓글 쓰기</span>
+        <!-- 댓글 작성 -->
+        <form th:action="@{|/comment/create/${freedomPost.id}|}" th:object="${commentForm}" method="post">
+            <textarea class="textarea textarea-primary w-full max-w-ls form-control" placeholder="content"
+                      th:field="*{content}" rows="4"></textarea>
+            <input type="submit" class="btn btn-primary" value="댓글 등록">
+        </form>
+
+        <!-- 댓글의 갯수 표시 -->
+        <h5 th:text="|${#lists.size(freedomPost.commentList)}개의 댓글이 있습니다.|"></h5>
+        <div class="card w-full bg-base-100 shadow-xl my-2" th:each="comment : ${freedomPost.commentList}">
+            <div class="card-body">
+                <p th:text="${comment.content}"></p>
+                <div class="card-actions justify-end">
+                    <a href="javascript:void(0);" class="comment-answer btn btn-sm btn-outline-secondary"
+                       th:data-num="${comment.id}">
+                        답글
+                        <span class="badge rounded-pill bg-secondary"
+                              th:text="${#lists.size(comment.replyList)}"></span>
+                    </a>
+
+                    <a class="btn btn-sm btn-outline-secondary"
+                       href="javascript:void(0);"
+                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                        삭제</a>
+                    <form hidden th:action="@{|/comment/${comment.id}|}" method="POST">
+                        <input type="hidden" name="_method" value="delete">
+                    </form>
+                </div>
+                <!-- 댓글 등록 창-->
+                <div class="comment-answer-block" style="display: none" th:id="${comment.id}"
+                     th:classappend="|cm_${comment.getId()}|">
+                    <a th:id="|comment-${comment.id}|"></a>
+                    <div class="form-floating comment_box" style="text-align: end">
+                        <form th:action="@{|/reply/create/${comment.id}|}" th:object="${commentForm}" method="post"
+                              class="my-3">
+                            <textarea class="textarea textarea-primary w-full max-w-ls form-control" placeholder="content"
+                                      th:field="*{content}" rows="4"></textarea>
+                            <input type="submit" class="btn btn-primary" value="답글 등록">
+                        </form>
+                    </div>
+
+                    <!-- 댓글 창-->
+                    <ul class="list-group">
+                        <li th:each="i: ${#numbers.sequence(comment.getReplyList().size()-1, 0, -1)}"
+                            class="comment-item list-group-item"
+                            th:with="reply=${comment.getReplyList().get(i)}">
+                            <div class="d-flex flex-column">
+                                <div class="d-flex flex-shrink-0">
+                                    <div>⎿</div>
+                                    <div class="p-2 w-100 flex-shrink-1" th:text="${reply.content}"></div>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <a class="btn btn-sm btn-outline-secondary"
+                                       href="javascript:void(0);"
+                                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                                        삭제</a>
+                                    <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">
+                                        <input type="hidden" name="_method" value="delete">
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script layout:fragment="script" type='text/javascript'>
+
+        const comment_answer_elements = document.getElementsByClassName("comment-answer");
+        const block_answer = document.getElementsByClassName("comment-answer-block");
+        Array.from(comment_answer_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                Array.from(block_answer).forEach((x) => {
+                    if (x.id === this.dataset.num) {
+                        if (x.style.display === "none") {
+                            x.style.display = "block";
+                        } else
+                            x.style.display = "none";
+                    }
+                })
+            });
+        });
+
+        if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
+            const commentId = window.location.hash.replace("#reply-", "");
+            $(function(){
+                document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
+            });
+        }
+
+    </script>
+</main>
+</body>
+
+</html>
+
