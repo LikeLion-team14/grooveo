@@ -7,6 +7,9 @@ import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.form.CommentForm;
 import com.kl.grooveo.boundedContext.form.FreedomPostForm;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -44,8 +47,43 @@ public class FreedomPostController {
 
     @GetMapping(value = "/detail/{id}")
     public String showMoreDetail(Model model, @PathVariable("id") Long id,
-                                 @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm) {
+                                 @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm,
+                                 HttpServletRequest request, HttpServletResponse response) {
         FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
+
+        // 조회수 관련 로직
+        Cookie oldCookie = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {   // 쿠키가 null 인지 검사
+            // null 이 아니라면 "postView" 라는 이름의 쿠키가 있는지 검사
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("postView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        if (oldCookie != null) {
+            // "postView" 가 존재한다면
+            // value 가 현재 접근한 게시글의 id 를 포함하고 있는지 검사
+            if (!oldCookie.getValue().contains("["+ id.toString() +"]")) {
+                // 포함하고 있지 않으면 조회수 증가
+                this.freedomPostService.updateView(id);
+                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24); 							// 쿠키 시간
+                response.addCookie(oldCookie);
+            }
+        } else {
+            // "postView" 가 존재하지 않는다면
+            // 게시글의 id 를 포함하는 쿠키를 만들고
+            // 마찬가지로 조회수 증가
+            this.freedomPostService.updateView(id);
+            Cookie newCookie = new Cookie("postView", "[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24); 								// 쿠키 시간
+            response.addCookie(newCookie);
+        }
 
         Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage);
         model.addAttribute("commentPaging", commentPaging);

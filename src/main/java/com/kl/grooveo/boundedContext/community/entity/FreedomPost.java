@@ -42,6 +42,9 @@ public class FreedomPost {
     private LocalDateTime modifyDate;
     private LocalDateTime deleteDate;
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int view; // 조회수
+
     public String categoryDisplayName() {
         return switch (category) {
             case "" -> "전체";

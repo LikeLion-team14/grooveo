@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -115,5 +116,11 @@ public class FreedomPostService {
         freedomPost.setModifyDate(LocalDateTime.now());
         freedomPost.setCategory(category);
         this.freedomPostRepository.save(freedomPost);
+    }
+
+    // 조회수 카운트
+    @Transactional
+    public int updateView(Long id) {
+        return this.freedomPostRepository.updateView(id);
     }
 }

@@ -23,13 +23,13 @@
         <span class="text-3xl font-bold">게시글 등록</span>
         <form th:action th:object="${freedomPostForm}" method="post">
             <div class="mt-2">
-                <label for="title" class="form-label text-xl">제목</label><br/>
-                <input type="text" placeholder="Type here" class="input input-bordered input-primary w-full max-w-ls my-1"
+                <span class="badge badge-lg rounded-pill bg-primary my-2">제목</span>
+                <input type="text" placeholder="Type here" class="input input-bordered input-primary w-full max-w-ls"
                        th:field="*{title}">
             </div>
-            <div class="mt-2">
-                <label for="category" class="form-label text-xl my-1">카테고리</label><br/>
-                <select id="category" onchange="changeFn()">
+            <div class="flex flex-col mt-2">
+                <span class="badge badge-lg rounded-pill bg-primary my-2">카테고리</span>
+                <select class="select select-primary select-sm w-full max-w-xs" id="category" onchange="changeFn()">
                     <option value="c2" selected>음악</option>
                     <option value="c3">리뷰</option>
                     <option value="c4">가사 해석</option>
@@ -38,11 +38,13 @@
                 <input type="hidden" id="ct" th:field="*{category}">
             </div>
             <div class="mt-2">
-                <label for="content" class="form-label text-xl my-1">내용</label><br/>
+                <span class="badge badge-lg rounded-pill bg-primary my-2">내용</span>
                 <textarea class="textarea textarea-primary w-full max-w-ls" placeholder="content" th:field="*{content}"
                           rows="10"></textarea>
             </div>
-            <button type="submit" class="btn btn-block btn-primary gap-1"><span>저장하기</span></button>
+            <div class="flex justify-end">
+                <button type="submit" class="btn btn-primary my-2">저장하기</button>
+            </div>
         </form>
     </div>
 </main>
