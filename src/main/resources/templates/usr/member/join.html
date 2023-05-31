@@ -1,6 +1,8 @@
 <html layout:decorate="~{usr/layout/layout.html}">
 
 <head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>회원가입</title>
 </head>
 
@@ -131,7 +133,7 @@
                 return;
             }
             // 비밀번호 != 비밀번호 재확인
-            if (form.confirmPassword.value !== form.memberPassword.value) {
+            if (form.confirmPassword.value !== form.password.value) {
                 form.confirmPassword.focus();
                 toastWarning('비밀번호와 비밀번호 확인이 다릅니다.');
                 return;
@@ -143,6 +145,26 @@
         function isValidEmail(email) {
             const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             return regex.test(email);
+        }
+
+        function sendAuthenticationCode() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            const userEmail = document.querySelector('.userEmail').value;
+            console.log(userEmail);
+
+            $.ajax({
+                type: "GET",
+                url: "/usr/member/checkEmail",
+                data: {"userEmail": userEmail},
+
+                dataType: "json",
+                success: function (data) {
+                    console.log("아래는 서버에서 전달 받은 데이터 값");
+                    console.log("data : " + data);
+                    toastNotice('인증번호가 전송되었습니다.');
+                }
+            });
         }
     </script>
 
@@ -192,7 +214,13 @@
                 <label class="label">
                     <span class="label-text">이메일</span>
                 </label>
-                <input type="text" name="email" maxlength="30" placeholder="이메일" class="input input-bordered">
+                <div class="relative">
+                    <input class="userEmail input input-bordered w-full pr-16" type="text" name="email"
+                           placeholder="이메일"/>
+                    <button onclick="sendAuthenticationCode()"
+                            class="btn btn-primary absolute top-0 right-0 rounded-l-none">인증코드 발송
+                    </button>
+                </div>
             </div>
 
             <button id="btn-join-1" class="btn btn-block btn-primary gap-1">
