@@ -29,7 +29,7 @@ public class FreedomPostController {
     static int boardTypeCode;
 
     @GetMapping("/{boardType}/list")
-    public String showList(Model model, @PathVariable("boardType") Integer boardType, @RequestParam(value="page", defaultValue="0") int page,
+    public String showList(Model model, @PathVariable("boardType") Integer boardType, @RequestParam(value = "page", defaultValue = "0") int page,
                            @RequestParam(value = "kw", defaultValue = "") String kw, CategoryForm categoryForm) {
         Page<FreedomPost> paging = this.freedomPostService.getList(boardType, categoryForm.options, kw, page);
         model.addAttribute("boardType", boardType);
@@ -66,12 +66,12 @@ public class FreedomPostController {
         if (oldCookie != null) {
             // "postView" 가 존재한다면
             // value 가 현재 접근한 게시글의 id 를 포함하고 있는지 검사
-            if (!oldCookie.getValue().contains("["+ id.toString() +"]")) {
+            if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
                 // 포함하고 있지 않으면 조회수 증가
                 this.freedomPostService.updateView(id);
                 oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
                 oldCookie.setPath("/");
-                oldCookie.setMaxAge(60 * 60 * 24); 							// 쿠키 시간
+                oldCookie.setMaxAge(60 * 60 * 24);                            // 쿠키 시간
                 response.addCookie(oldCookie);
             }
         } else {
@@ -81,7 +81,7 @@ public class FreedomPostController {
             this.freedomPostService.updateView(id);
             Cookie newCookie = new Cookie("postView", "[" + id + "]");
             newCookie.setPath("/");
-            newCookie.setMaxAge(60 * 60 * 24); 								// 쿠키 시간
+            newCookie.setMaxAge(60 * 60 * 24);                                // 쿠키 시간
             response.addCookie(newCookie);
         }
 
