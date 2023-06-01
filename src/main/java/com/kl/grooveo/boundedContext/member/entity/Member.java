@@ -1,8 +1,12 @@
 package com.kl.grooveo.boundedContext.member.entity;
 
 import com.kl.grooveo.base.baseEntity.BaseEntity;
+import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
+import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +34,13 @@ public class Member extends BaseEntity {
     @Builder.Default
     private String role = "user";
     private String providerTypeCode;
+
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
+    private List<FreedomPost> freedomPosts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
+    private List<FreedomPostComment> freedomPostComments = new ArrayList<>();
+
 
     public List<? extends GrantedAuthority> getGrantedAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
