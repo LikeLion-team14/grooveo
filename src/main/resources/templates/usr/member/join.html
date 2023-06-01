@@ -115,6 +115,8 @@
             }
 
             // email 이(가) 올바른지 체크
+            form.email.value = form.email.value.trim();
+
             if (form.email.value.length === 0) {
                 form.email.focus();
                 toastWarning('이메일을 입력해주세요.');
@@ -151,18 +153,45 @@
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             const userEmail = document.querySelector('.userEmail').value;
-            console.log(userEmail);
 
             $.ajax({
-                type: "GET",
-                url: "/usr/member/checkEmail",
+                type: "POST",
+                url: "/usr/member/sendCode",
                 data: {"userEmail": userEmail},
-
-                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType: "text",
                 success: function (data) {
-                    console.log("아래는 서버에서 전달 받은 데이터 값");
-                    console.log("data : " + data);
-                    toastNotice('인증번호가 전송되었습니다.');
+                    toastNotice('인증번호가 전송 되었습니다.');
+                }, error: function (data) {
+                    toastWarning('인증번호 전송에 실패했습니다.')
+                }
+            });
+        }
+
+        function emailCertification() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            let userEmail = document.getElementById('email').value;
+            let inputCode = document.getElementById('inputCode').value;
+
+            $.ajax({
+                type: "POST",
+                url: "/usr/member/certification",
+                data: {"userEmail": userEmail, "inputCode": inputCode},
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType: "text",
+                success: function (result) {
+                    if (result === 'true') {
+                        toastNotice('이메일 인증이 완료되었습니다.');
+                    } else {
+                        toastWarning('인증코드가 일치하지 않습니다.');
+                    }
+
                 }
             });
         }
@@ -215,10 +244,23 @@
                     <span class="label-text">이메일</span>
                 </label>
                 <div class="relative">
-                    <input class="userEmail input input-bordered w-full pr-16" type="text" name="email"
+                    <input class="userEmail input input-bordered w-full pr-16" type="text" name="email" id="email"
                            placeholder="이메일"/>
-                    <button onclick="sendAuthenticationCode()"
+                    <button type="button" onclick="sendAuthenticationCode()"
                             class="btn btn-primary absolute top-0 right-0 rounded-l-none">인증코드 발송
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">이메일 인증코드</span>
+                </label>
+                <div class="relative">
+                    <input class="input input-bordered w-full pr-16" type="text" id="inputCode"
+                           placeholder="인증코드"/>
+                    <button type="button" onclick="emailCertification()"
+                            class="btn btn-primary absolute top-0 right-0 rounded-l-none">이메일 인증
                     </button>
                 </div>
             </div>

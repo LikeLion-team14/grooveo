@@ -8,6 +8,8 @@ import com.kl.grooveo.boundedContext.member.form.FindPasswordForm;
 import com.kl.grooveo.boundedContext.member.form.FindUsernameForm;
 import com.kl.grooveo.boundedContext.member.form.JoinForm;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -79,13 +81,14 @@ public class MemberController {
         return rq.redirectWithMsg("/usr/member/login", findPasswordRs);
     }
 
-    @GetMapping("/checkEmail")
+    @PostMapping("/sendCode")
     @ResponseBody
-    public String checkEmail(String userEmail) {
-        System.out.println("e-mail 발송");
+    public String sendVerificationCode(HttpServletRequest request, String userEmail) {
+        HttpSession session = request.getSession();
 
-        String data = emailService.sendVerificationCode(userEmail);
+        emailService.sendVerificationCode(session, userEmail);
 
-        return data;
+        return "";
     }
+
 }
