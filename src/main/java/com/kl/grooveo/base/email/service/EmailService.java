@@ -1,6 +1,7 @@
 package com.kl.grooveo.base.email.service;
 
 import com.kl.grooveo.boundedContext.member.entity.Member;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -97,7 +98,7 @@ public class EmailService {
         return temporaryPassword;
     }
 
-    public String sendVerificationCode(String email) {
+    public String sendVerificationCode(HttpSession session, String email) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
         simpleMailMessage.setTo(email);
@@ -118,6 +119,20 @@ public class EmailService {
 
         javaMailSender.send(simpleMailMessage);
 
+        session.setAttribute(email, verificationCode);
+
         return verificationCode;
+    }
+
+    public boolean emailCertification(HttpSession session, String userEmail, String inputCode) {
+        String verificationCode = (String) session.getAttribute(userEmail);
+
+        if (verificationCode.equals(inputCode)) {
+            session.setAttribute("emailVerified", "true");
+            return true;
+        } else {
+            session.setAttribute("emailVerified", "false");
+            return false;
+        }
     }
 }

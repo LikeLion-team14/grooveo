@@ -91,4 +91,11 @@ public class MemberController {
         return "";
     }
 
+    @PostMapping("/certification")
+    @ResponseBody
+    public boolean checkVerificationCode(HttpServletRequest request, String userEmail, String inputCode) {
+        HttpSession session = request.getSession();
+
+        return emailService.emailCertification(session, userEmail, inputCode);
+    }
 }
