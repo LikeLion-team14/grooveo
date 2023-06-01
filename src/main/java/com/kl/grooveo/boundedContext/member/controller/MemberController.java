@@ -33,7 +33,13 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public String join(@Valid JoinForm joinForm) {
+    public String join(@Valid JoinForm joinForm, HttpServletRequest request) {
+        RsData emailVerified = memberService.isEmailVerified(request);
+
+        if (emailVerified.isFail()) {
+            return rq.historyBack(emailVerified);
+        }
+
         RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(),
                 joinForm.getName(), joinForm.getNickName(), joinForm.getEmail());
 
