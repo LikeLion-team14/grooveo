@@ -12,13 +12,18 @@
     <div class="flex flex-col align-center mx-auto w-4/6">
         <div class="flex justify-between">
             <span class="text-3xl font-bold" th:text="${freedomPost.title}"></span>
-            <span th:text="|View : ${freedomPost.view}|"></span>
+            <div class="flex">
+                <span><i class="fa-solid fa-heart"></i>&nbsp;:&nbsp;</span>
+                <span id="likeCnt" class="mr-2">0</span>
+                <span><i class="fa-solid fa-eye"></i>&nbsp;:&nbsp;</span>
+                <span th:text="${freedomPost.view}"></span>
+            </div>
         </div>
         <span class="badge badge-lg rounded-pill bg-primary my-2"
               th:text="${freedomPost.categoryDisplayName()}"></span>
         <div class="w-full max-w-ls" style="min-height: 10vh" th:text="${freedomPost.content}"></div>
         <div class="flex justify-end">
-            <button id="likeBtn3" class="btn btn-sm btn-primary mx-1">
+            <button id="likeBtn" class="btn btn-sm btn-primary mx-1">
                 <i class="fa-solid fa-heart"></i>&nbsp;Like
             </button>
             <button class="btn btn-sm btn-primary"
@@ -132,7 +137,7 @@
         </form>
     </div>
 
-    <script>
+    <script th:inline="javascript">
         const page_elements = document.getElementsByClassName("page-link");
         Array.from(page_elements).forEach(function (element) {
             element.addEventListener('click', function () {
@@ -169,10 +174,10 @@
             $(document).ajaxSend(function (e, xhr, options) {
                 xhr.setRequestHeader(header, token);
             });
-            const freedom = /*[[${freedomPost}]]*/ null;
-            if (freedom) {
-                const postId = /*[[${freedomPost.id}]]*/ null;
-                const likeButton = $('#likeBtn3');
+            const postId = /*[[${freedomPost.id}]]*/ null;
+            if (postId) {
+
+                const likeButton = $('#likeBtn');
                 $.ajax({
                     type: "POST",
                     url: "/pushLike", // 좋아요 요청을 보낼 URL
@@ -186,16 +191,16 @@
                         console.log(response.likeCnt)
                         if (response.result === "liked") { // 좋아요 데이터가 없음 -> 좋아요 표시
                             console.log("좋아요")
-                            const newHtml = '<i class="fa-solid fa-heart"></i>Like'
+                            const newHtml = '<i class="fa-solid fa-heart"></i>&nbsp;Like'
                             likeButton.html(newHtml)
 
                         } else if (response.result === "unliked") {  // 좋아요 데이터가 있음 -> 좋아요 표시X
-                            console.log("좋아요 X")
-                            const newHtml = '<i class="fa-solid fa-heart"></i>UnLike'
+                            console.log("좋아요 취소")
+                            const newHtml = '<i class="fa-regular fa-heart"></i>&nbsp;UnLike'
                             likeButton.html(newHtml)
                         }
                         console.log("pass")
-                        $('#likeCnt2').text(response.likeCnt)
+                        $('#likeCnt').text(response.likeCnt)
                     },
                     error: function (error) {
                         console.log(error);
@@ -214,10 +219,9 @@
             // 페이지가 로드될 때 실행되는 코드
             // Ajax 를 사용하여 데이터를 가져오는 등의 작업을 수행
 
-            const freedom = /*[[${freedomPost}]]*/ null;
-            if (freedom) {
-                const postId = /*[[${freedomPost.id}]]*/ null;
-                const likeButton = $('#likeBtn3');
+            const postId = /*[[${freedomPost.id}]]*/ null;
+            if (postId) {
+                const likeButton = $('#likeBtn');
                 $.ajax({
                     type: "POST",
                     url: "/findThumbsUpInfo", // 좋아요 요청을 보낼 URL
@@ -229,13 +233,14 @@
                         console.log(response)
                         if (response.result === "liked") {
                             // 좋아요 데이터가 없음 -> 좋아요 표시
-                            const newHtml = '<i class="fa-solid fa-heart"></i>Like'
+                            const newHtml = '<i class="fa-solid fa-heart"></i>&nbsp;Like'
                             likeButton.html(newHtml)
                         } else if (response.result === "unliked") {
                             // 좋아요 데이터가 있음 -> 좋아요 표시X
-                            const newHtml = '<i class="fa-solid fa-heart"></i>UnLike'
+                            const newHtml = '<i class="fa-solid fa-heart"></i>&nbsp;UnLike'
                             likeButton.html(newHtml)
                         }
+                        $('#likeCnt').text(response.likeCnt)
                     },
                     error: function (error) {
                         console.log(error);
@@ -243,7 +248,7 @@
                 });
             }
             // 버튼 클릭 이벤트 핸들러 등록
-            $(document).on('click', '#likeBtn3', function () {
+            $(document).on('click', '#likeBtn', function () {
                 console.log("click")
                 likeBtnClick();
             });
