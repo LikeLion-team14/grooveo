@@ -1,5 +1,7 @@
-package com.kl.grooveo.boundedContext.community.entity;
+package com.kl.grooveo.boundedContext.reply.entity;
 
+import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
+import com.kl.grooveo.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,23 +11,21 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Community {
+public class FreedomPostReply {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String category;
+    @ManyToOne
+    private FreedomPostComment freedomPostComment;
 
-    @Column
-    private String title;
+    @ManyToOne
+    private Member author;
 
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private String author;
-
     private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
     private LocalDateTime deleteDate;
 }

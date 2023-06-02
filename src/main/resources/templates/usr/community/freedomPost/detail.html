@@ -1,0 +1,170 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+<main layout:fragment="main">
+    <div class="flex flex-col align-center mx-auto w-4/6">
+        <div class="flex justify-between">
+            <span class="text-3xl font-bold" th:text="${freedomPost.title}"></span>
+            <span th:text="|View : ${freedomPost.view}|"></span>
+        </div>
+        <span class="badge badge-lg rounded-pill bg-primary my-2"
+              th:text="${freedomPost.categoryDisplayName()}"></span>
+        <div class="w-full max-w-ls" style="min-height: 10vh" th:text="${freedomPost.content}"></div>
+        <div class="flex justify-end">
+            <button class="btn btn-sm btn-primary mx-1">
+                <i class="fa-solid fa-heart"></i>&nbsp;Like
+            </button>
+            <button class="btn btn-sm btn-primary"
+                    th:onclick="|location.href='@{/community/freedomPost/modify/} + ${freedomPost.id}'|">
+                <i class="fa-solid fa-eraser"></i>&nbsp;Modify
+            </button>
+            <button class="btn btn-sm btn-primary mx-1" onclick="if(confirm('정말로 삭제하시겠습니까?')) $(this).next().submit();">
+                <i class="fa-regular fa-trash-can"></i>&nbsp;Delete
+            </button>
+            <form hidden th:action="@{|/community/freedomPost/${freedomPost.id}|}" method="POST">
+                <input type="hidden" name="_method" value="delete">
+            </form>
+        </div>
+
+
+        <span class="text-xl font-bold my-2">댓글 쓰기</span>
+        <!-- 댓글 작성 -->
+        <form th:action="@{|/comment/create/${freedomPost.id}|}" th:object="${commentForm}" method="post">
+            <textarea class="textarea textarea-primary w-full max-w-ls form-control" placeholder="content"
+                      th:field="*{content}" rows="4"></textarea>
+            <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
+            <input type="submit" class="btn btn-sm btn-primary my-2" value="댓글 등록">
+        </form>
+
+        <!-- 댓글의 갯수 표시 -->
+        <div class="flex items-center">
+            <i class="fa-solid fa-comments"></i>&nbsp;
+            <span th:text="|${#lists.size(freedomPost.commentList)} comments|"></span>
+        </div>
+        <!-- 댓글 반복 시작 -->
+        <div class="card w-full bg-base-100 shadow-xl my-2" th:each="comment : ${commentPaging}">
+            <div class="card-body">
+                <p th:text="${comment.content}"></p>
+                <div class="card-actions justify-end">
+                    <a href="javascript:void(0);" class="comment-answer btn btn-sm btn-outline-secondary"
+                       th:data-num="${comment.id}">
+                        reply&nbsp;
+                        <span class="badge badge-sm rounded-pill bg-secondary"
+                              th:text="${#lists.size(comment.replyList)}"></span>
+                    </a>
+
+                    <a class="btn btn-sm btn-outline-secondary"
+                       href="javascript:void(0);"
+                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                        <i class="fa-regular fa-trash-can"></i></a>
+                    <form hidden th:action="@{|/comment/${comment.id}|}" method="POST">
+                        <input type="hidden" name="_method" value="delete">
+                    </form>
+                </div>
+                <!-- 답글 등록 창-->
+                <div class="comment-answer-block" style="display: none" th:id="${comment.id}"
+                     th:classappend="|cm_${comment.getId()}|">
+                    <a th:id="|comment-${comment.id}|"></a>
+                    <div class="form-floating comment_box" style="text-align: end">
+                        <form th:action="@{|/reply/create/${comment.id}|}" th:object="${commentForm}" method="post"
+                              class="my-3">
+                            <textarea class="textarea textarea-primary w-full max-w-ls form-control" placeholder="content"
+                                      th:field="*{content}" rows="2"></textarea>
+                            <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
+                            <input type="submit" class="btn btn-sm btn-primary my-2" value="답글 등록">
+                        </form>
+                    </div>
+
+                    <!-- 댓글 창-->
+                    <ul class="list-group">
+                        <li th:each="i: ${#numbers.sequence(comment.getReplyList().size()-1, 0, -1)}"
+                            class="comment-item list-group-item"
+                            th:with="reply=${comment.getReplyList().get(i)}">
+                            <div>
+                                <div class="flex flex-shrink-0">
+                                    <div>⎿</div>
+                                    <div class="p-2 w-100 flex-shrink-1" th:text="${reply.content}"></div>
+                                </div>
+
+                                <div class="flex justify-end">
+                                    <a class="btn btn-sm btn-outline-secondary"
+                                       href="javascript:void(0);"
+                                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                                        삭제</a>
+                                    <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">
+                                        <input type="hidden" name="_method" value="delete">
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 페이징처리 시작 -->
+        <div th:if="${!commentPaging.isEmpty()}" class="flex justify-center mt-2">
+            <div class="btn-group pagination">
+                <a class="page-link btn btn-sm btn-outline btn-primary" th:disabled="${!commentPaging.hasPrevious} ? 'disabled'"
+                   href="javascript:void(0)" th:data-page="${(commentPaging.number)-1}">
+                    <span>이전</span>
+                </a>
+                <a th:text="${page}" class="page-link btn btn-sm btn-outline btn-primary"
+                   th:each="page: ${#numbers.sequence(0, (commentPaging.totalPages)-1)}"
+                   th:if="${page >= (commentPaging.number)-5 and page <= commentPaging.number+5}"
+                   href="javascript:void(0)"
+                   th:data-page="${page}"></a>
+                <a class="page-link btn btn-sm btn-outline btn-primary" th:disabled="${!commentPaging.hasNext} ? 'disabled'"
+                   href="javascript:void(0)" th:data-page="${commentPaging.number+1}">
+                    <span>다음</span>
+                </a>
+            </div>
+        </div>
+        <!-- 페이징처리 끝 -->
+        <!-- 댓글 페이징처리 끝 -->
+        <form th:action="@{|/community/freedomPost/detail/${freedomPost.id}#comment-start|}" method="get" id="commentForm">
+            <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">
+        </form>
+    </div>
+
+    <script layout:fragment="script" type='text/javascript'>
+        const page_elements = document.getElementsByClassName("page-link");
+        Array.from(page_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                document.getElementById('commentPage').value = this.dataset.page;
+                document.getElementById('commentForm').submit();
+            });
+        });
+
+        const comment_answer_elements = document.getElementsByClassName("comment-answer");
+        const block_answer = document.getElementsByClassName("comment-answer-block");
+        Array.from(comment_answer_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                Array.from(block_answer).forEach((x) => {
+                    if (x.id === this.dataset.num) {
+                        if (x.style.display === "none") {
+                            x.style.display = "block";
+                        } else
+                            x.style.display = "none";
+                    }
+                })
+            });
+        });
+
+        if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
+            const commentId = window.location.hash.replace("#reply-", "");
+            $(function(){
+                document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
+            });
+        }
+
+    </script>
+</main>
+</body>
+
+</html>
+

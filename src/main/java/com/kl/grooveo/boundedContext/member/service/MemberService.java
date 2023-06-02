@@ -1,8 +1,11 @@
 package com.kl.grooveo.boundedContext.member.service;
 
+import com.kl.grooveo.base.email.service.EmailService;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.repository.MemberRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,8 +20,8 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -49,6 +52,10 @@ public class MemberService {
 
         memberRepository.save(member);
 
+        if (member.getEmail() != null) {
+            emailService.sendRegistrationEmail(member);
+        }
+
         return RsData.of("S-1", "회원가입이 완료되었습니다.", member);
     }
 
@@ -63,4 +70,42 @@ public class MemberService {
         return join(providerTypeCode, username, "", "", null, null);
     }
 
+    public RsData findUsername(String email) {
+        Optional<Member> opActor = memberRepository.findByEmail(email);
+
+        if (opActor.isEmpty()) {
+            return RsData.of("F-1", "등록된 아이디를 찾을 수 없습니다.");
+        }
+
+        emailService.sendUsername(opActor.get());
+
+        return RsData.of("S-1", "등록하신 이메일로 아이디를 발송했습니다.");
+    }
+
+    @Transactional
+    public RsData findUserPassword(String username, String email) {
+        Optional<Member> opActor = memberRepository.findByUsernameAndEmail(username, email);
+        if (opActor.isEmpty()) {
+            return RsData.of("F-1", "등록된 아이디를 찾을 수 없습니다.");
+        }
+        Member actor = opActor.get();
+        // 임시비밀번호
+        String temporaryPassword = emailService.sendTemporaryPassword(actor);
+        // 임시비밀번호 인코딩
+        String password = passwordEncoder.encode(temporaryPassword);
+        // 임시비밀번호로 비밀번호 변경
+        actor.modifyPassword(password);
+
+        return RsData.of("S-1", "등록하신 이메일로 임시비밀번호를 발송했습니다.");
+    }
+
+    public RsData isEmailVerified(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        if (session.getAttribute("emailVerified").equals("false")) {
+            return RsData.of("F-1", "이메일 인증에 실패했습니다. 인증코드를 확인해 주세요.");
+        } else {
+            return RsData.of("S-1", "이메일 인증이 완료되었습니다.");
+        }
+    }
 }
