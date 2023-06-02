@@ -108,4 +108,8 @@ public class MemberService {
             return RsData.of("S-1", "이메일 인증이 완료되었습니다.");
         }
     }
+
+    public Optional<Member> findById(Long memberId) {
+        return memberRepository.findById(memberId);
+    }
 }

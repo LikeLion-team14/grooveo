@@ -5,6 +5,8 @@ import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
+import com.kl.grooveo.boundedContext.notification.service.NotificationService;
+import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +21,8 @@ public class NotProd {
     CommandLineRunner initData(
             MemberService memberService,
             FreedomPostService freedomPostService,
-            FreedomPostCommentService freedomPostCommentService
+            FreedomPostCommentService freedomPostCommentService,
+            NotificationService notificationService
     ) {
         return new CommandLineRunner() {
             @Override
@@ -38,6 +41,11 @@ public class NotProd {
                 for (int i = 0; i < 10; i++) {
                     freedomPostCommentService.create(freedomPost, "댓글 내용" + i, memberUser1);
                 }
+
+                ThumbsUp thumbsUp = new ThumbsUp();
+                thumbsUp.setPostId(199L);
+                thumbsUp.setMember(memberUser2);
+                notificationService.whenAfterPostLike(thumbsUp);
             }
         };
     }

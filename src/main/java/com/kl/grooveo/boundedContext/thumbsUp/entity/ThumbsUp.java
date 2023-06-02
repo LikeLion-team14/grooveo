@@ -1,11 +1,11 @@
 package com.kl.grooveo.boundedContext.thumbsUp.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.kl.grooveo.boundedContext.member.entity.Member;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,5 +17,9 @@ public class ThumbsUp {
 
     private Long postId;
 
-    private Long memberId;
+    @ManyToOne
+    private Member member;
+
+    private LocalDateTime createDate;
+    private LocalDateTime deleteDate;
 }

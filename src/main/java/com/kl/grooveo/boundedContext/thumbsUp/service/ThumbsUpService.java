@@ -1,5 +1,7 @@
 package com.kl.grooveo.boundedContext.thumbsUp.service;
 
+import com.kl.grooveo.boundedContext.member.entity.Member;
+import com.kl.grooveo.boundedContext.member.service.MemberService;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp_summary;
 import com.kl.grooveo.boundedContext.thumbsUp.repository.ThumbsUpRepository;
@@ -14,11 +16,15 @@ import java.util.Optional;
 public class ThumbsUpService {
     private final ThumbsUp_summaryRepository thumbsUpSummaryRepository;
     private final ThumbsUpRepository thumbsUpRepository;
+    private final MemberService memberService;
 
     public void likePost(Long postId, Long memberId) {
+        Optional<Member> member =  memberService.findById(memberId);
+        if (member.isEmpty()) return;
+
         ThumbsUp thumbsUp = new ThumbsUp();
         thumbsUp.setPostId(postId);
-        thumbsUp.setMemberId(memberId);
+        thumbsUp.setMember(member.get());
         thumbsUpRepository.save(thumbsUp);
 
         if (!thumbsUpSummaryRepository.existsByPostId(postId)) {
@@ -30,7 +36,9 @@ public class ThumbsUpService {
     }
 
     public void unlikePost(Long postId, Long memberId) {
-        Optional<ThumbsUp> thumbsUpOptional = thumbsUpRepository.findByPostIdAndMemberId(postId, memberId);
+        Optional<Member> member =  memberService.findById(memberId);
+        if (member.isEmpty()) return;
+        Optional<ThumbsUp> thumbsUpOptional = thumbsUpRepository.findByPostIdAndMember(postId, member.get());
         thumbsUpOptional.ifPresent(thumbsUpRepository::delete);
 
         if (!thumbsUpSummaryRepository.existsByPostId(postId)) {
@@ -41,7 +49,7 @@ public class ThumbsUpService {
         }
     }
 
-    public boolean isLikedByMember(Long postId, Long memberId) {
-        return thumbsUpRepository.existsByPostIdAndMemberId(postId, memberId);
+    public boolean isLikedByMember(Long postId, Member member) {
+        return thumbsUpRepository.existsByPostIdAndMember(postId, member);
     }
 }

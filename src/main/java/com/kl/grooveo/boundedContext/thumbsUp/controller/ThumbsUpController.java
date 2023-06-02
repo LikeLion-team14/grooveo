@@ -25,7 +25,7 @@ public class ThumbsUpController {
     @ResponseBody
     @Transactional
     public ThumbsUpDTO handleLikeRequest(@RequestParam("postId") Long postId) {
-        boolean isLiked = thumbsUpService.isLikedByMember(postId, rq.getMember().getId());
+        boolean isLiked = thumbsUpService.isLikedByMember(postId, rq.getMember());
         isLiked = !isLiked;
 
         int plusNum;
@@ -47,7 +47,7 @@ public class ThumbsUpController {
     @ResponseBody
     @Transactional
     public ThumbsUpDTO findLikeRequest(@RequestParam("postId") Long postId) {
-        boolean isLiked = thumbsUpService.isLikedByMember(postId, rq.getMember().getId());
+        boolean isLiked = thumbsUpService.isLikedByMember(postId, rq.getMember());
 
         if (isLiked) {
             int cntLike = thumbsUpSummaryService.getLikeCount(postId);

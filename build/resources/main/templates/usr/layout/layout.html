@@ -46,6 +46,12 @@
                     <li><a href="/community/freedomPost/2/list" style="color: black;">국내 게시판</a></li>
                 </ul>
             </div>
+            <a href="/usr/notification/list" class="btn btn-ghost btn-circle" th:if="${@rq.login}">
+                <div class="indicator">
+                    <i class="fa-regular fa-bell"></i>
+                    <span data-test="hasUnreadNotifications" th:if="${@rq.hasUnreadNotifications()}" class="badge badge-xs badge-secondary indicator-item"></span>
+                </div>
+            </a>
         </div>
     </div>
 </div>
