@@ -1,0 +1,133 @@
+<html layout:decorate="~{usr/layout/layout.html}" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title></title>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
+<body>
+<main layout:fragment="main">
+
+    <div id="likeBtn2" class="mx-1">
+    </div>
+    <button id="likeBtn" onclick="likeBtnClick()" class="btn btn-sm btn-primary mx-1">
+        Like
+    </button>
+
+
+    <script th:inline="javascript">
+        const page_elements = document.getElementsByClassName("page-link");
+        Array.from(page_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                document.getElementById('commentPage').value = this.dataset.page;
+                document.getElementById('commentForm').submit();
+            });
+        });
+
+        const comment_answer_elements = document.getElementsByClassName("comment-answer");
+        const block_answer = document.getElementsByClassName("comment-answer-block");
+        Array.from(comment_answer_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                Array.from(block_answer).forEach((x) => {
+                    if (x.id === this.dataset.num) {
+                        if (x.style.display === "none") {
+                            x.style.display = "block";
+                        } else
+                            x.style.display = "none";
+                    }
+                })
+            });
+        });
+
+        if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
+            const commentId = window.location.hash.replace("#reply-", "");
+            $(function () {
+                document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
+            });
+        }
+
+        function likeBtnClick() {
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const token = $("meta[name='_csrf']").attr("content");
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+            const freedom = [[${freedomPost}]];
+            if (freedom) {
+                const postId = [[${freedomPost.id}]];
+                const likeButton = $('#likeBtn');
+                $.ajax({
+                    type: "POST",
+                    url: "/pushLike", // 좋아요 요청을 보낼 URL
+                    data: {
+                        postId: postId
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response)
+                        console.log(response.result)
+                        console.log(response.likeCnt)
+                        if (response.result === "liked") { // 좋아요 데이터가 없음 -> 좋아요 표시
+                            console.log("좋아요")
+                            const newHtml = '<i class="fa-solid fa-heart"></i>Like'
+                            likeButton.html(newHtml)
+
+                        } else if (response.result === "unliked") {  // 좋아요 데이터가 있음 -> 좋아요 표시X
+                            console.log("좋아요 X")
+                            const newHtml = '<i class="fa-solid fa-heart"></i>UnLike'
+                            likeButton.html(newHtml)
+                        }
+                        console.log("aabb")
+                        $('#likeBtn2').text(response.likeCnt)
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            console.log("jQuery 로드 완료")
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const token = $("meta[name='_csrf']").attr("content");
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+            // 페이지가 로드될 때 실행되는 코드
+            // Ajax 를 사용하여 데이터를 가져오는 등의 작업을 수행
+
+            const freedom = [[${freedomPost}]];
+            if (freedom) {
+                const postId = [[${freedomPost.id}]];
+                const likeButton = $('#likeBtn');
+                $.ajax({
+                    type: "POST",
+                    url: "/findThumbsUpInfo", // 좋아요 요청을 보낼 URL
+                    data: {
+                        postId: postId
+                    },
+                    dataType: "text",
+                    success: function (response) {
+                        console.log(response)
+                        if (response === "liked") {
+                            // 좋아요 데이터가 없음 -> 좋아요 표시
+                            const newHtml = '<i class="fa-solid fa-heart"></i>Like'
+                            likeButton.html(newHtml)
+                        } else if (response === "unliked") {
+                            // 좋아요 데이터가 있음 -> 좋아요 표시X
+                            const newHtml = '<i class="fa-solid fa-heart"></i>UnLike'
+                            likeButton.html(newHtml)
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    </script>
+</main>
+</body>
+</html>

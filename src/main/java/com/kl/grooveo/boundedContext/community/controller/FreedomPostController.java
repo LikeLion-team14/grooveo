@@ -7,6 +7,7 @@ import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.form.CommentForm;
 import com.kl.grooveo.boundedContext.form.FreedomPostForm;
+import com.kl.grooveo.boundedContext.form.ReplyForm;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +30,7 @@ public class FreedomPostController {
     static int boardTypeCode;
 
     @GetMapping("/{boardType}/list")
-    public String showList(Model model, @PathVariable("boardType") Integer boardType, @RequestParam(value="page", defaultValue="0") int page,
+    public String showList(Model model, @PathVariable("boardType") Integer boardType, @RequestParam(value = "page", defaultValue = "0") int page,
                            @RequestParam(value = "kw", defaultValue = "") String kw, CategoryForm categoryForm) {
         Page<FreedomPost> paging = this.freedomPostService.getList(boardType, categoryForm.options, kw, page);
         model.addAttribute("boardType", boardType);
@@ -45,9 +46,16 @@ public class FreedomPostController {
         private String options = "";
     }
 
+    @GetMapping(value = "/detail2")
+    public String showTest(Model model) {
+        FreedomPost freedomPost = freedomPostService.getFreedomPost(1L);
+        model.addAttribute("freedomPost", freedomPost);
+        return "usr/community/freedomPost/detail2";
+    }
+
     @GetMapping(value = "/detail/{id}")
     public String showMoreDetail(Model model, @PathVariable("id") Long id,
-                                 @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm,
+                                 @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm, ReplyForm replyForm,
                                  HttpServletRequest request, HttpServletResponse response) {
         FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
 
@@ -66,12 +74,12 @@ public class FreedomPostController {
         if (oldCookie != null) {
             // "postView" 가 존재한다면
             // value 가 현재 접근한 게시글의 id 를 포함하고 있는지 검사
-            if (!oldCookie.getValue().contains("["+ id.toString() +"]")) {
+            if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
                 // 포함하고 있지 않으면 조회수 증가
                 this.freedomPostService.updateView(id);
                 oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
                 oldCookie.setPath("/");
-                oldCookie.setMaxAge(60 * 60 * 24); 							// 쿠키 시간
+                oldCookie.setMaxAge(60 * 60 * 24);                            // 쿠키 시간
                 response.addCookie(oldCookie);
             }
         } else {
@@ -81,11 +89,12 @@ public class FreedomPostController {
             this.freedomPostService.updateView(id);
             Cookie newCookie = new Cookie("postView", "[" + id + "]");
             newCookie.setPath("/");
-            newCookie.setMaxAge(60 * 60 * 24); 								// 쿠키 시간
+            newCookie.setMaxAge(60 * 60 * 24);                                // 쿠키 시간
             response.addCookie(newCookie);
         }
 
         Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage);
+
         model.addAttribute("commentPaging", commentPaging);
         model.addAttribute("freedomPost", freedomPost);
 

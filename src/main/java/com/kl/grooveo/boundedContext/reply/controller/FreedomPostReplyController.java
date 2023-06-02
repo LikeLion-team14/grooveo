@@ -49,6 +49,7 @@ public class FreedomPostReplyController {
         }
 
         FreedomPostReply freedomPostReply = this.freedomPostReplyService.create(freedomPostComment, replyForm.getContent(), member);
+        model.addAttribute("freedomPost", freedomPost);
         model.addAttribute("commentPaging", commentPaging);
         return String.format("redirect:/community/freedomPost/detail/%s?commentPage=%s#reply-%s",
                 freedomPostReply.getFreedomPostComment().getFreedomPost().getId(), commentPage, freedomPostReply.getFreedomPostComment().getId());

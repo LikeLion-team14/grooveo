@@ -4,6 +4,8 @@ spring:
   profiles:
     active: dev
     include: secret
+  thymeleaf:
+    enabled: true
   mvc:
     hiddenmethod:      # @DeleteMapping 사용 위해
       filter:
