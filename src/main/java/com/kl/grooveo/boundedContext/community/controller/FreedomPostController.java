@@ -7,6 +7,7 @@ import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.form.CommentForm;
 import com.kl.grooveo.boundedContext.form.FreedomPostForm;
+import com.kl.grooveo.boundedContext.form.ReplyForm;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,9 +46,16 @@ public class FreedomPostController {
         private String options = "";
     }
 
+    @GetMapping(value = "/detail2")
+    public String showTest(Model model) {
+        FreedomPost freedomPost = freedomPostService.getFreedomPost(1L);
+        model.addAttribute("freedomPost", freedomPost);
+        return "usr/community/freedomPost/detail2";
+    }
+
     @GetMapping(value = "/detail/{id}")
     public String showMoreDetail(Model model, @PathVariable("id") Long id,
-                                 @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm,
+                                 @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm, ReplyForm replyForm,
                                  HttpServletRequest request, HttpServletResponse response) {
         FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
 
@@ -86,6 +94,7 @@ public class FreedomPostController {
         }
 
         Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage);
+
         model.addAttribute("commentPaging", commentPaging);
         model.addAttribute("freedomPost", freedomPost);
 

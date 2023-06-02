@@ -1,6 +1,8 @@
 <html layout:decorate="~{usr/layout/layout.html}">
 
 <head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title></title>
 </head>
 
@@ -10,13 +12,18 @@
     <div class="flex flex-col align-center mx-auto w-4/6">
         <div class="flex justify-between">
             <span class="text-3xl font-bold" th:text="${freedomPost.title}"></span>
-            <span th:text="|View : ${freedomPost.view}|"></span>
+            <div class="flex">
+                <span><i class="fa-solid fa-heart"></i>&nbsp;:&nbsp;</span>
+                <span id="likeCnt" class="mr-2">0</span>
+                <span><i class="fa-solid fa-eye"></i>&nbsp;:&nbsp;</span>
+                <span th:text="${freedomPost.view}"></span>
+            </div>
         </div>
         <span class="badge badge-lg rounded-pill bg-primary my-2"
               th:text="${freedomPost.categoryDisplayName()}"></span>
         <div class="w-full max-w-ls" style="min-height: 10vh" th:text="${freedomPost.content}"></div>
         <div class="flex justify-end">
-            <button class="btn btn-sm btn-primary mx-1">
+            <button id="likeBtn" class="btn btn-sm btn-primary mx-1">
                 <i class="fa-solid fa-heart"></i>&nbsp;Like
             </button>
             <button class="btn btn-sm btn-primary"
@@ -30,7 +37,6 @@
                 <input type="hidden" name="_method" value="delete">
             </form>
         </div>
-
 
         <span class="text-xl font-bold my-2">댓글 쓰기</span>
         <!-- 댓글 작성 -->
@@ -131,7 +137,7 @@
         </form>
     </div>
 
-    <script layout:fragment="script" type='text/javascript'>
+    <script th:inline="javascript">
         const page_elements = document.getElementsByClassName("page-link");
         Array.from(page_elements).forEach(function (element) {
             element.addEventListener('click', function () {
@@ -162,9 +168,93 @@
             });
         }
 
+        function likeBtnClick() {
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const token = $("meta[name='_csrf']").attr("content");
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+            const postId = /*[[${freedomPost.id}]]*/ null;
+            if (postId) {
+
+                const likeButton = $('#likeBtn');
+                $.ajax({
+                    type: "POST",
+                    url: "/pushLike", // 좋아요 요청을 보낼 URL
+                    data: {
+                        postId: postId
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response)
+                        console.log(response.result)
+                        console.log(response.likeCnt)
+                        if (response.result === "liked") { // 좋아요 데이터가 없음 -> 좋아요 표시
+                            console.log("좋아요")
+                            const newHtml = '<i class="fa-solid fa-heart"></i>&nbsp;Like'
+                            likeButton.html(newHtml)
+
+                        } else if (response.result === "unliked") {  // 좋아요 데이터가 있음 -> 좋아요 표시X
+                            console.log("좋아요 취소")
+                            const newHtml = '<i class="fa-regular fa-heart"></i>&nbsp;UnLike'
+                            likeButton.html(newHtml)
+                        }
+                        console.log("pass")
+                        $('#likeCnt').text(response.likeCnt)
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            console.log('jQuery is loaded!');
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const token = $("meta[name='_csrf']").attr("content");
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+            // 페이지가 로드될 때 실행되는 코드
+            // Ajax 를 사용하여 데이터를 가져오는 등의 작업을 수행
+
+            const postId = /*[[${freedomPost.id}]]*/ null;
+            if (postId) {
+                const likeButton = $('#likeBtn');
+                $.ajax({
+                    type: "POST",
+                    url: "/findThumbsUpInfo", // 좋아요 요청을 보낼 URL
+                    data: {
+                        postId: postId
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response)
+                        if (response.result === "liked") {
+                            // 좋아요 데이터가 없음 -> 좋아요 표시
+                            const newHtml = '<i class="fa-solid fa-heart"></i>&nbsp;Like'
+                            likeButton.html(newHtml)
+                        } else if (response.result === "unliked") {
+                            // 좋아요 데이터가 있음 -> 좋아요 표시X
+                            const newHtml = '<i class="fa-solid fa-heart"></i>&nbsp;UnLike'
+                            likeButton.html(newHtml)
+                        }
+                        $('#likeCnt').text(response.likeCnt)
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+            // 버튼 클릭 이벤트 핸들러 등록
+            $(document).on('click', '#likeBtn', function () {
+                console.log("click")
+                likeBtnClick();
+            });
+        });
     </script>
 </main>
 </body>
 
 </html>
-

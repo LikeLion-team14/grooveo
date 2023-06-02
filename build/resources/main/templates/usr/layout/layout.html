@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- 제이쿼리 불러오기 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <!-- 폰트어썸 아이콘 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -17,7 +18,6 @@
 
     <!-- 공통 JS 불러오기 -->
     <script src="/resource/common/common.js"></script>
-
 </head>
 
 <body>
@@ -37,6 +37,7 @@
             <a th:if="${@rq.logout}" class="btn btn-ghost rounded-btn" href="/usr/member/login">로그인</a>
             <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="javascript:" onclick="$(this).next().submit();">로그아웃</a>
             <form class="!hidden" hidden th:action="|/usr/member/logout|" method="POST"></form>
+            <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="/usr/member/me">My Page</a>
 
             <div class="dropdown dropdown-end">
                 <label tabindex="0" class="btn btn-ghost rounded-btn">커뮤니티</label>

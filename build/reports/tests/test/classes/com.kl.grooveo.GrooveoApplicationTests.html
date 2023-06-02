@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - GrooveoApplicationTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>GrooveoApplicationTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.kl.grooveo.html">com.kl.grooveo</a> &gt; GrooveoApplicationTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.148s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">contextLoads()</td>
+<td class="success">0.148s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>15:55:40.672 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Neither @ContextConfiguration nor @ContextHierarchy found for test class [GrooveoApplicationTests]: using SpringBootContextLoader
+15:55:40.677 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader -- Could not detect default resource locations for test class [com.kl.grooveo.GrooveoApplicationTests]: no resource found for suffixes {-context.xml, Context.groovy}.
+15:55:40.678 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.kl.grooveo.GrooveoApplicationTests]: GrooveoApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+15:55:40.702 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using ContextCustomizers for test class [GrooveoApplicationTests]: [DisableObservabilityContextCustomizer, PropertyMappingContextCustomizer, Customizer, ExcludeFilterContextCustomizer, DuplicateJsonObjectContextCustomizer, MockitoContextCustomizer, TestRestTemplateContextCustomizer]
+15:55:40.773 [Test worker] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider -- Identified candidate component class: file [C:\Users\User\IdeaProjects\grooveo\build\classes\java\main\com\kl\grooveo\GrooveoApplication.class]
+15:55:40.774 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.kl.grooveo.GrooveoApplication for test class com.kl.grooveo.GrooveoApplicationTests
+15:55:40.886 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using TestExecutionListeners for test class [GrooveoApplicationTests]: [ServletTestExecutionListener, DirtiesContextBeforeModesTestExecutionListener, ApplicationEventsTestExecutionListener, MockitoTestExecutionListener, DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener, TransactionalTestExecutionListener, SqlScriptsTestExecutionListener, WithSecurityContextTestExecutionListener, EventPublishingTestExecutionListener, ReactorContextTestExecutionListener, RestDocsTestExecutionListener, MockRestServiceServerResetTestExecutionListener, MockMvcPrintOnlyOnFailureTestExecutionListener, WebDriverTestExecutionListener, MockWebServiceServerTestExecutionListener, ResetMocksTestExecutionListener]
+15:55:40.888 [Test worker] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener -- Before test class: class [GrooveoApplicationTests], class annotated with @DirtiesContext [false] with mode [null]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.0.7)
+
+2023-06-02T15:55:41.241+09:00  INFO 24168 --- [    Test worker] com.kl.grooveo.GrooveoApplicationTests   : Starting GrooveoApplicationTests using Java 17.0.6 with PID 24168 (started by User in C:\Users\User\IdeaProjects\grooveo)
+2023-06-02T15:55:41.243+09:00  INFO 24168 --- [    Test worker] com.kl.grooveo.GrooveoApplicationTests   : The following 2 profiles are active: &quot;secret&quot;, &quot;dev&quot;
+2023-06-02T15:55:42.131+09:00  INFO 24168 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-06-02T15:55:42.207+09:00  INFO 24168 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 68 ms. Found 6 JPA repository interfaces.
+2023-06-02T15:55:42.733+09:00  INFO 24168 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-06-02T15:55:42.800+09:00  INFO 24168 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.1.7.Final
+2023-06-02T15:55:43.134+09:00  INFO 24168 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-06-02T15:55:43.395+09:00  INFO 24168 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@299786b1
+2023-06-02T15:55:43.397+09:00  INFO 24168 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-06-02T15:55:43.458+09:00  INFO 24168 --- [    Test worker] SQL dialect                              : HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+Hibernate: 
+    
+    alter table freedom_post 
+       drop 
+       foreign key FKkx81815i80c2qdjad4yirfxbd
+Hibernate: 
+    
+    alter table freedom_post_comment 
+       drop 
+       foreign key FKseyjf65asaov2kbl3c4k4ic1h
+Hibernate: 
+    
+    alter table freedom_post_comment 
+       drop 
+       foreign key FKam0vjqqdaqlxfxopbb4mr27he
+Hibernate: 
+    
+    alter table freedom_post_reply 
+       drop 
+       foreign key FK3d12bppam9t2g17bq8g2mublr
+Hibernate: 
+    
+    alter table freedom_post_reply 
+       drop 
+       foreign key FKd0e7ffppthc0f0pssooyfqm6i
+Hibernate: 
+    
+    drop table if exists freedom_post
+Hibernate: 
+    
+    drop table if exists freedom_post_comment
+Hibernate: 
+    
+    drop table if exists freedom_post_reply
+Hibernate: 
+    
+    drop table if exists member
+Hibernate: 
+    
+    drop table if exists thumbs_up
+Hibernate: 
+    
+    drop table if exists thumbs_up_summary
+Hibernate: 
+    
+    create table freedom_post (
+       id bigint not null auto_increment,
+        board_type integer,
+        category varchar(255),
+        content TEXT,
+        create_date datetime(6),
+        delete_date datetime(6),
+        modify_date datetime(6),
+        title varchar(255),
+        view integer default 0 not null,
+        author_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table freedom_post_comment (
+       id bigint not null auto_increment,
+        content TEXT,
+        create_date datetime(6),
+        delete_date datetime(6),
+        author_id bigint,
+        freedom_post_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table freedom_post_reply (
+       id bigint not null auto_increment,
+        content TEXT,
+        create_date datetime(6),
+        delete_date datetime(6),
+        author_id bigint,
+        freedom_post_comment_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table member (
+       id bigint not null auto_increment,
+        create_date datetime(6),
+        modify_date datetime(6),
+        email varchar(255),
+        name varchar(255),
+        nick_name varchar(255),
+        password varchar(255),
+        provider_type_code varchar(255),
+        role varchar(255),
+        username varchar(255),
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table thumbs_up (
+       id bigint not null auto_increment,
+        member_id bigint,
+        post_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table thumbs_up_summary (
+       id bigint not null auto_increment,
+        like_count integer not null,
+        post_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    alter table member 
+       add constraint UK_mbmcqelty0fbrvxp1q58dn57t unique (email)
+Hibernate: 
+    
+    alter table member 
+       add constraint UK_f3xpkeiwuq8kwkt45lkvanwsd unique (nick_name)
+Hibernate: 
+    
+    alter table member 
+       add constraint UK_gc3jmn7c2abyo3wf6syln5t2i unique (username)
+Hibernate: 
+    
+    alter table thumbs_up_summary 
+       add constraint UK_df3buqj8orkuij0lackc4h2hc unique (post_id)
+Hibernate: 
+    
+    alter table freedom_post 
+       add constraint FKkx81815i80c2qdjad4yirfxbd 
+       foreign key (author_id) 
+       references member (id)
+Hibernate: 
+    
+    alter table freedom_post_comment 
+       add constraint FKseyjf65asaov2kbl3c4k4ic1h 
+       foreign key (author_id) 
+       references member (id)
+Hibernate: 
+    
+    alter table freedom_post_comment 
+       add constraint FKam0vjqqdaqlxfxopbb4mr27he 
+       foreign key (freedom_post_id) 
+       references freedom_post (id)
+Hibernate: 
+    
+    alter table freedom_post_reply 
+       add constraint FK3d12bppam9t2g17bq8g2mublr 
+       foreign key (author_id) 
+       references member (id)
+Hibernate: 
+    
+    alter table freedom_post_reply 
+       add constraint FKd0e7ffppthc0f0pssooyfqm6i 
+       foreign key (freedom_post_comment_id) 
+       references freedom_post_comment (id)
+2023-06-02T15:55:44.758+09:00  INFO 24168 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-06-02T15:55:44.768+09:00  INFO 24168 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-06-02T15:55:45.679+09:00  WARN 24168 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-06-02T15:55:45.838+09:00  INFO 24168 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1d8e9f22, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@47166740, org.springframework.security.web.context.SecurityContextHolderFilter@3c88db1, org.springframework.security.web.header.HeaderWriterFilter@406cf37f, org.springframework.security.web.csrf.CsrfFilter@7e383712, org.springframework.security.web.authentication.logout.LogoutFilter@578cd644, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@50479c2b, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@554a4d18, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@31af3f22, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5078e308, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2045a469, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3b75b7b4, org.springframework.security.web.access.ExceptionTranslationFilter@633328d3]
+2023-06-02T15:55:46.433+09:00  INFO 24168 --- [    Test worker] com.kl.grooveo.GrooveoApplicationTests   : Started GrooveoApplicationTests in 5.497 seconds (process running for 6.603)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        m1_0.id,
+        m1_0.create_date,
+        m1_0.email,
+        m1_0.modify_date,
+        m1_0.name,
+        m1_0.nick_name,
+        m1_0.password,
+        m1_0.provider_type_code,
+        m1_0.role,
+        m1_0.username 
+    from
+        member m1_0 
+    where
+        m1_0.username=?
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.member.entity.Member
+        */ insert 
+    into
+        member (create_date, email, modify_date, name, nick_name, password, provider_type_code, role, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        m1_0.id,
+        m1_0.create_date,
+        m1_0.email,
+        m1_0.modify_date,
+        m1_0.name,
+        m1_0.nick_name,
+        m1_0.password,
+        m1_0.provider_type_code,
+        m1_0.role,
+        m1_0.username 
+    from
+        member m1_0 
+    where
+        m1_0.username=?
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.member.entity.Member
+        */ insert 
+    into
+        member (create_date, email, modify_date, name, nick_name, password, provider_type_code, role, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* &lt;criteria&gt; */ select
+        m1_0.id,
+        m1_0.create_date,
+        m1_0.email,
+        m1_0.modify_date,
+        m1_0.name,
+        m1_0.nick_name,
+        m1_0.password,
+        m1_0.provider_type_code,
+        m1_0.role,
+        m1_0.username 
+    from
+        member m1_0 
+    where
+        m1_0.username=?
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.member.entity.Member
+        */ insert 
+    into
+        member (create_date, email, modify_date, name, nick_name, password, provider_type_code, role, username) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+Hibernate: 
+    /* insert com.kl.grooveo.boundedContext.community.entity.FreedomPost
+        */ insert 
+    into
+        freedom_post (author_id, board_type, category, content, create_date, delete_date, modify_date, title, view) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?)
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 7.6.1</a> at 2023. 6. 2. 오후 3:55:47</p>
+</div>
+</div>
+</body>
+</html>
