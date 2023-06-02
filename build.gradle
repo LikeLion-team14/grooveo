@@ -36,7 +36,6 @@ dependencies {
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 	// mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
 
 }
