@@ -26,6 +26,8 @@ public class NotProd {
             @Transactional
             public void run(String... args) throws Exception {
                 Member memberUser1 = memberService.join("user1", "1234", "유저1", "유저1입니다", null).getData();
+                Member memberUser2 = memberService.join("user2", "1234", "유저2", "유저2입니다", null).getData();
+                Member memberUser3 = memberService.join("user3", "1234", "유저3", "유저3입니다", null).getData();
 
                 for (int i = 0; i < 100; i++) {
                     freedomPostService.create(1, "국외 게시판 제목" + i, "c2", "내용", memberUser1);

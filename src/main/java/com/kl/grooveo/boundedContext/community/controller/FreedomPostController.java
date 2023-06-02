@@ -46,6 +46,13 @@ public class FreedomPostController {
         private String options = "";
     }
 
+    @GetMapping(value = "/detail2")
+    public String showTest(Model model) {
+        FreedomPost freedomPost = freedomPostService.getFreedomPost(1L);
+        model.addAttribute("freedomPost", freedomPost);
+        return "usr/community/freedomPost/detail2";
+    }
+
     @GetMapping(value = "/detail/{id}")
     public String showMoreDetail(Model model, @PathVariable("id") Long id,
                                  @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm, ReplyForm replyForm,
@@ -87,6 +94,7 @@ public class FreedomPostController {
         }
 
         Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage);
+
         model.addAttribute("commentPaging", commentPaging);
         model.addAttribute("freedomPost", freedomPost);
 
