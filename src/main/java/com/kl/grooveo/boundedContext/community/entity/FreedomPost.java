@@ -61,10 +61,8 @@ public class FreedomPost {
         if (diff < 60) return "방금 전";
         else if (diff < 3600) {
             return (diff / 60) + "분 전";
-        }
-        else if (diff < 86400) {
+        } else if (diff < 86400) {
             return (diff / 60 / 60) + "시간 전";
-        }
-        else return getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } else return getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 }

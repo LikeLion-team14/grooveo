@@ -31,8 +31,8 @@ public class FreedomPostReplyController {
 
     @PostMapping("/create/{id}")
     public String create(Model model, @PathVariable("id") Long id,
-                                    @Valid ReplyForm replyForm, @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
-                                    BindingResult bindingResult, CommentForm commentForm) {
+                         @Valid ReplyForm replyForm, @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
+                         BindingResult bindingResult, CommentForm commentForm) {
 
         FreedomPostComment freedomPostComment = this.freedomPostCommentService.getComment(id);
         Member member = this.memberService.findByUsername(rq.getMember().getUsername()).orElseThrow(

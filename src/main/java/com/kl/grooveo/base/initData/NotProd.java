@@ -1,6 +1,5 @@
 package com.kl.grooveo.base.initData;
 
-import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
@@ -35,10 +34,10 @@ public class NotProd {
                     freedomPostService.create(2, "국내 게시판 제목" + i, "c4", "내용", memberUser1);
                 }
 
-//                FreedomPost freedomPost = freedomPostService.getFreedomPost(199L);
-//                for (int i = 0; i < 10; i++) {
-//                    freedomPostCommentService.create(freedomPost, "댓글 내용" + i, memberUser1);
-//                }
+                FreedomPost freedomPost = freedomPostService.getFreedomPost(199L);
+                for (int i = 0; i < 10; i++) {
+                    freedomPostCommentService.create(freedomPost, "댓글 내용" + i, memberUser1);
+                }
             }
         };
     }

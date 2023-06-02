@@ -4,6 +4,8 @@ import com.kl.grooveo.base.email.service.EmailService;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.repository.MemberRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -95,5 +97,15 @@ public class MemberService {
         actor.modifyPassword(password);
 
         return RsData.of("S-1", "등록하신 이메일로 임시비밀번호를 발송했습니다.");
+    }
+
+    public RsData isEmailVerified(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        if (session.getAttribute("emailVerified").equals("false")) {
+            return RsData.of("F-1", "이메일 인증에 실패했습니다. 인증코드를 확인해 주세요.");
+        } else {
+            return RsData.of("S-1", "이메일 인증이 완료되었습니다.");
+        }
     }
 }

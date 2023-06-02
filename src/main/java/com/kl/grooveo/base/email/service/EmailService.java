@@ -1,6 +1,7 @@
 package com.kl.grooveo.base.email.service;
 
 import com.kl.grooveo.boundedContext.member.entity.Member;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -39,14 +40,18 @@ public class EmailService {
         simpleMailMessage.setSubject("아이디 찾기");
 
         simpleMailMessage.setText(("""
-                안녕하세요 'Grooveo'입니다."
-                회원님이 요청하신 아이디 찾기 안내 메시지를 보내드립니다.
-                회원님의 아이디는 다음과 같습니다: [%s]. 감사합니다.""").formatted(member.getUsername()));
+                안녕하세요, Grooveo입니다.
+                                                
+                회원님께서는 아이디 분실을 요청하셨습니다. 아래에 회원님의 아이디를 안내해 드립니다:
+                                                
+                아이디 : %s
+                이메일 주소와 관련된 아이디를 분실하셨을 경우, 이메일 주소를 확인해 보시고 다시 시도해 주세요. 문제가 계속되면 고객 지원팀에 문의해 주세요.
+                                                
+                감사합니다.""").formatted(member.getUsername()));
 
         javaMailSender.send(simpleMailMessage);
     }
 
-    // 임시 비밀번호 만들기
     private String createCode() {
         Random random = new Random();
         StringBuffer key = new StringBuffer();
@@ -78,13 +83,56 @@ public class EmailService {
         String temporaryPassword = createCode();
 
         simpleMailMessage.setText(("""
-                안녕하세요 'Grooveo' 입니다.
-                비밀번호 분실을 처리하기 위해 임시 비밀번호를 발급해드렸습니다.
-                임시 비밀번호는 다음과 같습니다: [%s].
-                보안을 위해 로그인 후 반드시 비밀번호를 변경해주세요.""").formatted(temporaryPassword));
+                안녕하세요, 'Grooveo'입니다.
+                                
+                회원님께서는 비밀번호 분실을 요청하셨습니다. 임시 비밀번호를 안내해 드립니다. 로그인 후에는 반드시 비밀번호를 변경해 주세요.
+                                
+                아이디 : %s
+                임시 비밀번호 : %s
+                로그인 후에는 개인정보 보호를 위해 임시 비밀번호를 즉시 변경해 주시기 바랍니다. 비밀번호 변경을 원하지 않으셨거나 문제가 발생하면 고객 지원팀에 문의해 주세요.
+                                
+                감사합니다.""").formatted(member.getUsername(), temporaryPassword));
 
         javaMailSender.send(simpleMailMessage);
 
         return temporaryPassword;
+    }
+
+    public String sendVerificationCode(HttpSession session, String email) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
+        simpleMailMessage.setTo(email);
+
+        simpleMailMessage.setSubject("회원가입 이메일 인증");
+
+        String verificationCode = createCode();
+
+        simpleMailMessage.setText(("""
+                안녕하세요! 'Grooveo'에 가입해 주셔서 감사합니다.
+                아래 인증 코드를 사용하여 회원가입을 완료해주세요.
+                                  
+                인증 코드 : %s
+                                              
+                'Grooveo'에 대한 저희 사이트에서 멋진 음악과 다양한 커뮤니티를 즐겨보세요!
+                                
+                감사합니다.""").formatted(verificationCode));
+
+        javaMailSender.send(simpleMailMessage);
+
+        session.setAttribute(email, verificationCode);
+
+        return verificationCode;
+    }
+
+    public boolean emailCertification(HttpSession session, String userEmail, String inputCode) {
+        String verificationCode = (String) session.getAttribute(userEmail);
+
+        if (verificationCode.equals(inputCode)) {
+            session.setAttribute("emailVerified", "true");
+            return true;
+        } else {
+            session.setAttribute("emailVerified", "false");
+            return false;
+        }
     }
 }

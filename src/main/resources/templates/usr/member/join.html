@@ -1,6 +1,8 @@
 <html layout:decorate="~{usr/layout/layout.html}">
 
 <head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>회원가입</title>
 </head>
 
@@ -113,6 +115,8 @@
             }
 
             // email 이(가) 올바른지 체크
+            form.email.value = form.email.value.trim();
+
             if (form.email.value.length === 0) {
                 form.email.focus();
                 toastWarning('이메일을 입력해주세요.');
@@ -131,7 +135,7 @@
                 return;
             }
             // 비밀번호 != 비밀번호 재확인
-            if (form.confirmPassword.value !== form.memberPassword.value) {
+            if (form.confirmPassword.value !== form.password.value) {
                 form.confirmPassword.focus();
                 toastWarning('비밀번호와 비밀번호 확인이 다릅니다.');
                 return;
@@ -143,6 +147,53 @@
         function isValidEmail(email) {
             const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             return regex.test(email);
+        }
+
+        function sendAuthenticationCode() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            const userEmail = document.querySelector('.userEmail').value;
+
+            $.ajax({
+                type: "POST",
+                url: "/usr/member/sendCode",
+                data: {"userEmail": userEmail},
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType: "text",
+                success: function (data) {
+                    toastNotice('인증번호가 전송 되었습니다.');
+                }, error: function (data) {
+                    toastWarning('인증번호 전송에 실패했습니다.')
+                }
+            });
+        }
+
+        function emailCertification() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            let userEmail = document.getElementById('email').value;
+            let inputCode = document.getElementById('inputCode').value;
+
+            $.ajax({
+                type: "POST",
+                url: "/usr/member/certification",
+                data: {"userEmail": userEmail, "inputCode": inputCode},
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType: "text",
+                success: function (result) {
+                    if (result === 'true') {
+                        toastNotice('이메일 인증이 완료되었습니다.');
+                    } else {
+                        toastWarning('인증코드가 일치하지 않습니다.');
+                    }
+
+                }
+            });
         }
     </script>
 
@@ -192,7 +243,26 @@
                 <label class="label">
                     <span class="label-text">이메일</span>
                 </label>
-                <input type="text" name="email" maxlength="30" placeholder="이메일" class="input input-bordered">
+                <div class="relative">
+                    <input class="userEmail input input-bordered w-full pr-16" type="text" name="email" id="email"
+                           placeholder="이메일"/>
+                    <button type="button" onclick="sendAuthenticationCode()"
+                            class="btn btn-primary absolute top-0 right-0 rounded-l-none">인증코드 발송
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">이메일 인증코드</span>
+                </label>
+                <div class="relative">
+                    <input class="input input-bordered w-full pr-16" type="text" id="inputCode"
+                           placeholder="인증코드"/>
+                    <button type="button" onclick="emailCertification()"
+                            class="btn btn-primary absolute top-0 right-0 rounded-l-none">이메일 인증
+                    </button>
+                </div>
             </div>
 
             <button id="btn-join-1" class="btn btn-block btn-primary gap-1">
