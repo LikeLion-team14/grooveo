@@ -1,0 +1,38 @@
+<html layout:decorate="~{usr/member/myPage.html}">
+<div layout:fragment="content">
+    <div class="flex flex-wrap gap-4">
+        <h2 class="card-title">
+            <i class="fa-solid fa-user"></i>
+            내 정보
+        </h2>
+        <a class="btn btn-sm btn-warning" href="#">Edit</a>
+    </div>
+    <div class="mt-4">
+        프로필 이미지
+        <div class="mt-2">
+            <img src="/images/likelion.jpg" style="width: 300px; height: 200px;">
+        </div>
+    </div>
+
+    <div class="mt-4">
+        닉네임
+        <div class="mt-2">
+            <span class="badge badge-primary" th:text="${@rq.member.nickName}"></span>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        이메일
+        <div class="mt-2">
+            <span class="badge badge-primary" th:text="${@rq.member.email}"></span>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        가입날짜
+        <div class="mt-2">
+            <span class="badge badge-primary" th:text="${#temporals.format(@rq.member.createDate, 'yy.MM.dd')}"></span>
+        </div>
+    </div>
+</div>
+</html>

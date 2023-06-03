@@ -1,0 +1,57 @@
+<html layout:decorate="~{usr/member/myPage.html}">
+<div layout:fragment="content">
+    <div th:unless="${!#lists.isEmpty(freedomPosts)}" class="text-center">
+        <div>작성한 게시물이 없습니다.</div>
+    </div>
+    <div th:if="${!#lists.isEmpty(freedomPosts)}">
+        <table class="table w-full">
+            <thead class="table-dark">
+            <tr class="text-center">
+                <th>번호</th>
+                <th>카테고리</th>
+                <th style="width:50%">제목</th>
+                <th>글쓴이</th>
+                <th>조회수</th>
+                <th>날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center" th:each="freedomPost, loop : ${paging}">
+                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+                <td th:text="${freedomPost.categoryDisplayName()}"></td>
+                <td class="text-left">
+                    <label for="subject">
+                        <a id="subject" th:href="@{|/community/freedomPost/detail/${freedomPost.id}|}"
+                           th:text="${freedomPost.title}"></a>
+                    </label>
+                </td>
+                <td th:text="${freedomPost.author.username}"></td>
+                <td th:text="${freedomPost.view}"></td>
+                <td>
+                    <span th:text="${freedomPost.getAfterPost()}"></span>
+                    <i th:if="${freedomPost.afterPost.endsWith('전')}" class="fa-solid fa-fire text-red-500"></i></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- 페이징처리 시작 -->
+        <div th:if="${!paging.isEmpty()}" class="flex justify-center mt-2">
+            <div class="btn-group pagination">
+                <a class="page-link btn btn-sm btn-outline btn-primary" th:disabled="${!paging.hasPrevious} ? 'disabled'"
+                   th:href="@{|?page=${paging.number-1}|}" th:data-page="${(paging.number)-1}">
+                    <span>이전</span>
+                </a>
+                <a th:text="${page}" class="page-link btn btn-sm btn-outline btn-primary"
+                   th:each="page: ${#numbers.sequence(0, (paging.totalPages)-1)}"
+                   th:if="${page >= (paging.number)-5 and page <= paging.number+5}"
+                   th:href="@{|?page=${page}|}"
+                   th:data-page="${page}"></a>
+                <a class="page-link btn btn-sm  btn-outline btn-primary" th:disabled="${!paging.hasNext} ? 'disabled'"
+                   th:href="@{|?page=${paging.number+1}|}" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </div>
+        </div>
+        <!-- 페이징처리 끝 -->
+    </div>
+</div>
+</html>

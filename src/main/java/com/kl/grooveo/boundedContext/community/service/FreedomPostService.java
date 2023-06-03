@@ -123,4 +123,11 @@ public class FreedomPostService {
     public int updateView(Long id) {
         return this.freedomPostRepository.updateView(id);
     }
+
+    public Page<FreedomPost> getList(Long userId, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return freedomPostRepository.findAllByAuthorId(userId, pageable);
+    }
 }

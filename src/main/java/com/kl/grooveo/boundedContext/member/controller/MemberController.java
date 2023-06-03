@@ -3,6 +3,8 @@ package com.kl.grooveo.boundedContext.member.controller;
 import com.kl.grooveo.base.email.service.EmailService;
 import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.base.rsData.RsData;
+import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
+import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.form.FindPasswordForm;
 import com.kl.grooveo.boundedContext.member.form.FindUsernameForm;
@@ -12,12 +14,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MemberController {
 
     private final MemberService memberService;
+    private final FreedomPostService freedomPostService;
     private final EmailService emailService;
     private final Rq rq;
 
@@ -107,8 +111,37 @@ public class MemberController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/me")
+    @GetMapping("/myPage")
+    public String showMyPage() {
+        return "usr/member/myPage";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/me")
     public String showMe() {
-        return "usr/member/me";
+        return "usr/member/myPage/me";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/post")
+    public String showMyPost(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Member member = rq.getMember();
+        List<FreedomPost> freedomPosts = member.getFreedomPosts();
+        Page<FreedomPost> paging = freedomPostService.getList(member.getId(), page);
+        model.addAttribute("paging", paging);
+        model.addAttribute("freedomPosts", freedomPosts);
+        return "usr/member/myPage/post";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/comment")
+    public String showMyComment() {
+        return "usr/member/myPage/comment";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/library")
+    public String showMyLibrary() {
+        return "usr/member/myPage/library";
     }
 }
