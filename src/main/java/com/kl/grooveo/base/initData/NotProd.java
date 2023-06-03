@@ -42,13 +42,13 @@ public class NotProd {
 
                 FreedomPost freedomPost = freedomPostService.getFreedomPost(199L);
                 for (int i = 0; i < 10; i++) {
-                    freedomPostCommentService.create(freedomPost, "댓글 내용" + i, memberUser1);
+                    freedomPostCommentService.create(freedomPost, "댓글 내용" + i, memberUser2);
                 }
 
-                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser2));
-                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser3));
-                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser4));
-                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser5));
+//                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser2));
+//                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser3));
+//                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser4));
+//                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser5));
 
 
             }

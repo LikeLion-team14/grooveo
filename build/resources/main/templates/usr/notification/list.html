@@ -24,6 +24,9 @@
                 <div th:if="${notification.typeCode.equals('postLike')}">
                   <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한 게시글에 좋아요를 눌렀어요!
                 </div>
+                <div th:if="${notification.typeCode.equals('comment')}">
+                  <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한 게시글에 댓글을 달았어요!
+                </div>
               </div>
             </div>
           </div>
