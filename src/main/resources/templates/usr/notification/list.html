@@ -1,45 +1,29 @@
-<html layout:decorate="~{usr/layout/layout.html}">
-
-<head>
-  <title>알림</title>
-</head>
-
-<body>
-
-<main layout:fragment="main" class="flex-grow flex items-center justify-center">
-  <div class="max-w-2xl w-full px-4">
-    <h1 class="mb-4">
-      <i class="fa-regular fa-bell"></i>
-      알림
-    </h1>
-
+<div class="flex-grow flex items-center justify-center">
+  <div class="max-w-2xl w-full p-1">
     <div class="text-center mt-10" th:if="${#lists.isEmpty(notifications)}">
       <i class="fa-regular fa-face-laugh"></i> 최근에 받은 알림이 없습니다.
     </div>
 
-    <ul class="flex flex-col gap-4" th:if="${!#lists.isEmpty(notifications)}">
-      <li th:each="notification: ${notifications}">
-        <div class="card bg-base-100 shadow-xl">
+    <ul class="flex flex-col gap-1" th:if="${!#lists.isEmpty(notifications)}">
+      <li th:each="notification, iterationStat: ${notifications}">
+        <div class="card bg-base-100 shadow-2xl">
           <div class="card-body">
             <div class="flex flex-col gap-2">
-              <div>
-                <i class="fa-regular fa-clock"></i>
-                알림
-              </div>
-              <div>
+              <div class="flex items-center">
+                <i class="fa-solid fa-bell mr-2"></i>
+                <span>알림&nbsp;</span><span class="mr-4 text-blue-500" th:text="|#${iterationStat.count}|"></span>
                 <span class="badge badge-primary"
                       th:text="|${#temporals.format(notification.createDate, 'yy.MM.dd HH:mm')}, ${notification.afterAddNotification} 전|"></span>
                 <i th:if="${notification.afterAddNotification.endsWith('초') or notification.afterAddNotification.endsWith('분')}"
-                   class="fa-solid fa-fire text-red-500"></i>
+                   class="fa-solid fa-fire text-red-500 ml-2"></i>
               </div>
             </div>
-            <div class="mt-4 flex flex-col gap-2">
-              <div>
-                <i class="fa-regular fa-message"></i>
-                내용
-              </div>
-              <div th:if="${notification.typeCode.equals('postLike')}">
-                <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한 게시글에 좋아요를 눌렀어요!
+            <div class="mt-1 flex flex-col gap-2">
+              <div class="flex items-center">
+                <i class="fa-regular fa-message mr-2"></i>
+                <div th:if="${notification.typeCode.equals('postLike')}">
+                  <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한 게시글에 좋아요를 눌렀어요!
+                </div>
               </div>
             </div>
           </div>
@@ -49,9 +33,4 @@
 
   </div>
 
-</main>
-
-
-</body>
-
-</html>
+</div>

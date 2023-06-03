@@ -22,4 +22,12 @@ public class ThumbsUp {
 
     private LocalDateTime createDate;
     private LocalDateTime deleteDate;
+
+    public ThumbsUp() {
+    }
+
+    public ThumbsUp(Long postId, Member member) {
+        this.postId = postId;
+        this.member = member;
+    }
 }
