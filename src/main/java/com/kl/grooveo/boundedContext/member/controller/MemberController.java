@@ -3,6 +3,8 @@ package com.kl.grooveo.boundedContext.member.controller;
 import com.kl.grooveo.base.email.service.EmailService;
 import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.base.rsData.RsData;
+import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
+import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -29,6 +31,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final FreedomPostService freedomPostService;
+    private final FreedomPostCommentService freedomPostCommentService;
     private final EmailService emailService;
     private final Rq rq;
 
@@ -135,7 +138,12 @@ public class MemberController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPage/comment")
-    public String showMyComment() {
+    public String showMyComment(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Member member = rq.getMember();
+        List<FreedomPostComment> freedomPostComments = member.getFreedomPostComments();
+        Page<FreedomPostComment> paging = freedomPostCommentService.getCommentList(member.getId(), page);
+        model.addAttribute("paging", paging);
+        model.addAttribute("freedomPostComments", freedomPostComments);
         return "usr/member/myPage/comment";
     }
 
