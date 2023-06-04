@@ -18,3 +18,7 @@ html > body .label-text {
 .navbar {
     z-index: 2;
 }
+
+div {
+    overflow-wrap: break-word;
+}

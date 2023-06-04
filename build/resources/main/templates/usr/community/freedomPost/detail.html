@@ -132,7 +132,7 @@
                             class="comment-item list-group-item"
                             th:with="reply=${comment.getReplyList().get(i)}">
                             <div>
-                                <div class="flex flex-shrink-0">
+                                <div class="flex flex-shrink-0 break-words">
                                     <div>⎿</div>
                                     <div class="p-2 w-100 flex-shrink-1" th:text="${reply.content}"></div>
                                 </div>
