@@ -50,7 +50,7 @@
             <span class="text-3xl font-bold" th:text="${freedomPost.title}"></span>
             <div class="flex">
                 <span><i class="fa-solid fa-heart"></i>&nbsp;:&nbsp;</span>
-                <span id="likeCnt" class="mr-2">0</span>
+                <span id="likeCnt" class="mr-2"></span>
                 <span><i class="fa-solid fa-eye"></i>&nbsp;:&nbsp;</span>
                 <span th:text="${freedomPost.view}"></span>
             </div>
@@ -264,7 +264,7 @@
             if (postId) {
                 const likeButton = $('#likeBtn');
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: "/findThumbsUpInfo", // 좋아요 요청을 보낼 URL
                     data: {
                         postId: postId

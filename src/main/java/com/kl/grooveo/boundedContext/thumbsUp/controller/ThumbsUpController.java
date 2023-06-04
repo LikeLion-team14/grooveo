@@ -7,6 +7,7 @@ import com.kl.grooveo.boundedContext.thumbsUp.service.ThumbsUp_summaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,17 +44,18 @@ public class ThumbsUpController {
         return thumbsUpSummaryService.getLikeCount(postId, plusNum);
     }
 
-    @PostMapping("/findThumbsUpInfo")
+    @GetMapping("/findThumbsUpInfo")
     @ResponseBody
     @Transactional
     public ThumbsUpDTO findLikeRequest(@RequestParam("postId") Long postId) {
         boolean isLiked = thumbsUpService.isLikedByMember(postId, rq.getMember());
+        int cntLike = thumbsUpSummaryService.getLikeCount(postId);
+        if (cntLike == -1) cntLike = 0;
 
         if (isLiked) {
-            int cntLike = thumbsUpSummaryService.getLikeCount(postId);
             return new ThumbsUpDTO(RESPONSE_UNLIKED, cntLike);
         } else {
-            return new ThumbsUpDTO(RESPONSE_LIKED, 0);
+            return new ThumbsUpDTO(RESPONSE_LIKED, cntLike);
         }
     }
 }
