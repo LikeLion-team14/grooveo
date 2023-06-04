@@ -1,5 +1,6 @@
 package com.kl.grooveo.boundedContext.thumbsUp.entity;
 
+import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,19 +16,12 @@ public class ThumbsUp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long postId;
+    @ManyToOne
+    private FreedomPost freedomPost;
 
     @ManyToOne
     private Member member;
 
     private LocalDateTime createDate;
     private LocalDateTime deleteDate;
-
-    public ThumbsUp() {
-    }
-
-    public ThumbsUp(Long postId, Member member) {
-        this.postId = postId;
-        this.member = member;
-    }
 }

@@ -1,5 +1,7 @@
 package com.kl.grooveo.boundedContext.thumbsUp.service;
 
+import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
+import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.response.ThumbsUpDTO;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp_summary;
 import com.kl.grooveo.boundedContext.thumbsUp.repository.ThumbsUp_summaryRepository;
@@ -11,10 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ThumbsUp_summaryService {
     private final ThumbsUp_summaryRepository thumbsUpSummaryRepository;
+    private final FreedomPostService freedomPostService;
+
 
     @Transactional
     public void updateLikeCount(Long postId, int num) {
-        ThumbsUp_summary thumbsUpSummary = thumbsUpSummaryRepository.findByPostId(postId);
+        FreedomPost freedomPost = freedomPostService.getFreedomPost(postId);
+        if (freedomPost == null) return;
+        ThumbsUp_summary thumbsUpSummary = thumbsUpSummaryRepository.findByFreedomPost(freedomPost);
         if (thumbsUpSummary != null) {
             thumbsUpSummary.setLikeCount(thumbsUpSummary.getLikeCount() + num);
             thumbsUpSummaryRepository.save(thumbsUpSummary);
@@ -23,7 +29,8 @@ public class ThumbsUp_summaryService {
 
     @Transactional
     public ThumbsUpDTO getLikeCount(Long postId, int plusNum) {
-        ThumbsUp_summary thumbsUpSummary = thumbsUpSummaryRepository.findByPostId(postId);
+        FreedomPost freedomPost = freedomPostService.getFreedomPost(postId);
+        ThumbsUp_summary thumbsUpSummary = thumbsUpSummaryRepository.findByFreedomPost(freedomPost);
         if (thumbsUpSummary == null) {
             return new ThumbsUpDTO("error", -1);
         }
@@ -33,7 +40,8 @@ public class ThumbsUp_summaryService {
     }
 
     public int getLikeCount(Long postId) {
-        ThumbsUp_summary thumbsUpSummary = thumbsUpSummaryRepository.findByPostId(postId);
+        FreedomPost freedomPost = freedomPostService.getFreedomPost(postId);
+        ThumbsUp_summary thumbsUpSummary = thumbsUpSummaryRepository.findByFreedomPost(freedomPost);
         if (thumbsUpSummary == null) {
             return -1;
         }

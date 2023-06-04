@@ -15,10 +15,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequestMapping("/community/freedomPost")
 @RequiredArgsConstructor
@@ -46,13 +49,7 @@ public class FreedomPostController {
         private String options = "";
     }
 
-    @GetMapping(value = "/detail2")
-    public String showTest(Model model) {
-        FreedomPost freedomPost = freedomPostService.getFreedomPost(1L);
-        model.addAttribute("freedomPost", freedomPost);
-        return "usr/community/freedomPost/detail2";
-    }
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/detail/{id}")
     public String showMoreDetail(Model model, @PathVariable("id") Long id,
                                  @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm, ReplyForm replyForm,
@@ -101,11 +98,13 @@ public class FreedomPostController {
         return "usr/community/freedomPost/detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String freedomPostCreate(Model model, FreedomPostForm freedomPostForm) {
         return "usr/community/freedomPost/form";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String freedomPostCreate(Model model, @Valid FreedomPostForm freedomPostForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -116,28 +115,35 @@ public class FreedomPostController {
         return String.format("redirect:/community/freedomPost/%d/list", boardTypeCode);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public String freedomPostDelete(@PathVariable("id") Long id) {
         FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
-//        if (!freedomPost.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-//        }
+
+        if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+        }
+
         this.freedomPostService.delete(freedomPost);
         return String.format("redirect:/community/freedomPost/%d/list", boardTypeCode);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String freedomPostModify(FreedomPostForm freedomPostForm, @PathVariable("id") Long id) {
         FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
-//        if(!freedomPost.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-//        }
+
+        if(!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+
         freedomPostForm.setTitle(freedomPost.getTitle());
         freedomPostForm.setCategory(freedomPost.getCategory());
         freedomPostForm.setContent(freedomPost.getContent());
         return "usr/community/freedomPost/form";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String freedomPostModify(@Valid FreedomPostForm freedomPostForm, BindingResult bindingResult,
                                     @PathVariable("id") Long id) {
@@ -145,9 +151,11 @@ public class FreedomPostController {
             return "usr/community/freedomPost/form";
         }
         FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
-//        if (!freedomPost.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-//        }
+
+        if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+
         this.freedomPostService.modify(freedomPost, freedomPostForm.getTitle(), freedomPostForm.getCategory(), freedomPostForm.getContent());
         return String.format("redirect:/community/freedomPost/detail/%s", id);
     }

@@ -25,11 +25,10 @@ public class NotificationService {
 
     @Transactional
     public void whenAfterPostLike(ThumbsUp thumbsUp) {
-        FreedomPost freedomPost = freedomPostService.getFreedomPost(thumbsUp.getPostId());
         Notification notification = Notification
                 .builder()
                 .fromMember(thumbsUp.getMember()) // 좋아요 한 멤버
-                .toMember(freedomPost.getAuthor()) // 좋아요 받은 멤버
+                .toMember(thumbsUp.getFreedomPost().getAuthor()) // 좋아요 받은 멤버
                 .typeCode("postLike") // "postLike" -> 커뮤니티 게시글 좋아요 알림
                 .build();
 
