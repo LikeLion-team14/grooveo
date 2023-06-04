@@ -49,4 +49,11 @@ public class FreedomPostCommentService {
         Pageable pageable = PageRequest.of(commentPage, 5, Sort.by(sorts));
         return this.freedomPostCommentRepository.findAllByFreedomPost(freedomPost, pageable);
     }
+
+    public Page<FreedomPostComment> getCommentList(Long userId, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return freedomPostCommentRepository.findAllByAuthorId(userId, pageable);
+    }
 }
