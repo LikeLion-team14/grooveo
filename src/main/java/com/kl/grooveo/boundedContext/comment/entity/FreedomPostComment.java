@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Getter
@@ -33,4 +35,14 @@ public class FreedomPostComment {
 
     private LocalDateTime createDate;
     private LocalDateTime deleteDate;
+
+    public String getAfterPost() {
+        long diff = ChronoUnit.SECONDS.between(getCreateDate(), LocalDateTime.now());
+        if (diff < 60) return "방금 전";
+        else if (diff < 3600) {
+            return (diff / 60) + "분 전";
+        } else if (diff < 86400) {
+            return (diff / 60 / 60) + "시간 전";
+        } else return getCreateDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
 }

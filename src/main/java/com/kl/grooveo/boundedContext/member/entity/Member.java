@@ -54,7 +54,16 @@ public class Member extends BaseEntity {
         return grantedAuthorities;
     }
 
-    public void modifyPassword(String password) {
+    public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;
+
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
     }
 }
