@@ -42,13 +42,16 @@
     top: 0;
     right: 0;
     background-color: #fefefe;
-    max-height: 80vh; /* 모달 창의 최대 높이를 화면 높이의 80%로 제한 (추가) */
-    overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 표시 (추가) */
     border-radius: 8px; /* 둥글게 */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* 입체감 있는 그림자 효과 */
 
     /* 모달 창이 나타날 때의 애니메이션 */
     animation: modalFadeIn 0.6s ease-in-out forwards;
+}
+
+#modalContent1 {
+    max-height: 80vh; /* 모달 창의 최대 높이를 화면 높이의 80%로 제한 (추가) */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 표시 (추가) */
 }
 
 .close1 {

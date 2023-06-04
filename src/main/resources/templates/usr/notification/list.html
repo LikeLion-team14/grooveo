@@ -11,7 +11,7 @@
             <div class="flex flex-col gap-2">
               <div class="flex items-center">
                 <i class="fa-solid fa-bell mr-2"></i>
-                <span>알림&nbsp;</span><span class="mr-4 text-blue-500" th:text="|#${iterationStat.count}|"></span>
+                <span>알림&nbsp;</span><span class="mr-4 text-blue-500" th:text="|#${#lists.size(notifications) - iterationStat.count + 1}|"></span>
                 <span class="badge badge-primary"
                       th:text="|${#temporals.format(notification.createDate, 'yy.MM.dd HH:mm')}, ${notification.afterAddNotification} 전|"></span>
                 <i th:if="${notification.afterAddNotification.endsWith('초') or notification.afterAddNotification.endsWith('분')}"
@@ -22,10 +22,12 @@
               <div class="flex items-center">
                 <i class="fa-regular fa-message mr-2"></i>
                 <div th:if="${notification.typeCode.equals('postLike')}">
-                  <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한 게시글에 좋아요를 눌렀어요!
+                  <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한
+                  게시글에 좋아요를 눌렀어요!
                 </div>
                 <div th:if="${notification.typeCode.equals('comment')}">
-                  <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한 게시글에 댓글을 달았어요!
+                  <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한
+                  게시글에 댓글을 달았어요!
                 </div>
               </div>
             </div>
