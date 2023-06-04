@@ -190,4 +190,21 @@ public class MemberController {
         return rq.redirectWithMsg("/usr/member/myPage/me", member);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/modifyEmail")
+    public String showModifyEmail() {
+        return "usr/member/myPage/modifyEmail";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/myPage/modifyEmail")
+    public String modifyEmail(@Valid ModifyEmailForm modifyEmailForm) {
+        RsData<Member> member = memberService.modifyEmail(rq.getMember(), modifyEmailForm.getEmail());
+
+        if (member.isFail()) {
+            return rq.historyBack(member);
+        }
+
+        return rq.redirectWithMsg("/usr/member/myPage/me", member);
+    }
 }

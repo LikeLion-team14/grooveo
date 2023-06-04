@@ -108,8 +108,8 @@ public class EmailService {
         String verificationCode = createCode();
 
         simpleMailMessage.setText(("""
-                안녕하세요! 'Grooveo'에 가입해 주셔서 감사합니다.
-                아래 인증 코드를 사용하여 회원가입을 완료해주세요.
+                안녕하세요! 'Grooveo'입니다.
+                아래 인증 코드를 사용하여 이메일 인증을 완료해주세요.
                                   
                 인증 코드 : %s
                                               

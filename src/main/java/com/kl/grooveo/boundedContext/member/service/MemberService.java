@@ -137,10 +137,26 @@ public class MemberService {
         return RsData.of("S-1", "닉네임이 변경되었습니다.");
     }
 
+    @Transactional
+    public RsData<Member> modifyEmail(Member actor, String email) {
+        if (isEmailTaken(email)) {
+            return RsData.of("F-2", "이미 사용중인 이메일 입니다.");
+        }
+
+        actor.updateEmail(email);
+
+        return RsData.of("S-1", "이메일이 변경되었습니다.");
+    }
+
     private boolean isNicknameTaken(String nickName) {
         Optional<Member> opActor = memberRepository.findByNickName(nickName);
 
         return opActor.isPresent();
     }
 
+    private boolean isEmailTaken(String email) {
+        Optional<Member> opActor = memberRepository.findByEmail(email);
+
+        return opActor.isPresent();
+    }
 }
