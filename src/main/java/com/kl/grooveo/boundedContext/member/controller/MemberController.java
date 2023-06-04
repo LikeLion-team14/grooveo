@@ -8,10 +8,7 @@ import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
-import com.kl.grooveo.boundedContext.member.form.FindPasswordForm;
-import com.kl.grooveo.boundedContext.member.form.FindUsernameForm;
-import com.kl.grooveo.boundedContext.member.form.JoinForm;
-import com.kl.grooveo.boundedContext.member.form.ModifyPasswordForm;
+import com.kl.grooveo.boundedContext.member.form.*;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -127,12 +124,6 @@ public class MemberController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/myPage/edit")
-    public String editMyPage() {
-        return "modifyPassword";
-    }
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPage/post")
     public String showMyPost(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
         Member member = rq.getMember();
@@ -180,4 +171,23 @@ public class MemberController {
 
         return rq.redirectWithMsg("/usr/member/login", member);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/modifyNickName")
+    public String showModifyNickName() {
+        return "usr/member/myPage/modifyNickName";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/myPage/modifyNickName")
+    public String modifyInfo(@Valid ModifyNickNameForm modifyInfoForm) {
+        RsData<Member> member = memberService.modifyNickName(rq.getMember(), modifyInfoForm.getNickName());
+
+        if (member.isFail()) {
+            return rq.historyBack(member);
+        }
+
+        return rq.redirectWithMsg("/usr/member/myPage/me", member);
+    }
+
 }

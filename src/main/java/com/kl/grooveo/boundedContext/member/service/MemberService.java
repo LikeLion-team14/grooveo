@@ -94,7 +94,7 @@ public class MemberService {
         // 임시비밀번호 인코딩
         String password = passwordEncoder.encode(temporaryPassword);
         // 임시비밀번호로 비밀번호 변경
-        actor.modifyPassword(password);
+        actor.updatePassword(password);
 
         return RsData.of("S-1", "등록하신 이메일로 임시비밀번호를 발송했습니다.");
     }
@@ -120,9 +120,27 @@ public class MemberService {
         }
 
         String password = passwordEncoder.encode(newPassword);
-        actor.modifyPassword(password);
+        actor.updatePassword(password);
 
 
         return RsData.of("S-1", "비밀번호가 변경되었습니다.", actor);
     }
+
+    @Transactional
+    public RsData<Member> modifyNickName(Member actor, String nickName) {
+        if (isNicknameTaken(nickName)) {
+            return RsData.of("F-1", "이미 사용중인 닉네임 입니다.");
+        }
+
+        actor.updateNickName(nickName);
+
+        return RsData.of("S-1", "닉네임이 변경되었습니다.");
+    }
+
+    private boolean isNicknameTaken(String nickName) {
+        Optional<Member> opActor = memberRepository.findByNickName(nickName);
+
+        return opActor.isPresent();
+    }
+
 }
