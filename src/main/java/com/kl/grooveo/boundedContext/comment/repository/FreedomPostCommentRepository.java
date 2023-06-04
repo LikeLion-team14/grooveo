@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FreedomPostCommentRepository extends JpaRepository<FreedomPostComment, Long> {
     Page<FreedomPostComment> findAllByFreedomPost(FreedomPost freedomPost, Pageable pageable);
+
+    Page<FreedomPostComment> findAllByAuthorId(Long username, Pageable pageable);
 }

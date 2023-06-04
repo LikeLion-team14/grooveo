@@ -12,6 +12,8 @@ import org.springframework.data.repository.query.Param;
 public interface FreedomPostRepository extends JpaRepository<FreedomPost, Long> {
     Page<FreedomPost> findAll(Specification<FreedomPost> spec, Pageable pageable);
 
+    Page<FreedomPost> findAllByAuthorId(Long username, Pageable pageable);
+
     @Modifying
     @Query("update FreedomPost fp set fp.view = fp.view + 1 where fp.id = :id")
     int updateView(@Param("id") Long id);
