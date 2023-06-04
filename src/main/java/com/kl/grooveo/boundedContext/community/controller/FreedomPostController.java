@@ -159,4 +159,10 @@ public class FreedomPostController {
         this.freedomPostService.modify(freedomPost, freedomPostForm.getTitle(), freedomPostForm.getCategory(), freedomPostForm.getContent());
         return String.format("redirect:/community/freedomPost/detail/%s", id);
     }
+
+    @GetMapping("/getView")
+    @ResponseBody
+    public String getViewCnt(@RequestParam("postId") Long postId) {
+        return String.valueOf(freedomPostService.getViewCnt(postId));  // 조회수 String 처리
+    }
 }

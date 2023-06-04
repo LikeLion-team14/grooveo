@@ -107,32 +107,34 @@
     <script>
         // 모달 열기
         const openModalButton = document.getElementById("openModalButton1");
-        openModalButton.onclick = function () {
-            console.log("click")
-            if (!modal.classList.contains("hidden")) {
-                closeModal();
+        if (openModalButton != null) {
+            openModalButton.onclick = function () {
+                console.log("click")
+                if (!modal.classList.contains("hidden")) {
+                    closeModal();
+                    return false;
+                }
+                // AJAX 요청 보내기
+                $.ajax({
+                    url: "/usr/notification/list", // 컨트롤러의 엔드포인트 주소를 입력하세요.
+                    method: "GET", // GET 또는 POST 방식을 선택하세요.
+                    success: function (data) {
+                        // 요청이 성공하면 반환된 데이터를 사용하여 모달 내용 업데이트
+                        const modalContent = document.getElementById("modalContent1");
+                        modalContent.innerHTML = data;
+
+                        // 모달 열기
+                        const modal = document.getElementById("notificationModal");
+                        console.log("modal open")
+                        modal.classList.remove("hidden");
+                    },
+                    error: function (xhr, status, error) {
+                        // 요청이 실패한 경우 에러 처리
+                        console.error(error);
+                    }
+                });
                 return false;
             }
-            // AJAX 요청 보내기
-            $.ajax({
-                url: "/usr/notification/list", // 컨트롤러의 엔드포인트 주소를 입력하세요.
-                method: "GET", // GET 또는 POST 방식을 선택하세요.
-                success: function (data) {
-                    // 요청이 성공하면 반환된 데이터를 사용하여 모달 내용 업데이트
-                    const modalContent = document.getElementById("modalContent1");
-                    modalContent.innerHTML = data;
-
-                    // 모달 열기
-                    const modal = document.getElementById("notificationModal");
-                    console.log("modal open")
-                    modal.classList.remove("hidden");
-                },
-                error: function (xhr, status, error) {
-                    // 요청이 실패한 경우 에러 처리
-                    console.error(error);
-                }
-            });
-            return false;
         }
 
         function closeModal() {

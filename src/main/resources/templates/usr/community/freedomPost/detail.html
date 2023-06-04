@@ -52,7 +52,7 @@
                 <span><i class="fa-solid fa-heart"></i>&nbsp;:&nbsp;</span>
                 <span id="likeCnt" class="mr-2"></span>
                 <span><i class="fa-solid fa-eye"></i>&nbsp;:&nbsp;</span>
-                <span th:text="${freedomPost.view}"></span>
+                <span id="viewCnt"></span>
             </div>
         </div>
         <span class="badge badge-lg rounded-pill bg-primary my-2"
@@ -287,7 +287,25 @@
                         console.log(error);
                     }
                 });
+
+                const viewText = $('#viewCnt');
+                $.ajax({
+                    type: "GET",
+                    url: "/community/freedomPost/getView", // 조회수 요청을 보낼 URL
+                    data: {
+                        postId: postId
+                    },
+                    dataType: "text",
+                    success: function (data) {
+                        console.log(data)
+                        $(viewText).text(data)
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
             }
+
             // 버튼 클릭 이벤트 핸들러 등록
             $(document).on('click', '#likeBtn', function () {
                 console.log("click")
