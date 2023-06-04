@@ -14,8 +14,8 @@
                 return;
             }
 
-            if (form.content.value.length > 500) {
-                toastWarning('댓글의 내용은 500자 이하로 입력해주세요.');
+            if (form.content.value.length > 300) {
+                toastWarning('댓글의 내용은 300자 이하로 입력해주세요.');
                 form.content.focus();
                 return;
             }
@@ -31,8 +31,8 @@
                 return;
             }
 
-            if (form.content.value.length > 400) {
-                toastWarning('답글의 내용은 400자 이하로 입력해주세요.');
+            if (form.content.value.length > 200) {
+                toastWarning('답글의 내용은 200자 이하로 입력해주세요.');
                 form.content.focus();
                 return;
             }
@@ -127,29 +127,25 @@
                     </div>
 
                     <!-- 댓글 창-->
-                    <ul class="list-group">
-                        <li th:each="i: ${#numbers.sequence(comment.getReplyList().size()-1, 0, -1)}"
-                            class="comment-item list-group-item"
-                            th:with="reply=${comment.getReplyList().get(i)}">
+                    <div class="list-group">
+                        <div th:each="i: ${#numbers.sequence(comment.getReplyList().size()-1, 0, -1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">
                             <div>
-                                <div class="flex flex-shrink-0 break-words">
+                                <div class="flex">
                                     <div>⎿</div>
-                                    <div class="p-2 w-100 flex-shrink-1" th:text="${reply.content}"></div>
+                                    <div class="p-2" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;" th:text="${reply.content}"></div>
                                 </div>
 
                                 <div class="flex justify-end">
-                                    <a class="btn btn-sm btn-outline-secondary"
-                                       href="javascript:void(0);"
+                                    <a class="btn btn-sm btn-outline-secondary" href="javascript:void(0);"
                                        th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"
-                                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
-                                        삭제</a>
+                                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">삭제</a>
                                     <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">
                                         <input type="hidden" name="_method" value="delete">
                                     </form>
                                 </div>
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -21,4 +21,5 @@ html > body .label-text {
 
 div {
     overflow-wrap: break-word;
+    word-wrap: break-word;
 }
