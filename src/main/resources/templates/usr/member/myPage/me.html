@@ -5,7 +5,13 @@
             <i class="fa-solid fa-user"></i>
             내 정보
         </h2>
-        <a class="btn btn-sm btn-warning" href="#">Edit</a>
+        <div class="dropdown dropdown-right">
+            <label tabindex="0" class="btn btn-error btn-xs gap-1"><i class="fa-solid fa-lock"></i>Edit</label>
+            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li><a href="/usr/member/myPage/editMyInfo"><i class="fa-solid fa-user-lock"></i>회원정보 변경</a></li>
+                <li><a href="/usr/member/myPage/modifyPassword"><i class="fa-solid fa-unlock-keyhole"></i>비밀번호 변경</a></li>
+            </ul>
+        </div>
     </div>
     <div class="mt-4">
         프로필 이미지

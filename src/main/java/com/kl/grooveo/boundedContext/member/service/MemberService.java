@@ -40,7 +40,7 @@ public class MemberService {
 
         if (StringUtils.hasText(password)) password = passwordEncoder.encode(password);
 
-        Member member = Member
+        Member actor = Member
                 .builder()
                 .providerTypeCode(providerTypeCode)
                 .username(username)
@@ -50,13 +50,13 @@ public class MemberService {
                 .email(email)
                 .build();
 
-        memberRepository.save(member);
+        memberRepository.save(actor);
 
-        if (member.getEmail() != null) {
-            emailService.sendRegistrationEmail(member);
+        if (actor.getEmail() != null) {
+            emailService.sendRegistrationEmail(actor);
         }
 
-        return RsData.of("S-1", "회원가입이 완료되었습니다.", member);
+        return RsData.of("S-1", "회원가입이 완료되었습니다.", actor);
     }
 
     @Transactional
@@ -107,5 +107,22 @@ public class MemberService {
         } else {
             return RsData.of("S-1", "이메일 인증이 완료되었습니다.");
         }
+    }
+
+    @Transactional
+    public RsData<Member> modifyPassword(Member actor, String previousPassword, String newPassword, String confirmNewPassword) {
+        if (passwordEncoder.matches(actor.getPassword(), previousPassword)) {
+            return RsData.of("F-1", "비밀번호가 일치하지 않습니다.");
+        }
+
+        if (!newPassword.equals(confirmNewPassword)) {
+            return RsData.of("F-2", "새 비밀번호와 새 비밀번호 확인이 일치하지 않습니다.");
+        }
+
+        String password = passwordEncoder.encode(newPassword);
+        actor.modifyPassword(password);
+
+
+        return RsData.of("S-1", "비밀번호가 변경되었습니다.", actor);
     }
 }

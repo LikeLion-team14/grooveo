@@ -11,6 +11,7 @@ import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.form.FindPasswordForm;
 import com.kl.grooveo.boundedContext.member.form.FindUsernameForm;
 import com.kl.grooveo.boundedContext.member.form.JoinForm;
+import com.kl.grooveo.boundedContext.member.form.ModifyPasswordForm;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -126,6 +127,12 @@ public class MemberController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/edit")
+    public String editMyPage() {
+        return "modifyPassword";
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPage/post")
     public String showMyPost(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
         Member member = rq.getMember();
@@ -151,5 +158,26 @@ public class MemberController {
     @GetMapping("/myPage/library")
     public String showMyLibrary() {
         return "usr/member/myPage/library";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/modifyPassword")
+    public String showModifyPassword() {
+        return "usr/member/myPage/modifyPassword";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/myPage/modifyPassword")
+    public String modifyPassword(@Valid ModifyPasswordForm modifyPasswordForm, HttpSession session) {
+        RsData<Member> member = memberService.modifyPassword(rq.getMember(), modifyPasswordForm.getPreviousPassword(),
+                modifyPasswordForm.getNewPassword(), modifyPasswordForm.getConfirmNewPassword());
+
+        if (member.isFail()) {
+            return rq.historyBack(member);
+        }
+
+        session.invalidate();
+
+        return rq.redirectWithMsg("/usr/member/login", member);
     }
 }
