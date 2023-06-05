@@ -3,10 +3,8 @@ package com.kl.grooveo.boundedContext.member.entity;
 import com.kl.grooveo.base.baseEntity.BaseEntity;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import com.kl.grooveo.boundedContext.follow.entity.Follow;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +39,15 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
     private List<FreedomPostComment> freedomPostComments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "follower", cascade = {CascadeType.ALL})
+    @OrderBy("id desc")
+    @Builder.Default
+    private List<Follow> followerPeople = new ArrayList<>();
+
+    @OneToMany(mappedBy = "following", cascade = {CascadeType.ALL})
+    @OrderBy("id desc")
+    @Builder.Default
+    private List<Follow> followingPeople = new ArrayList<>();
 
     public List<? extends GrantedAuthority> getGrantedAuthorities() {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
