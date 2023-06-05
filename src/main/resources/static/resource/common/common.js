@@ -13,7 +13,8 @@ toastr.options = {
     showEasing: "swing",
     hideEasing: "linear",
     showMethod: "fadeIn",
-    hideMethod: "fadeOut"
+    hideMethod: "fadeOut",
+    zIndex: 9999
 };
 
 function parseMsg(msg) {

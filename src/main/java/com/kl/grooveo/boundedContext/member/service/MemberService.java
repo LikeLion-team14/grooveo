@@ -159,4 +159,8 @@ public class MemberService {
 
         return opActor.isPresent();
     }
+
+    public Optional<Member> findById(Long memberId) {
+        return memberRepository.findById(memberId);
+    }
 }

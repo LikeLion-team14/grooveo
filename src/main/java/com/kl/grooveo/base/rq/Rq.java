@@ -3,6 +3,7 @@ package com.kl.grooveo.base.rq;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
+import com.kl.grooveo.boundedContext.notification.service.NotificationService;
 import com.kl.grooveo.standard.utill.Ut;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,14 +20,16 @@ import java.util.Date;
 @RequestScope
 public class Rq {
     private final MemberService memberService;
+    private final NotificationService notificationService;
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
     private final HttpSession session;
     private final User user;
     private Member member = null; // 레이지 로딩, 처음부터 넣지 않고, 요청이 들어올 때 넣는다.
 
-    public Rq(MemberService memberService, HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
+    public Rq(MemberService memberService, NotificationService notificationService, HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
         this.memberService = memberService;
+        this.notificationService = notificationService;
         this.req = req;
         this.resp = resp;
         this.session = session;
@@ -61,6 +64,12 @@ public class Rq {
         }
 
         return member;
+    }
+
+    public boolean hasUnreadNotifications() {
+        if (isLogout()) return false;
+
+        return notificationService.countUnreadNotificationsByToMember(getMember());
     }
 
     // 뒤로가기 + 메세지

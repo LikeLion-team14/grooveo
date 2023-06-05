@@ -4,27 +4,50 @@
     <title></title>
 
     <script>
+        function PostForm__submit(form) {
+            form.title.value = form.title.value.trim(); // 제목 좌우 공백 제거
+            if (form.title.value.length === 0) {
+                toastWarning('게시글의 제목을 입력해주세요.');
+                form.title.focus();
+                return;
+            }
+
+            if (form.title.value.length > 200) {
+                toastWarning('게시글의 제목을 200자 이하로 입력해주세요.');
+                form.title.focus();
+                return;
+            }
+
+            if (form.content.value.length === 0) {
+                toastWarning('게시글의 내용을 입력해주세요.');
+                form.content.focus();
+                return;
+            }
+
+            form.submit();
+        }
+
         function changeFn(){
             const category = document.getElementById("category");
             $('#ct').val(category.options[category.selectedIndex].value);
         }
-    </script>
-    <script>
+
         window.onload = function() {
             $('#ct').val("c2");
         }
     </script>
+
 </head>
 
 <body>
 
 <main layout:fragment="main">
-    <div class="flex flex-col align-center mx-auto w-4/6">
+    <div class="flex flex-col align-center mx-auto w-4/6 my-3">
         <span class="text-3xl font-bold">게시글 등록</span>
-        <form th:action th:object="${freedomPostForm}" method="post">
+        <form th:action th:object="${freedomPostForm}" method="post" onsubmit="PostForm__submit(this); return false;">
             <div class="mt-2">
                 <span class="badge badge-lg rounded-pill bg-primary my-2">제목</span>
-                <input type="text" placeholder="Type here" class="input input-bordered input-primary w-full max-w-ls"
+                <input type="text" name="title" placeholder="Type here" class="input input-bordered input-primary w-full max-w-ls"
                        th:field="*{title}">
             </div>
             <div class="flex flex-col mt-2">
@@ -39,7 +62,7 @@
             </div>
             <div class="mt-2">
                 <span class="badge badge-lg rounded-pill bg-primary my-2">내용</span>
-                <textarea class="textarea textarea-primary w-full max-w-ls" placeholder="content" th:field="*{content}"
+                <textarea name="content" class="textarea textarea-primary w-full max-w-ls" placeholder="content" th:field="*{content}"
                           rows="10"></textarea>
             </div>
             <div class="flex justify-end">

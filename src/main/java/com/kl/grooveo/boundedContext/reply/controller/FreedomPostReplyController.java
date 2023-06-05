@@ -14,10 +14,13 @@ import com.kl.grooveo.boundedContext.reply.service.FreedomPostReplyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequestMapping("/reply")
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class FreedomPostReplyController {
     private final MemberService memberService;
     private final Rq rq;
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
     public String create(Model model, @PathVariable("id") Long id,
                          @Valid ReplyForm replyForm, @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
@@ -55,15 +59,16 @@ public class FreedomPostReplyController {
                 freedomPostReply.getFreedomPostComment().getFreedomPost().getId(), commentPage, freedomPostReply.getFreedomPostComment().getId());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") Long id) {
         FreedomPostReply freedomPostReply = this.freedomPostReplyService.getReply(id);
         FreedomPostComment freedomPostComment = this.freedomPostCommentService.getComment(freedomPostReply.getFreedomPostComment().getId());
 
-//        if (!freedomPostReply.getAuthor().getUsername().equals(principal.getName())
-//                && !freedomPostComment.getAuthor().getUsername().equals(principal.getName())) {
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
-//        }
+        if (!freedomPostReply.getAuthor().getUsername().equals(rq.getMember().getUsername())
+                && !freedomPostComment.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+        }
 
         this.freedomPostReplyService.delete(freedomPostReply);
         return String.format("redirect:/community/freedomPost/detail/%s", freedomPostComment.getFreedomPost().getId());

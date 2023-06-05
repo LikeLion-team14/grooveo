@@ -1,5 +1,6 @@
 package com.kl.grooveo.boundedContext.thumbsUp.entity;
 
+import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,8 +13,9 @@ public class ThumbsUp_summary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private Long postId;
+    @OneToOne
+    @JoinColumn(name = "freedom_post_id")
+    FreedomPost freedomPost;
 
     @Column(nullable = false)
     private int likeCount = 0;

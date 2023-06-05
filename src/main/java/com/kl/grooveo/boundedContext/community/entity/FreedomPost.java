@@ -2,6 +2,8 @@ package com.kl.grooveo.boundedContext.community.entity;
 
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.member.entity.Member;
+import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp;
+import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp_summary;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +47,12 @@ public class FreedomPost {
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int view; // 조회수
+
+    @OneToMany(mappedBy = "freedomPost", cascade = CascadeType.REMOVE)
+    private List<ThumbsUp> thumbsUpList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "freedomPost", cascade = CascadeType.REMOVE)
+    private ThumbsUp_summary thumbsUpSummary;
 
     public String categoryDisplayName() {
         return switch (category) {

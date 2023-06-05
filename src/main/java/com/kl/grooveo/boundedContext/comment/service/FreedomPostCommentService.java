@@ -1,11 +1,13 @@
 package com.kl.grooveo.boundedContext.comment.service;
 
+import com.kl.grooveo.base.event.EventAfterComment;
 import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.repository.FreedomPostCommentRepository;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ import java.util.List;
 @Service
 public class FreedomPostCommentService {
     private final FreedomPostCommentRepository freedomPostCommentRepository;
+    private final ApplicationEventPublisher publisher;
 
     public FreedomPostComment create(FreedomPost freedomPost, String content, Member author) {
         FreedomPostComment freedomPostComment = new FreedomPostComment();
@@ -28,6 +31,8 @@ public class FreedomPostCommentService {
         freedomPostComment.setFreedomPost(freedomPost);
         freedomPostComment.setAuthor(author);
         this.freedomPostCommentRepository.save(freedomPostComment);
+
+        publisher.publishEvent(new EventAfterComment(this, author, freedomPost.getAuthor()));
 
         return freedomPostComment;
     }

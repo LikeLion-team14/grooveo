@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -129,5 +130,10 @@ public class FreedomPostService {
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return freedomPostRepository.findAllByAuthorId(userId, pageable);
+    }
+
+    public int getViewCnt(Long postId) {
+        Optional<FreedomPost> freedomPost = freedomPostRepository.findById(postId);
+        return freedomPost.map(FreedomPost::getView).orElse(-1);
     }
 }
