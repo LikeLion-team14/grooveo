@@ -69,7 +69,10 @@
                            th:text="${freedomPost.title}"></a>
                     </label>
                 </td>
-                <td th:text="${freedomPost.author.username}"></td>
+                <td>
+                    <button id="author" th:text="${freedomPost.author.username}"
+                            onclick="profile_modal.showModal();showProfile()"></button>
+                </td>
                 <td th:text="${freedomPost.view}"></td>
                 <td>
                     <span th:text="${freedomPost.getAfterPost()}"></span>
@@ -80,7 +83,8 @@
         <!-- 페이징처리 시작 -->
         <div th:if="${!paging.isEmpty()}" class="flex justify-center mt-2">
             <div class="btn-group pagination">
-                <a class="page-link btn btn-sm btn-outline btn-primary" th:disabled="${!paging.hasPrevious} ? 'disabled'"
+                <a class="page-link btn btn-sm btn-outline btn-primary"
+                   th:disabled="${!paging.hasPrevious} ? 'disabled'"
                    href="javascript:void(0)" th:data-page="${(paging.number)-1}">
                     <span>이전</span>
                 </a>
@@ -97,7 +101,26 @@
         </div>
         <!-- 페이징처리 끝 -->
     </div>
-
+    <!-- Profile_modal -->
+    <dialog id="profile_modal" class="modal modal-bottom sm:modal-middle">
+        <form method="dialog" class="modal-box">
+            <div class="modal-action">
+                <button class="btn btn-active btn-accent">X</button>
+            </div>
+            <div class="flex flex-col items-center justify-center gap-1">
+                <img src="/images/likelion.jpg" style="width: 200px; height: 150px;">
+                <span class="mt-1 btn btn-active btn-secondary btn-sm">ID</span>
+                <span id="modal-username"></span>
+                <span class="mt-1 btn btn-active btn-secondary btn-sm">업로드한 곡수</span>
+                <span>0</span>
+                <span class="mt-1 btn btn-active btn-secondary btn-sm">팔로우</span>
+                <span>0</span>
+                <span class="mt-1 btn btn-active btn-secondary btn-sm">팔로잉</span>
+                <span>0</span>
+                <button class="btn btn-active btn-accent btn-xs mt-4" onclick="following()">Following</button>
+            </div>
+        </form>
+    </dialog>
 
     <script>
         const page_elements = document.getElementsByClassName("page-link");
@@ -113,6 +136,15 @@
             document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
             document.getElementById('searchForm').submit();
         });
+
+        function showProfile() {
+            const modalUsername = document.getElementById("modal-username");
+            modalUsername.textContent = document.getElementById("author").textContent;
+        }
+
+        function following() {
+
+        }
     </script>
 
 </main>
