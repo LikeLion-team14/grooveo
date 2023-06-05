@@ -2,6 +2,8 @@
 
 <head>
     <title></title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
 <body>
@@ -117,7 +119,9 @@
                 <span>0</span>
                 <span class="mt-1 btn btn-active btn-secondary btn-sm">팔로잉</span>
                 <span>0</span>
-                <button class="btn btn-active btn-accent btn-xs mt-4" onclick="following()">Following</button>
+                <button id="follow-button" type="button" class="btn btn-active btn-accent btn-xs mt-4"
+                        onclick="following()">Following
+                </button>
             </div>
         </form>
     </dialog>
@@ -143,7 +147,51 @@
         }
 
         function following() {
+            const modalUsername = document.getElementById("modal-username");
+            const authorElement = document.getElementById("author");
+            modalUsername.textContent = authorElement.textContent;
 
+            const authorUsername = authorElement.innerText;
+
+            // Ajax 요청
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // 요청이 성공한 경우
+                        console.log("Following success!");
+                        const isUnfollowed = xhr.responseText === "Following success!";
+                        updateButtonStatus(isUnfollowed); // 버튼 텍스트 변경
+                    } else {
+                        // 요청이 실패한 경우
+                        console.error("Following failed:", xhr.responseText);
+                    }
+                }
+            };
+
+            // POST 요청 설정
+            xhr.open("POST", "/follow");
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            // CSRF 토큰 읽기
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+            // 요청 헤더에 CSRF 토큰 추가
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+
+            // 요청 본문 생성
+            const data = {
+                username: authorUsername
+            };
+
+            // 요청 전송
+            xhr.send(JSON.stringify(data));
+        }
+
+        function updateButtonStatus(isUnfollowed) {
+            const button = document.getElementById("follow-button");
+            button.textContent = isUnfollowed ? "UnFollowing" : "Following";
         }
     </script>
 
