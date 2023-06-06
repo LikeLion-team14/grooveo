@@ -119,8 +119,8 @@
                 <span>0</span>
                 <span class="mt-1 btn btn-active btn-secondary btn-sm">팔로잉</span>
                 <span>0</span>
-                <button id="follow-button" type="button" class="btn btn-active btn-accent btn-xs mt-4"
-                        onclick="following()">Following
+                <button id="follow-button" type="button" class="followBtn btn btn-active btn-accent btn-xs mt-4">
+                    Follow
                 </button>
             </div>
         </form>
@@ -146,53 +146,45 @@
             modalUsername.textContent = document.getElementById("author").textContent;
         }
 
-        function following() {
-            const modalUsername = document.getElementById("modal-username");
-            const authorElement = document.getElementById("author");
-            modalUsername.textContent = authorElement.textContent;
+        $('.followBtn').on('click', function () {
+            var isFollowing = $(this).hasClass('following');
+            follow(isFollowing);
+        });
 
-            const authorUsername = authorElement.innerText;
+        function follow(isFollowing) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            const username = document.getElementById("modal-username").textContent;
 
-            // Ajax 요청
-            const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        // 요청이 성공한 경우
-                        console.log("Following success!");
-                        const isUnfollowed = xhr.responseText === "Following success!";
-                        updateButtonStatus(isUnfollowed); // 버튼 텍스트 변경
-                    } else {
-                        // 요청이 실패한 경우
-                        console.error("Following failed:", xhr.responseText);
+            if (isFollowing) {
+                $.ajax({
+                    type: "POST",
+                    url: "/unFollow?username=" + username,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function (result) {
+                        if (result === "unFollow") {
+                            $('.followBtn').removeClass('following').text("Follow");
+                        }
                     }
-                }
-            };
-
-            // POST 요청 설정
-            xhr.open("POST", "/follow");
-            xhr.setRequestHeader("Content-Type", "application/json");
-
-            // CSRF 토큰 읽기
-            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
-
-            // 요청 헤더에 CSRF 토큰 추가
-            xhr.setRequestHeader(csrfHeader, csrfToken);
-
-            // 요청 본문 생성
-            const data = {
-                username: authorUsername
-            };
-
-            // 요청 전송
-            xhr.send(JSON.stringify(data));
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/follow?username=" + username,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function (result) {
+                        if (result === "follow") {
+                            $('.followBtn').addClass('following').text("UnFollow");
+                        }
+                    }
+                });
+            }
         }
 
-        function updateButtonStatus(isUnfollowed) {
-            const button = document.getElementById("follow-button");
-            button.textContent = isUnfollowed ? "UnFollowing" : "Following";
-        }
     </script>
 
 </main>
