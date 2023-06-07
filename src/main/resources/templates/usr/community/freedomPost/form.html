@@ -46,13 +46,13 @@
         <span class="text-3xl font-bold">게시글 등록</span>
         <form th:action th:object="${freedomPostForm}" method="post" onsubmit="PostForm__submit(this); return false;">
             <div class="mt-2">
-                <span class="badge badge-lg rounded-pill bg-primary my-2">제목</span>
-                <input type="text" name="title" placeholder="Type here" class="input input-bordered input-primary w-full max-w-ls"
+                <span class="badge badge-lg rounded-pill bg-neutral my-2">제목</span>
+                <input type="text" name="title" placeholder="title" class="input input-bordered input-bordered w-full max-w-ls"
                        th:field="*{title}">
             </div>
             <div class="flex flex-col mt-2">
-                <span class="badge badge-lg rounded-pill bg-primary my-2">카테고리</span>
-                <select class="select select-primary select-sm w-full max-w-xs" id="category" onchange="changeFn()">
+                <span class="badge badge-lg rounded-pill bg-neutral my-2">카테고리</span>
+                <select class="select select-bordered select-sm w-full max-w-xs" id="category" onchange="changeFn()">
                     <option value="c2" selected>음악</option>
                     <option value="c3">리뷰</option>
                     <option value="c4">가사 해석</option>
@@ -61,12 +61,12 @@
                 <input type="hidden" id="ct" th:field="*{category}">
             </div>
             <div class="mt-2">
-                <span class="badge badge-lg rounded-pill bg-primary my-2">내용</span>
-                <textarea name="content" class="textarea textarea-primary w-full max-w-ls" placeholder="content" th:field="*{content}"
+                <span class="badge badge-lg rounded-pill bg-neutral my-2">내용</span>
+                <textarea name="content" class="textarea textarea-bordered w-full max-w-ls" placeholder="content" th:field="*{content}"
                           rows="10"></textarea>
             </div>
             <div class="flex justify-end">
-                <button type="submit" class="btn btn-primary my-2">저장하기</button>
+                <button type="submit" class="btn btn-neutral my-2">저장하기</button>
             </div>
         </form>
     </div>
