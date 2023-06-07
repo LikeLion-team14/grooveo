@@ -1,6 +1,7 @@
 package com.kl.grooveo.boundedContext.follow.controller;
 
 import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.follow.service.FollowService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
@@ -19,10 +20,18 @@ public class FollowController {
     @PostMapping("/follow")
     @ResponseBody
     public String follow(@RequestParam String username) throws Exception {
+        if (rq.isLogout()) {
+            return rq.redirectWithMsg("/usr/member/login", "로그인이 필요합니다.");
+        }
+
         Member actor = rq.getMember();
         Member followingUser = memberService.findByUsername(username).orElseThrow();
 
-        followService.following(actor,followingUser);
+        RsData followRsdata = followService.following(actor, followingUser);
+
+        if (followRsdata.isFail()) {
+            return rq.historyBack(followRsdata);
+        }
 
         return "follow";
     }
@@ -30,11 +39,18 @@ public class FollowController {
     @PostMapping("/unFollow")
     @ResponseBody
     public String unFollow(@RequestParam String username) {
+        if (rq.isLogout()) {
+            return rq.redirectWithMsg("/usr/member/login", "로그인이 필요합니다.");
+        }
+
         Member actor = rq.getMember();
         Member followingUser = memberService.findByUsername(username).orElseThrow();
 
-        followService.unFollowing(actor,followingUser);
+        RsData unFollowRsdata = followService.unFollowing(actor, followingUser);
 
+        if (unFollowRsdata.isFail()) {
+            return rq.historyBack(unFollowRsdata);
+        }
         return "unFollow";
     }
 }

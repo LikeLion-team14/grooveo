@@ -119,7 +119,8 @@
                 <span id="follower-count">0</span>
                 <span class="mt-1 btn btn-active btn-secondary btn-sm">팔로잉</span>
                 <span id="following-count">0</span>
-                <button id="follow-button" type="button" class="followBtn btn btn-active btn-accent btn-xs mt-4">
+                <button th:if="${@rq.login}" id="follow-button" type="button"
+                        class="followBtn btn btn-active btn-accent btn-xs mt-4">
                     Follow
                 </button>
             </div>
@@ -204,6 +205,9 @@
                             var followingCount = parseInt($('#following-count').text());
                             $('#following-count').text(followingCount - 1);
                         }
+                    },
+                    error: function (error) {
+                        toastWarning('자신을 언팔로우 할 수 없습니다.');
                     }
                 });
             } else {
@@ -221,11 +225,12 @@
                             var followingCount = parseInt($('#following-count').text());
                             $('#following-count').text(followingCount + 1);
                         }
+                    }, error: function (error) {
+                        toastWarning('자신을 팔로우 할 수 없습니다.');
                     }
-                });
+                })
             }
         }
-
     </script>
 
 </main>

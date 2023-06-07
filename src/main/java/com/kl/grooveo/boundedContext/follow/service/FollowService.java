@@ -1,6 +1,7 @@
 package com.kl.grooveo.boundedContext.follow.service;
 
 import com.kl.grooveo.base.exception.DataNotFoundException;
+import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.follow.repository.FollowRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -18,11 +19,15 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     @Transactional
-    public void following(Member follower, Member following) throws Exception {
+    public RsData following(Member follower, Member following) {
         Optional<Follow> opFollow = followRepository.findByFollower_usernameAndFollowing_username(follower.getUsername(), following.getUsername());
 
         if (opFollow.isPresent()) {
-            throw new Exception("이미 팔로우 하셨습니다.");
+            return RsData.of("F-1", "이미 팔로우 팔로우 하셨습니다.");
+        }
+
+        if (follower.getUsername().equals(following.getUsername())) {
+            return RsData.of("F-2", "자기 자신을 팔로우 할 수 없습니다.");
         }
 
         Follow follow = Follow
@@ -35,20 +40,28 @@ public class FollowService {
         following.getFollowingPeople().add(follow);
 
         followRepository.save(follow);
+
+        return RsData.of("S-1", "팔로우가 가능합니다.");
     }
 
     @Transactional
-    public void unFollowing(Member follower, Member following) {
+    public RsData unFollowing(Member follower, Member following) {
         Optional<Follow> follow = followRepository.findByFollower_usernameAndFollowing_username(follower.getUsername(), following.getUsername());
 
         if (follow.isEmpty()) {
-            throw new DataNotFoundException("해당 Follow가 존재하지 않습니다.");
+            return RsData.of("F-1", "상대방을 팔로우를 하지 않아서 언팔로우를 할 수 없습니다.");
+        }
+
+        if (follower.getUsername().equals(following.getUsername())) {
+            return RsData.of("F-2", "자기 자신을 언팔로우 할 수 없습니다.");
         }
 
         follower.getFollowingPeople().remove(follow.get());
         following.getFollowerPeople().remove(follow.get());
 
         followRepository.delete(follow.get());
+
+        return RsData.of("S-1", "언팔로우가 가능합니다.");
     }
 
     public Optional<Follow> findByFollowerAndFollowing(Member follower, Member following) {
