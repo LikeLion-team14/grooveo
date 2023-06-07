@@ -34,9 +34,11 @@ public class Member extends BaseEntity {
     private String providerTypeCode;
 
     @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
+    @Builder.Default
     private List<FreedomPost> freedomPosts = new ArrayList<>();
 
     @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
+    @Builder.Default
     private List<FreedomPostComment> freedomPostComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "follower", cascade = {CascadeType.ALL})
