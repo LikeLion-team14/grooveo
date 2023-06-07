@@ -35,7 +35,17 @@
         window.onload = function() {
             $('#ct').val("c2");
         }
+
+        function copyEditorContentToTextarea() {
+            const editorContent = editor1.getHTML(); // 에디터의 내용을 가져옵니다.
+            document.getElementById("content").value = editorContent; // 숨겨진 <textarea>에 복사합니다.
+        }
     </script>
+
+    <!-- 토스트 UI 에디터 불러오기 시작 -->
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <!-- 토스트 UI 에디터 불러오기 끝 -->
 
 </head>
 
@@ -44,7 +54,7 @@
 <main layout:fragment="main">
     <div class="flex flex-col align-center mx-auto w-4/6 my-3">
         <span class="text-3xl font-bold">게시글 등록</span>
-        <form th:action th:object="${freedomPostForm}" method="post" onsubmit="PostForm__submit(this); return false;">
+        <form th:action th:object="${freedomPostForm}" method="post" onsubmit="copyEditorContentToTextarea(); PostForm__submit(this); return false;">
             <div class="mt-2">
                 <span class="badge badge-lg rounded-pill bg-neutral my-2">제목</span>
                 <input type="text" name="title" placeholder="title" class="input input-bordered input-bordered w-full max-w-ls"
@@ -62,14 +72,35 @@
             </div>
             <div class="mt-2">
                 <span class="badge badge-lg rounded-pill bg-neutral my-2">내용</span>
-                <textarea name="content" class="textarea textarea-bordered w-full max-w-ls" placeholder="content" th:field="*{content}"
-                          rows="10"></textarea>
+                <!-- 에디터 시작 -->
+                <div id="editor-1"></div>
+                <!-- 에디터 끝 -->
+                <input id="content" type="hidden" th:field="*{content}">
             </div>
             <div class="flex justify-end">
                 <button type="submit" class="btn btn-neutral my-2">저장하기</button>
             </div>
         </form>
     </div>
+
+    <script>
+        // 에디터 클래스를 사용하기 쉽도록 변경(여기서 `쉽다`는 뜻은 `짧게 쓸 수 있다`라는 뜻)
+        const Editor = toastui.Editor;
+
+        const editor1 = new Editor({
+            el: document.querySelector("#editor-1"),
+            initialValue: "",
+            height: "50vh",
+            previewStyle: "vertical"
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const content = document.getElementById('content');  // 게시글 수정 시 기존 데이터 토스트 에디터 편집창에 출력
+            if (content.value) {
+                editor1.setHTML(content.value);
+            }
+        });
+    </script>
 </main>
 </body>
 

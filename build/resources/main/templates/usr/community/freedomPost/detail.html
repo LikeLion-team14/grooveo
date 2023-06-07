@@ -57,7 +57,7 @@
         </div>
         <span class="badge badge-lg rounded-pill bg-neutral my-2 p-2"
               th:text="${freedomPost.categoryDisplayName()}"></span>
-        <div class="w-full max-w-ls" style="min-height: 10vh" th:text="${freedomPost.content}"></div>
+        <div class="w-full max-w-ls" style="min-height: 10vh" th:utext="${freedomPost.content}"></div>
         <div class="flex justify-end">
             <button id="likeBtn" class="btn btn-sm btn-neutral mx-1">
                 <i class="fa-solid fa-heart"></i>&nbsp;Like
