@@ -104,9 +104,3 @@ div {
 #certify:checked + label {
     background-color: rgba(0, 0, 0, 0.3);
 }
-
-.active {
-    background-color: #4CAF50; /* Set the background color for the active page button */
-    color: white; /* Set the text color for the active page button */
-    font-weight: bold; /* Make the text bold for the active page button */
-}
