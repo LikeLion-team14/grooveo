@@ -93,6 +93,13 @@
             height: "50vh",
             previewStyle: "vertical"
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const content = document.getElementById('content');  // 게시글 수정 시 기존 데이터 토스트 에디터 편집창에 출력
+            if (content.value) {
+                editor1.setHTML(content.value);
+            }
+        });
     </script>
 </main>
 </body>
