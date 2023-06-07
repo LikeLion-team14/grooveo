@@ -34,7 +34,7 @@ class FollowServiceTest {
 
     @Test
     @DisplayName("following Test")
-    void test001() {
+    void test001() throws Exception {
         Member member1 = memberRepository.findById(1L).get();
         Member member2 = memberRepository.findById(2L).get();
 

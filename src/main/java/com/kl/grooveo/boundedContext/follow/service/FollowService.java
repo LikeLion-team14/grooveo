@@ -18,7 +18,13 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     @Transactional
-    public void following(Member follower, Member following) {
+    public void following(Member follower, Member following) throws Exception {
+        Optional<Follow> opFollow = followRepository.findByFollower_usernameAndFollowing_username(follower.getUsername(), following.getUsername());
+
+        if (opFollow.isPresent()) {
+            throw new Exception("이미 팔로우 하셨습니다.");
+        }
+
         Follow follow = Follow
                 .builder()
                 .follower(follower)
@@ -34,9 +40,11 @@ public class FollowService {
     @Transactional
     public void unFollowing(Member follower, Member following) {
         Optional<Follow> follow = followRepository.findByFollower_usernameAndFollowing_username(follower.getUsername(), following.getUsername());
+
         if (follow.isEmpty()) {
             throw new DataNotFoundException("해당 Follow가 존재하지 않습니다.");
         }
+
         follower.getFollowingPeople().remove(follow.get());
         following.getFollowerPeople().remove(follow.get());
 
