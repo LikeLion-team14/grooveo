@@ -5,13 +5,11 @@ import com.kl.grooveo.boundedContext.follow.service.FollowService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class FollowController {
 
     private final FollowService followService;
@@ -20,7 +18,7 @@ public class FollowController {
 
     @PostMapping("/follow")
     @ResponseBody
-    public String follow(@RequestParam String username) {
+    public String follow(@RequestParam String username) throws Exception {
         Member actor = rq.getMember();
         Member followingUser = memberService.findByUsername(username).orElseThrow();
 
