@@ -4,6 +4,8 @@
     <title></title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta th:if="${@rq.isLogin()}" name="currentUsername" th:content="${@rq.getMember().getUsername()}"/>
+    <meta th:if="${@rq.isLogout()}" name="currentUsername" th:content="no"/>
 </head>
 
 <body>
@@ -168,7 +170,7 @@
         </form>
     </dialog>
 
-    <script>
+    <script th:inline="javascript">
         const page_elements = document.getElementsByClassName("page-link");
         Array.from(page_elements).forEach(function (element) {
             element.addEventListener('click', function () {
@@ -181,27 +183,6 @@
             document.getElementById('kw').value = document.getElementById('search_kw').value;
             document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
             document.getElementById('searchForm').submit();
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const urlParams = new URL(location.href).searchParams;
-            let currentPage = parseInt(urlParams.get('page'));
-            const pageButtons = document.getElementsByClassName("page-link");
-
-            for (let i = 0; i < pageButtons.length; i++) {
-                const pageButton = pageButtons[i];
-                const pageNumber = parseInt(pageButton.dataset.page);
-                if (isNaN(currentPage)) {
-                    currentPage = 0;
-                }
-                if (pageNumber === currentPage) {           // 지금 현재 페이지
-                    pageButton.classList.remove("btn-outline")
-                    pageButton.classList.add("btn-neutral");
-                } else {
-                    pageButton.classList.add("btn-outline")
-                    pageButton.classList.remove("btn-neutral");
-                }
-            }
         });
 
         function getProfile(username) {
@@ -243,13 +224,23 @@
 
         $('.followBtn').on('click', function () {
             var isFollowing = $(this).hasClass('following');
-            follow(isFollowing);
+            var currentUsername = $("meta[name='currentUsername']").attr("content");
+            if (currentUsername === "no") {
+                toastWarning('login 후 이용 가능합니다.');
+                return;
+            }
+            follow(isFollowing, currentUsername);
         });
 
-        function follow(isFollowing) {
+        function follow(isFollowing, currentUsername) {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             const username = document.getElementById("modal-username").textContent;
+
+            if (currentUsername === username) {
+                toastWarning('자신을 팔로우 할 수 없습니다.');
+                return;
+            }
 
             if (isFollowing) {
                 $.ajax({
