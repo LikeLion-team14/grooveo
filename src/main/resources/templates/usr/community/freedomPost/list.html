@@ -114,11 +114,11 @@
                 <span class="mt-1 btn btn-active btn-secondary btn-sm">ID</span>
                 <span id="modal-username"></span>
                 <span class="mt-1 btn btn-active btn-secondary btn-sm">업로드한 곡수</span>
-                <span>0</span>
+                <span id="upload-count">0</span>
                 <span class="mt-1 btn btn-active btn-secondary btn-sm">팔로우</span>
-                <span>0</span>
+                <span id="follower-count">0</span>
                 <span class="mt-1 btn btn-active btn-secondary btn-sm">팔로잉</span>
-                <span>0</span>
+                <span id="following-count">0</span>
                 <button id="follow-button" type="button" class="followBtn btn btn-active btn-accent btn-xs mt-4">
                     Follow
                 </button>
@@ -141,9 +141,34 @@
             document.getElementById('searchForm').submit();
         });
 
+        function getProfile(username) {
+            $.ajax({
+                type: "GET",
+                url: "/api/member/getProfile",
+                data: {username: username},
+                success: function (response) {
+                    // 프로필 정보를 성공적으로 가져왔을 때 처리할 로직
+                    const followingCount = response.followingPeopleCount;
+                    const followerCount = response.followerPeopleCount;
+                    const uploadCount = 10; // TODO:음원업로드시 수정예정
+
+                    // 가져온 프로필 정보를 원하는 대로 처리합니다. (콜백방식)
+                    $('#modal-username').text(username);
+                    $('#following-count').text(followingCount);
+                    $('#follower-count').text(followerCount);
+                    $('#upload-count').text(uploadCount); // TODO:음원업로드시 수정예정
+                },
+                error: function (error) {
+                    console.error('Error retrieving profile:', error);
+                }
+            });
+        }
+
         function showProfile() {
             const modalUsername = document.getElementById("modal-username");
             modalUsername.textContent = document.getElementById("author").textContent;
+
+            getProfile(modalUsername.textContent);
         }
 
         $('.followBtn').on('click', function () {
@@ -159,7 +184,7 @@
             if (isFollowing) {
                 $.ajax({
                     type: "POST",
-                    url: "/unFollow?username=" + username,
+                    url: "/api/unFollow?username=" + username,
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader(header, token);
                     },
@@ -172,7 +197,7 @@
             } else {
                 $.ajax({
                     type: "POST",
-                    url: "/follow?username=" + username,
+                    url: "/api/follow?username=" + username,
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader(header, token);
                     },
