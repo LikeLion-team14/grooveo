@@ -16,4 +16,5 @@ public class MemberProfileDto {
     private int followingPeopleCount;
     private String nickName;
     private String email;
+    private boolean isFollowing;
 }

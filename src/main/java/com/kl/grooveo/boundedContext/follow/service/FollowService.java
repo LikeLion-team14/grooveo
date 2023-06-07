@@ -54,4 +54,8 @@ public class FollowService {
     public Optional<Follow> findByFollowerAndFollowing(Member follower, Member following) {
         return followRepository.findByFollowerAndFollowing(follower, following);
     }
+
+    public boolean isFollowing(Member followUser, Member followingUser) {
+        return followRepository.existsByFollowerAndFollowing(followUser, followingUser);
+    }
 }

@@ -151,12 +151,20 @@
                     const followingCount = response.followingPeopleCount;
                     const followerCount = response.followerPeopleCount;
                     const uploadCount = 10; // TODO:음원업로드시 수정예정
-
+                    const isFollowing = response.following;
                     // 가져온 프로필 정보를 원하는 대로 처리합니다. (콜백방식)
                     $('#modal-username').text(username);
                     $('#following-count').text(followingCount);
                     $('#follower-count').text(followerCount);
                     $('#upload-count').text(uploadCount); // TODO:음원업로드시 수정예정
+
+                    // 버튼의 텍스트 변경
+                    const followButton = $('#follow-button');
+                    if (isFollowing) {
+                        followButton.text('Unfollow');
+                    } else {
+                        followButton.text('Follow');
+                    }
                 },
                 error: function (error) {
                     console.error('Error retrieving profile:', error);

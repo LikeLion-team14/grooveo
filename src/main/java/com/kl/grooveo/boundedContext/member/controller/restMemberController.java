@@ -1,5 +1,7 @@
 package com.kl.grooveo.boundedContext.member.controller;
 
+import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.follow.service.FollowService;
 import com.kl.grooveo.boundedContext.member.dto.MemberProfileDto;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
@@ -16,6 +18,8 @@ import java.util.Optional;
 public class restMemberController {
 
     private final MemberService memberService;
+    private final FollowService followService;
+    private final Rq rq;
 
     @GetMapping("api/member/getProfile")
     @ResponseBody
@@ -26,7 +30,10 @@ public class restMemberController {
             throw new Exception("존재하지 않는 User 입니다.");
         }
 
+        Member followUser = rq.getMember();
         Member followingUser = opFollowingUser.get();
+
+        boolean isFollowing = followService.isFollowing(followUser, followingUser);
 
         return MemberProfileDto.builder()
                 .username(followingUser.getUsername())
@@ -34,6 +41,7 @@ public class restMemberController {
                 .followingPeopleCount(followingUser.getFollowingPeople().size())
                 .nickName(followingUser.getNickName())
                 .email(followingUser.getEmail())
+                .isFollowing(isFollowing)
                 .build();
     }
 }
