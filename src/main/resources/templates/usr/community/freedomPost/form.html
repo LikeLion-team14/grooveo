@@ -62,8 +62,7 @@
             </div>
             <div class="mt-2">
                 <span class="badge badge-lg rounded-pill bg-neutral my-2">내용</span>
-                <textarea name="content" class="textarea textarea-bordered w-full max-w-ls" placeholder="content" th:field="*{content}"
-                          rows="10"></textarea>
+                <input id="content" type="hidden" th:field="*{content}">
             </div>
             <div class="flex justify-end">
                 <button type="submit" class="btn btn-neutral my-2">저장하기</button>
