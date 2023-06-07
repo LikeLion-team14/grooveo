@@ -57,7 +57,7 @@
         </div>
         <span class="badge badge-lg rounded-pill bg-neutral my-2 p-2"
               th:text="${freedomPost.categoryDisplayName()}"></span>
-        <div class="w-full max-w-ls" style="min-height: 10vh" th:text="${freedomPost.content}"></div>
+        <div class="w-full max-w-ls" style="min-height: 10vh" th:utext="${freedomPost.content}"></div>
         <div class="flex justify-end">
             <button id="likeBtn" class="btn btn-sm btn-neutral mx-1">
                 <i class="fa-solid fa-heart"></i>&nbsp;Like
@@ -177,7 +177,7 @@
     </div>
 
     <script th:inline="javascript">
-        const page_elements = document.getElementsByClassName("page-link");
+        const page_elements = document.getElementsByclass("page-link");
         Array.from(page_elements).forEach(function (element) {
             element.addEventListener('click', function () {
                 document.getElementById('commentPage').value = this.dataset.page;
@@ -185,8 +185,8 @@
             });
         });
 
-        const comment_answer_elements = document.getElementsByClassName("comment-answer");
-        const block_answer = document.getElementsByClassName("comment-answer-block");
+        const comment_answer_elements = document.getElementsByclass("comment-answer");
+        const block_answer = document.getElementsByclass("comment-answer-block");
         Array.from(comment_answer_elements).forEach(function (element) {
             element.addEventListener('click', function () {
                 Array.from(block_answer).forEach((x) => {
@@ -203,7 +203,7 @@
         if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
             const commentId = window.location.hash.replace("#reply-", "");
             $(function(){
-                document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
+                document.getElementsByclass("cm_" + commentId)[0].style.display = "block";
             });
         }
 
@@ -306,7 +306,7 @@
 
             const urlParams = new URL(location.href).searchParams;
             let currentPage = parseInt(urlParams.get('commentPage'));
-            const pageButtons = document.getElementsByClassName("page-link");
+            const pageButtons = document.getElementsByclass("page-link");
 
             for (let i = 0; i < pageButtons.length; i++) {
                 const pageButton = pageButtons[i];
