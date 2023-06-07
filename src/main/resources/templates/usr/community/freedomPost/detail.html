@@ -154,16 +154,16 @@
         <!-- 페이징처리 시작 -->
         <div th:if="${!commentPaging.isEmpty()}" class="flex justify-center mt-2">
             <div class="btn-group pagination">
-                <a class="page-link btn btn-sm btn-outline btn-primary" th:disabled="${!commentPaging.hasPrevious} ? 'disabled'"
+                <a class="page-link btn btn-sm btn-outline" th:disabled="${!commentPaging.hasPrevious} ? 'disabled'"
                    href="javascript:void(0)" th:data-page="${(commentPaging.number)-1}">
                     <span>이전</span>
                 </a>
-                <a th:text="${page}" class="page-link btn btn-sm btn-outline btn-primary"
+                <a th:text="${page}" class="page-link btn btn-sm btn-outline"
                    th:each="page: ${#numbers.sequence(0, (commentPaging.totalPages)-1)}"
                    th:if="${page >= (commentPaging.number)-5 and page <= commentPaging.number+5}"
                    href="javascript:void(0)"
                    th:data-page="${page}"></a>
-                <a class="page-link btn btn-sm btn-outline btn-primary" th:disabled="${!commentPaging.hasNext} ? 'disabled'"
+                <a class="page-link btn btn-sm btn-outline" th:disabled="${!commentPaging.hasNext} ? 'disabled'"
                    href="javascript:void(0)" th:data-page="${commentPaging.number+1}">
                     <span>다음</span>
                 </a>
@@ -302,6 +302,25 @@
                         console.log(error);
                     }
                 });
+            }
+
+            const urlParams = new URL(location.href).searchParams;
+            let currentPage = parseInt(urlParams.get('commentPage'));
+            const pageButtons = document.getElementsByClassName("page-link");
+
+            for (let i = 0; i < pageButtons.length; i++) {
+                const pageButton = pageButtons[i];
+                const pageNumber = parseInt(pageButton.dataset.page);
+                if (isNaN(currentPage)) {
+                    currentPage = 0;
+                }
+                if (pageNumber === currentPage) {           // 지금 현재 페이지
+                    pageButton.classList.remove("btn-outline")
+                    pageButton.classList.add("btn-neutral");
+                } else {
+                    pageButton.classList.add("btn-outline")
+                    pageButton.classList.remove("btn-neutral");
+                }
             }
 
             // 버튼 클릭 이벤트 핸들러 등록
