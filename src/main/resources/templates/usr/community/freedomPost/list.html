@@ -161,9 +161,9 @@
                     // 버튼의 텍스트 변경
                     const followButton = $('#follow-button');
                     if (isFollowing) {
-                        followButton.text('Unfollow');
+                        $('.followBtn').addClass('following').text("UnFollow");
                     } else {
-                        followButton.text('Follow');
+                        $('.followBtn').removeClass('following').text("Follow");
                     }
                 },
                 error: function (error) {
@@ -199,6 +199,10 @@
                     success: function (result) {
                         if (result === "unFollow") {
                             $('.followBtn').removeClass('following').text("Follow");
+
+                            // 팔로잉 숫자 업데이트
+                            var followingCount = parseInt($('#following-count').text());
+                            $('#following-count').text(followingCount - 1);
                         }
                     }
                 });
@@ -212,6 +216,10 @@
                     success: function (result) {
                         if (result === "follow") {
                             $('.followBtn').addClass('following').text("UnFollow");
+
+                            // 팔로잉 숫자 업데이트
+                            var followingCount = parseInt($('#following-count').text());
+                            $('#following-count').text(followingCount + 1);
                         }
                     }
                 });
