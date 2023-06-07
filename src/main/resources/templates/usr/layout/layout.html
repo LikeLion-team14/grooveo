@@ -55,9 +55,10 @@
                     </ul>
                 </div>
                 <a id="openModalButton1" class="btn btn-ghost btn-circle" th:if="${@rq.login}">
-                    <div class="indicator">
-                        <i class="fa-regular fa-bell"></i>
-                        <span data-test="hasUnreadNotifications" th:if="${@rq.hasUnreadNotifications()}" class="badge badge-xs badge-secondary indicator-item"></span>
+                    <div class="indicator" style="position: relative;">
+                        <i class="fa-regular fa-bell">
+                            <span data-test="hasUnreadNotifications" th:if="${@rq.hasUnreadNotifications()}" class="badge badge-xs badge-secondary indicator-item" style="position: absolute; top: -5px; right: -5px;"></span>
+                        </i>
                     </div>
                 </a>
             </div>
