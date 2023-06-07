@@ -7,8 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,11 +24,18 @@ public class NotificationController {
 
         List<Notification> notifications = notificationService.findByToMember(rq.getMember());
 
-        // 알림을 확인
-        notificationService.getAfterReadNotification(notifications);
-
         model.addAttribute("notifications", notifications);
 
         return "usr/notification/list";
+    }
+
+    @PostMapping("/readNotification")
+    @ResponseBody
+    @PreAuthorize("isAuthenticated()")
+    public String afterReadNotification(@RequestParam Long notificationId) {
+        if (notificationService.getAfterReadNotification(notificationId)) {
+            return "success";
+        }
+        return "fail";
     }
 }

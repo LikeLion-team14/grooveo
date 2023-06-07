@@ -1,41 +1,57 @@
 <div class="flex-grow flex items-center justify-center">
-  <div class="max-w-2xl w-full p-1">
-    <div class="text-center mt-2 mx-2" th:if="${#lists.isEmpty(notifications)}">
-      <i class="fa-regular fa-bell-slash"></i> 최근에 받은 알림이 없습니다.
-    </div>
-
-    <ul class="flex flex-col gap-1" th:if="${!#lists.isEmpty(notifications)}">
-      <li th:each="notification, iterationStat: ${notifications}">
-        <div class="card bg-base-100 shadow-2xl">
-          <div class="card-body">
-            <div class="flex flex-col gap-2">
-              <div class="flex items-center">
-                <i class="fa-solid fa-bell mr-2"></i>
-                <span>알림&nbsp;</span><span class="mr-4 text-blue-500" th:text="|#${#lists.size(notifications) - iterationStat.count + 1}|"></span>
-                <span class="badge badge-primary"
-                      th:text="|${#temporals.format(notification.createDate, 'yy.MM.dd HH:mm')}, ${notification.afterAddNotification} 전|"></span>
-                <i th:if="${notification.afterAddNotification.endsWith('초') or notification.afterAddNotification.endsWith('분')}"
-                   class="fa-solid fa-fire text-red-500 ml-2"></i>
-              </div>
-            </div>
-            <div class="mt-1 flex flex-col gap-2">
-              <div class="flex items-center">
-                <i class="fa-regular fa-message mr-2"></i>
-                <div th:if="${notification.typeCode.equals('postLike')}">
-                  <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한
-                  게시글에 좋아요를 눌렀어요!
-                </div>
-                <div th:if="${notification.typeCode.equals('comment')}">
-                  <span class="badge badge-primary" th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한
-                  게시글에 댓글을 달았어요!
-                </div>
-              </div>
-            </div>
-          </div>
+    <div class="max-w-2xl w-full p-1">
+        <div class="text-center mt-2 mx-2" th:if="${#lists.isEmpty(notifications)}">
+            <i class="fa-regular fa-bell-slash"></i> 최근에 받은 알림이 없습니다.
         </div>
-      </li>
-    </ul>
 
-  </div>
-
+        <ul class="flex flex-col gap-1" th:if="${!#lists.isEmpty(notifications)}">
+            <li th:each="notification, iterationStat: ${notifications}">
+                <div class="card bg-base-100 shadow-2xl">
+                    <div class="card-body">
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-bell mr-2"></i>
+                                <span>알림&nbsp;</span><span class="mr-4 text-blue-500"
+                                                           th:text="|#${#lists.size(notifications) - iterationStat.count + 1}|"></span>
+                                <span class="badge badge-primary"
+                                      th:text="|${#temporals.format(notification.createDate, 'yy.MM.dd HH:mm')}, ${notification.afterAddNotification} 전|"></span>
+                                <i th:if="${notification.afterAddNotification.endsWith('초') or notification.afterAddNotification.endsWith('분')}"
+                                   class="fa-solid fa-fire text-red-500 ml-2"></i>
+                                <div class="flex flex-grow justify-end">
+                                    <!-- 클릭 시 알림 읽음 처리(눈 아이콘) -->
+                                    <button id="eye-icon" class="btn" onclick="handleEyeIconClick()">
+                                        <i class="fa-solid fa-eye mr-3"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-1 flex flex-col gap-2">
+                            <div class="flex items-center">
+                                <i class="fa-regular fa-message mr-2"></i>
+                                <div th:if="${notification.typeCode.equals('postLike')}">
+                                    <span class="badge badge-primary"
+                                          th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한
+                                    게시글에 좋아요를 눌렀어요!
+                                </div>
+                                <div th:if="${notification.typeCode.equals('comment')}">
+                                    <span class="badge badge-primary"
+                                          th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한
+                                    게시글에 댓글을 달았어요!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
+
+<script>
+    // 클릭 이벤트 핸들러 함수
+    function handleEyeIconClick() {
+        // 클릭한 아이콘에 대한 처리를 수행하세요
+        console.log("아이콘 클릭:", 5);
+        // 필요한 로직을 추가하세요
+    }
+</script>
