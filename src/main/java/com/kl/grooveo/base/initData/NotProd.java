@@ -3,10 +3,10 @@ package com.kl.grooveo.base.initData;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
+import com.kl.grooveo.boundedContext.follow.service.FollowService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import com.kl.grooveo.boundedContext.notification.service.NotificationService;
-import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,8 @@ public class NotProd {
             MemberService memberService,
             FreedomPostService freedomPostService,
             FreedomPostCommentService freedomPostCommentService,
-            NotificationService notificationService
+            NotificationService notificationService,
+            FollowService followService
     ) {
         return new CommandLineRunner() {
             @Override
@@ -34,6 +35,7 @@ public class NotProd {
                 Member memberUser4 = memberService.join("user4", "1234", "유저4", "유저4입니다", null).getData();
                 Member memberUser5 = memberService.join("user5", "1234", "유저5", "유저5입니다", null).getData();
 
+                followService.following(memberUser5, memberUser1);
 
                 for (int i = 0; i < 100; i++) {
                     freedomPostService.create(1, "국외 게시판 제목" + i, "c2", "내용", memberUser1);
