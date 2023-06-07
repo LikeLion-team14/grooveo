@@ -32,7 +32,7 @@ public class FreedomPost {
     @ManyToOne
     private Member author;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     @OneToMany(mappedBy = "freedomPost", cascade = CascadeType.REMOVE)
