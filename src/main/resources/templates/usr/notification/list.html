@@ -40,6 +40,10 @@
                                     <span class="badge badge-primary"
                                           th:text="${notification.fromMember.username}"></span> 님이 당신을 팔로우 했습니다.
                                 </div>
+                                <div th:if="${notification.typeCode.equals('unFollow')}">
+                                    <span class="badge badge-primary"
+                                          th:text="${notification.fromMember.username}"></span> 님이 당신을 언팔로우 했습니다.
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -2,6 +2,7 @@ package com.kl.grooveo.boundedContext.follow.service;
 
 import com.kl.grooveo.base.event.EventAfterComment;
 import com.kl.grooveo.base.event.EventAfterFollow;
+import com.kl.grooveo.base.event.EventAfterUnFollow;
 import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
@@ -66,6 +67,8 @@ public class FollowService {
         following.getFollowerPeople().remove(follow.get());
 
         followRepository.delete(follow.get());
+
+        publisher.publishEvent(new EventAfterUnFollow(this, follow.get()));
 
         return RsData.of("S-1", "언팔로우가 가능합니다.");
     }

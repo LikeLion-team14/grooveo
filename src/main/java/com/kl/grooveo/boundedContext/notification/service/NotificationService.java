@@ -65,6 +65,18 @@ public class NotificationService {
     }
 
     @Transactional
+    public void whenAfterUnFollow(Follow follow) {
+        Notification notification = Notification
+                .builder()
+                .fromMember(follow.getFollower())
+                .toMember(follow.getFollowing())
+                .typeCode("unFollow")
+                .build();
+
+        notificationRepository.save(notification);
+    }
+
+    @Transactional
     public boolean getAfterReadNotification(Long notificationId) {
         LocalDateTime localDateTime = LocalDateTime.now();
         Optional<Notification> notification = notificationRepository.findById(notificationId);
