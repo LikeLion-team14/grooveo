@@ -2,26 +2,96 @@
 
 <head>
     <title>내 정보</title>
+
+    <!-- tab CSS 불러오기 -->
+    <link rel="stylesheet" href="/resource/common/tab.css">
 </head>
 
 <body>
 
 <main layout:fragment="main">
-    <div class="flex flex-col align-center mx-auto w-4/6 my-3">
-        <div class="flex flex-col gap-4">
+    <div class="align-center mx-auto w-4/6 mt-5 h-40">
+        <div class="gap-4 mb-5">
             <div class="card shadow-xl">
-                <div class="card-body">
-                    <div class="navbar gap-2">
-                        <a class="btn btn-neutral normal-case text-xl" href="/usr/member/myPage/me">회원정보 보기</a>
-                        <a class="btn btn-neutral normal-case text-xl" href="/usr/member/myPage/post">작성 게시물</a>
-                        <a class="btn btn-neutral normal-case text-xl" href="/usr/member/myPage/comment">작성 댓글</a>
-                        <a class="btn btn-neutral normal-case text-xl" href="/usr/member/myPage/library">업로드한 음원</a>
+                <div class="card-body flex flex-row">
+                    <div>
+                        <img src="/images/likelion.jpg" style="width: 300px; height: 300px; border-radius: 50%;">
+                    </div>
+                    <div class="my-4 ml-10 flex flex-col flex-grow">
+                        <div class="flex">
+                            <span class="text-xl font-bold">sefsefsef</span>
+                            <div class="dropdown dropdown-right ml-5">
+                                <label tabindex="0" class="btn btn-neutral btn-xs gap-1"><i class="fa-solid fa-lock"></i>Edit</label>
+                                <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                                    <li><a href="/usr/member/myPage/modifyNickName"><i class="fa-solid fa-user-pen"></i>닉네임 변경</a></li>
+                                    <li><a href="/usr/member/myPage/modifyEmail"><i class="fa-solid fa-envelope"></i>이메일 변경</a></li>
+                                    <li><a href="/usr/member/myPage/modifyPassword"><i class="fa-solid fa-unlock-keyhole"></i>비밀번호 변경</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <span class="mt-5 mb-2">fesge gegese</span>
+                        <span>At home, Democratic People's Republic of Korea</span>
+                        <div class="flex flex-grow justify-end items-end">
+                            <span class="badge badge-neutral p-2 mr-3">이메일</span><span class="mr-3">sefsef@gmail.com</span>
+                            <span class="badge badge-neutral p-2 mr-3">가입날짜</span><span class="mr-3">23.06.08</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <th:block layout:fragment="content" class="mt-4"></th:block>
+        <div class="flex">
+            <div class="flex flex-col border-2 mx-5">
+                <div class="flex my-10"><span class="mr-3 w-32 font-bold">Followers</span><span class="badge badge-lg rounded-pill badge-neutral">0</span></div>
+                <div class="flex my-10"><span class="mr-3 w-32 font-bold">Following</span><span class="badge badge-lg rounded-pill badge-neutral">0</span></div>
+                <div class="flex my-10"><span class="mr-3 w-32 font-bold">Tracks</span><span class="badge badge-lg rounded-pill badge-neutral">0</span></div>
+            </div>
+            <!-- tab menu -->
+            <div class="flex flex-grow border-6">
+                <div class="tabmenu-container w-full">
+                    <div class="tabmenu out-tabmenu">
+                        <ul>
+                            <li id="tab1" class="btnCon">
+                                <input type="radio" checked name="tabmenu" id="tabmenu1">
+                                <label for="tabmenu1">업로드한 음원</label>
+                                <div class="tabCon">
+                                    <div layout:fragment="content" class="mt-4"></div>
+                                </div>
+                            </li>
+                            <li id="tab2" class="btnCon"><input type="radio" name="tabmenu" id="tabmenu2">
+                                <label for="tabmenu2">작성 게시글</label>
+                                <div class="tabCon">
+                                    <div layout:fragment="content" class="mt-4"></div>
+                                </div>
+                            </li>
+                            <li id="tab3" class="btnCon"><input type="radio" name="tabmenu" id="tabmenu3">
+                                <label for="tabmenu3">작성 댓글</label>
+                                <div class="tabCon">
+                                    <div layout:fragment="content" class="mt-4"></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        const tBtn_1 = document.getElementById('tabmenu1');
+        tBtn_1.addEventListener('click', () => {
+            window.location.href = '/usr/member/myPage/library';
+        });
+
+        const tBtn_2 = document.getElementById('tabmenu2');
+        tBtn_2.addEventListener('click', () => {
+            window.location.href = '/usr/member/myPage/post';
+        });
+
+        const tBtn_3 = document.getElementById('tabmenu3');
+        tBtn_3.addEventListener('click', () => {
+            window.location.href = '/usr/member/myPage/comment';
+        });
+    </script>
 
 </main>
 </body>
