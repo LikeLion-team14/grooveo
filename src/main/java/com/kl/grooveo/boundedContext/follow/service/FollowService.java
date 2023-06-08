@@ -1,11 +1,14 @@
 package com.kl.grooveo.boundedContext.follow.service;
 
+import com.kl.grooveo.base.event.EventAfterComment;
+import com.kl.grooveo.base.event.EventAfterFollow;
 import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.follow.repository.FollowRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +20,7 @@ import java.util.Optional;
 public class FollowService {
 
     private final FollowRepository followRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public RsData following(Member follower, Member following) {
@@ -40,6 +44,8 @@ public class FollowService {
         following.getFollowingPeople().add(follow);
 
         followRepository.save(follow);
+
+        publisher.publishEvent(new EventAfterFollow(this, follow));
 
         return RsData.of("S-1", "팔로우가 가능합니다.");
     }

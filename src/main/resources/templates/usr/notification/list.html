@@ -19,7 +19,7 @@
                                    class="fa-solid fa-fire text-red-500 ml-2"></i>
                                 <div class="flex flex-grow justify-end">
                                     <!-- 클릭 시 알림 읽음 처리(눈 아이콘) -->
-                                        <i class="fa-solid fa-eye mr-3"></i>
+                                    <i class="fa-solid fa-eye mr-3"></i>
                                 </div>
                             </div>
                         </div>
@@ -35,6 +35,10 @@
                                     <span class="badge badge-primary"
                                           th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한
                                     게시글에 댓글을 달았어요!
+                                </div>
+                                <div th:if="${notification.typeCode.equals('follow')}">
+                                    <span class="badge badge-primary"
+                                          th:text="${notification.fromMember.username}"></span> 님이 당신을 팔로우 했습니다.
                                 </div>
                             </div>
                         </div>
