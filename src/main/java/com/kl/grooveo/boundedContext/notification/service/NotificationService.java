@@ -3,6 +3,7 @@ package com.kl.grooveo.boundedContext.notification.service;
 import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
+import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.notification.entity.Notification;
 import com.kl.grooveo.boundedContext.notification.repository.NotificationRepository;
@@ -52,15 +53,27 @@ public class NotificationService {
     }
 
     @Transactional
-    public void whenAfterFollow() {
-//        Notification notification = Notification
-//                .builder()
-//                .fromMember()
-//                .toMember()
-//                .typeCode("follow")
-//                .build();
-//
-//        notificationRepository.save(notification);
+    public void whenAfterFollow(Follow follow) {
+        Notification notification = Notification
+                .builder()
+                .fromMember(follow.getFollower())
+                .toMember(follow.getFollowing())
+                .typeCode("follow")
+                .build();
+
+        notificationRepository.save(notification);
+    }
+
+    @Transactional
+    public void whenAfterUnFollow(Follow follow) {
+        Notification notification = Notification
+                .builder()
+                .fromMember(follow.getFollower())
+                .toMember(follow.getFollowing())
+                .typeCode("unFollow")
+                .build();
+
+        notificationRepository.save(notification);
     }
 
     @Transactional
