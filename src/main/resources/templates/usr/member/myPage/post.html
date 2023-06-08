@@ -40,17 +40,17 @@
         <!-- 페이징처리 시작 -->
         <div th:if="${!paging.isEmpty()}" class="flex justify-center mt-2">
             <div class="btn-group pagination">
-                <a class="page-link btn btn-sm btn-outline btn-primary"
+                <a class="page-link btn btn-sm btn-outline"
                    th:disabled="${!paging.hasPrevious} ? 'disabled'"
                    th:href="@{|?page=${paging.number-1}|}" th:data-page="${(paging.number)-1}">
                     <span>이전</span>
                 </a>
-                <a th:text="${page}" class="page-link btn btn-sm btn-outline btn-primary"
+                <a th:text="${page}" class="page-link btn btn-sm btn-outline"
                    th:each="page: ${#numbers.sequence(0, (paging.totalPages)-1)}"
                    th:if="${page >= (paging.number)-5 and page <= paging.number+5}"
                    th:href="@{|?page=${page}|}"
                    th:data-page="${page}"></a>
-                <a class="page-link btn btn-sm  btn-outline btn-primary" th:disabled="${!paging.hasNext} ? 'disabled'"
+                <a class="page-link btn btn-sm  btn-outline" th:disabled="${!paging.hasNext} ? 'disabled'"
                    th:href="@{|?page=${paging.number+1}|}" th:data-page="${paging.number+1}">
                     <span>다음</span>
                 </a>
@@ -58,5 +58,28 @@
         </div>
         <!-- 페이징처리 끝 -->
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URL(location.href).searchParams;
+            let currentPage = parseInt(urlParams.get('page'));
+            const pageButtons = document.getElementsByClassName("page-link");
+
+            for (let i = 0; i < pageButtons.length; i++) {
+                const pageButton = pageButtons[i];
+                const pageNumber = parseInt(pageButton.dataset.page);
+                if (isNaN(currentPage)) {
+                    currentPage = 0;
+                }
+                if (pageNumber === currentPage) {           // 지금 현재 페이지
+                    pageButton.classList.remove("btn-outline")
+                    pageButton.classList.add("btn-neutral");
+                } else {
+                    pageButton.classList.add("btn-outline")
+                    pageButton.classList.remove("btn-neutral");
+                }
+            }
+        });
+    </script>
 </div>
 </html>
