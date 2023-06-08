@@ -7,6 +7,7 @@ import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp_summary;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,6 +42,7 @@ public class FreedomPost {
     // 1 : 국외 게시판 2: 국내 게시판
     private Integer boardType;
 
+    @CreatedDate
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
     private LocalDateTime deleteDate;
