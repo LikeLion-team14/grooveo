@@ -45,11 +45,12 @@
     </div>
 
     <div class="mt-4 flex flex-wrap gap-3 text-center">
-        <div>Followers
+        <button onclick="followers_modal.showModal()">Followers
             <div class="mt-2">
-                <span class="badge badge-secondary" th:text="${@rq.member.getFollowingPeople().size()}"></span>
+                <span id="followerCount" class="badge badge-secondary"
+                      th:text="${@rq.member.getFollowingPeople().size()}"></span>
             </div>
-        </div>
+        </button>
 
         <div>Follow
             <div class="mt-2">
@@ -64,5 +65,73 @@
         </div>
     </div>
 
+    <!-- Followers Modal -->
+    <dialog id="followers_modal" class="modal modal-bottom sm:modal-middle">
+        <form method="dialog" class="modal-box !max-w-none !w-[400px]">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-center flex-grow">Follows</h3>
+                <button class="btn btn-xs">X</button>
+            </div>
+            <div class="flex flex-col items-center mt-4" style="max-height: 400px; overflow-y: auto;">
+                <!-- 팔로워 리스트 시작 -->
+                <div class="w-full max-w-xs" th:each="follower : ${@rq.member.getFollowingPeople()}">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <img src="/images/likelion.jpg" alt="프로필 사진" class="w-8 h-8 rounded-full">
+                        <span class="text-base font-medium !mr-auto" th:text="${follower.getFollower().username}"></span>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="delete_follow(this)">삭제
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </dialog>
+
+    <script>
+        function delete_follow(button) {
+            var username = button.previousElementSibling.textContent;
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            // 확인 메시지 표시
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                // Ajax 요청 설정
+                $.ajax({
+                    type: "POST",
+                    url: "/api/deleteFollower",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: {username: username},
+                    success: function (result) {
+                        console.log("팔로우가 취소되었습니다.");
+                        updateFollowerCount();
+
+                        // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
+                        button.disabled = true;
+                        button.textContent = "삭제됨";
+                    },
+                    error: function (error) {
+                        console.log("팔로우 취소 실패:", error);
+                    }
+                });
+            } else {
+                console.log("삭제가 취소되었습니다.");
+            }
+        }
+
+        function updateFollowerCount() {
+            $.ajax({
+                type: "GET",
+                url: "/api/updateFollowerCount",
+                success: function (result) {
+                    $("#followerCount").text(result);
+                },
+                error: function (error) {
+                    console.log("팔로우 숫자 업데이트 실패:", error);
+                }
+            });
+        }
+    </script>
 </div>
+
 </html>
