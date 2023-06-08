@@ -67,13 +67,15 @@
                                     <div layout:fragment="content" class="mt-4"></div>
                                 </div>
                             </li>
-                            <li id="tab2" class="btnCon"><input type="radio" name="tabmenu" id="tabmenu2">
+                            <li id="tab2" class="btnCon">
+                                <input type="radio" name="tabmenu" id="tabmenu2">
                                 <label for="tabmenu2">작성 게시글</label>
                                 <div class="tabCon">
                                     <div layout:fragment="content" class="mt-4"></div>
                                 </div>
                             </li>
-                            <li id="tab3" class="btnCon"><input type="radio" name="tabmenu" id="tabmenu3">
+                            <li id="tab3" class="btnCon">
+                                <input type="radio" name="tabmenu" id="tabmenu3">
                                 <label for="tabmenu3">작성 댓글</label>
                                 <div class="tabCon">
                                     <div layout:fragment="content" class="mt-4"></div>
@@ -87,6 +89,18 @@
     </div>
 
     <script>
+        const pathArray = window.location.pathname.split('/');
+        const post = pathArray[pathArray.length - 1];
+        console.log(post);
+        switch (post) {
+            case "post":
+                $('#tabmenu2').prop('checked', true);
+                break;
+            case "comment":
+                $('#tabmenu3').prop('checked', true);
+                break;
+        }
+
         const tBtn_1 = document.getElementById('tabmenu1');
         tBtn_1.addEventListener('click', () => {
             window.location.href = '/usr/member/myPage/library';
