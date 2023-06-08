@@ -1,21 +1,24 @@
-<html layout:decorate="~{usr/member/myPage.html}">
+<html layout:decorate="~{usr/layout/layout.html}">
+
 
 <head>
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>닉네임 변경</title>
 </head>
 
-<div layout:fragment="content">
+<body>
+
+<main layout:fragment="main">
+
     <h2 class="card-title">
         <i class="fa-solid fa-user-pen"></i>
         닉네임 변경
     </h2>
+
     <div class="flex justify-center">
         <div class="card w-96 bg-base-100 shadow-xl">
             <div class="card-body">
                 <form th:action method="POST" class="flex flex-col gap-6"
-                      onsubmit="ModifyPasswordForm__submit(this); return false;">
+                      onsubmit="ModifyNickNameForm__submit(this); return false;">
                     <div class="form-control gap-2">
                         <span>닉네임</span>
                         <input type="text" name="nickName" maxlength="30" placeholder="닉네임"
@@ -23,13 +26,14 @@
                     </div>
 
                     <div class="card-actions justify-end">
-                        <a href="/usr/member/myPage/me" class="btn btn-primary">취소</a>
+                        <a href="/usr/member/myPage" class="btn btn-primary">취소</a>
                         <input type="submit" value="변경" class="btn btn-primary gap-1">
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
     <script>
         function ModifyNickNameForm__submit(form) {
             // nickName 이(가) 올바른지 체크
@@ -56,5 +60,9 @@
             form.submit(); // 폼 발송
         }
     </script>
-</div>
+
+</main>
+
+</body>
+
 </html>
