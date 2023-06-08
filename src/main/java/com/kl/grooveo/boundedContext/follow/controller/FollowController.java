@@ -78,4 +78,29 @@ public class FollowController {
 
         return actor.getFollowingPeople().size();
     }
+
+    @PostMapping("/deleteFollowing")
+    @ResponseBody
+    public String deleteFollowing(@RequestParam String username) {
+        if (rq.isLogout()) {
+            return rq.redirectWithMsg("/usr/member/login", "로그인이 필요합니다.");
+        }
+
+        Member actor = rq.getMember();
+        Member followingUser = memberService.findByUsername(username).orElseThrow();
+
+        RsData unFollowRsdata = followService.unFollowing(actor, followingUser);
+
+        if (unFollowRsdata.isFail()) {
+            return rq.historyBack(unFollowRsdata);
+        }
+        return "deleteFollowing";
+    }
+
+    @GetMapping("/updateFollowingCount")
+    public int updateFollowingCount() {
+        Member actor = rq.getMember();
+
+        return actor.getFollowerPeople().size();
+    }
 }
