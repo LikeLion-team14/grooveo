@@ -47,15 +47,15 @@
 <main layout:fragment="main">
     <div class="flex flex-col align-center mx-auto w-4/6 my-3">
         <div class="flex justify-between">
-            <span class="text-3xl font-bold" th:text="${freedomPost.title}"></span>
-            <div class="flex">
+            <span class="text-3xl font-bold mt-8" th:text="${freedomPost.title}"></span>
+            <div class="flex mt-8">
                 <span><i class="fa-solid fa-heart"></i>&nbsp;:&nbsp;</span>
                 <span id="likeCnt" class="mr-2"></span>
                 <span><i class="fa-solid fa-eye"></i>&nbsp;:&nbsp;</span>
                 <span id="viewCnt"></span>
             </div>
         </div>
-        <span class="badge badge-lg rounded-pill bg-neutral my-2 p-2"
+        <span class="badge badge-neutral badge-lg rounded-pill my-2 p-2"
               th:text="${freedomPost.categoryDisplayName()}"></span>
         <div class="w-full max-w-ls" style="min-height: 10vh" th:utext="${freedomPost.content}"></div>
         <div class="flex justify-end">
@@ -96,14 +96,14 @@
             <div class="card-body">
                 <p th:text="${comment.content}"></p>
                 <div class="card-actions justify-end">
-                    <a href="javascript:void(0);" class="comment-answer btn btn-sm btn-outline-secondary"
+                    <a href="javascript:void(0);" class="comment-answer btn btn-sm btn-neutral"
                        th:data-num="${comment.id}">
                         reply&nbsp;
                         <span class="badge badge-sm rounded-pill bg-secondary"
                               th:text="${#lists.size(comment.replyList)}"></span>
                     </a>
 
-                    <a class="btn btn-sm btn-outline-secondary"
+                    <a class="btn btn-sm btn-neutral"
                        href="javascript:void(0);"
                        th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
                        onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
@@ -136,7 +136,7 @@
                                 </div>
 
                                 <div class="flex justify-end">
-                                    <a class="btn btn-sm btn-outline-secondary" href="javascript:void(0);"
+                                    <a class="btn btn-sm btn-neutral" href="javascript:void(0);"
                                        th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"
                                        onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
                                         <i class="fa-regular fa-trash-can"></i></a>
@@ -177,7 +177,7 @@
     </div>
 
     <script th:inline="javascript">
-        const page_elements = document.getElementsByclass("page-link");
+        const page_elements = document.getElementsByClassName("page-link");
         Array.from(page_elements).forEach(function (element) {
             element.addEventListener('click', function () {
                 document.getElementById('commentPage').value = this.dataset.page;
@@ -185,8 +185,8 @@
             });
         });
 
-        const comment_answer_elements = document.getElementsByclass("comment-answer");
-        const block_answer = document.getElementsByclass("comment-answer-block");
+        const comment_answer_elements = document.getElementsByClassName("comment-answer");
+        const block_answer = document.getElementsByClassName("comment-answer-block");
         Array.from(comment_answer_elements).forEach(function (element) {
             element.addEventListener('click', function () {
                 Array.from(block_answer).forEach((x) => {
@@ -203,7 +203,7 @@
         if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
             const commentId = window.location.hash.replace("#reply-", "");
             $(function(){
-                document.getElementsByclass("cm_" + commentId)[0].style.display = "block";
+                document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
             });
         }
 
@@ -306,7 +306,7 @@
 
             const urlParams = new URL(location.href).searchParams;
             let currentPage = parseInt(urlParams.get('commentPage'));
-            const pageButtons = document.getElementsByclass("page-link");
+            const pageButtons = document.getElementsByClassName("page-link");
 
             for (let i = 0; i < pageButtons.length; i++) {
                 const pageButton = pageButtons[i];

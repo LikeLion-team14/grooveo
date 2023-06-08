@@ -53,15 +53,15 @@
 
 <main layout:fragment="main">
     <div class="flex flex-col align-center mx-auto w-4/6 my-3">
-        <span class="text-3xl font-bold">게시글 등록</span>
+        <span class="text-3xl font-bold mt-8">게시글 등록</span>
         <form th:action th:object="${freedomPostForm}" method="post" onsubmit="copyEditorContentToTextarea(); PostForm__submit(this); return false;">
             <div class="mt-2">
-                <span class="badge badge-lg rounded-pill bg-neutral my-2">제목</span>
+                <span class="badge badge-neutral badge-lg rounded-pill my-2">제목</span>
                 <input type="text" name="title" placeholder="title" class="input input-bordered input-bordered w-full max-w-ls"
                        th:field="*{title}">
             </div>
             <div class="flex flex-col mt-2">
-                <span class="badge badge-lg rounded-pill bg-neutral my-2">카테고리</span>
+                <span class="badge badge-lg rounded-pill badge-neutral my-2">카테고리</span>
                 <select class="select select-bordered select-sm w-full max-w-xs" id="category" onchange="changeFn()">
                     <option value="c2" selected>음악</option>
                     <option value="c3">리뷰</option>
@@ -71,7 +71,7 @@
                 <input type="hidden" id="ct" th:field="*{category}">
             </div>
             <div class="mt-2">
-                <span class="badge badge-lg rounded-pill bg-neutral my-2">내용</span>
+                <span class="badge badge-lg rounded-pill badge-neutral my-2">내용</span>
                 <!-- 에디터 시작 -->
                 <div id="editor-1"></div>
                 <!-- 에디터 끝 -->

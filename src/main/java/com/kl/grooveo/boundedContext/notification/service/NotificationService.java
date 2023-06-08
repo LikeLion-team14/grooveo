@@ -1,5 +1,6 @@
 package com.kl.grooveo.boundedContext.notification.service;
 
+import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,15 +64,15 @@ public class NotificationService {
     }
 
     @Transactional
-    public void getAfterReadNotification(List<Notification> notificationList) {
+    public boolean getAfterReadNotification(Long notificationId) {
         LocalDateTime localDateTime = LocalDateTime.now();
+        Optional<Notification> notification = notificationRepository.findById(notificationId);
+        if (notification.isEmpty()) return false;
 
-        for (Notification notification : notificationList) {
-            // readDate 가 null 이면 현재 날짜 입력
-            if (notification.getReadDate() == null){
-                notification.setAfterReadNotification(localDateTime);
-            }
+        if (notification.get().getReadDate() == null) {
+            notification.get().setAfterReadNotification(localDateTime);
         }
+        return true;
     }
 
     public boolean countUnreadNotificationsByToMember(Member member) {
