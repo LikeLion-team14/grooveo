@@ -38,17 +38,17 @@
         <!-- 페이징처리 시작 -->
         <div th:if="${!paging.isEmpty()}" class="flex justify-center mt-2">
             <div class="btn-group pagination">
-                <a class="page-link btn btn-sm btn-outline btn-primary"
+                <a class="page-link btn btn-sm btn-outline"
                    th:disabled="${!paging.hasPrevious} ? 'disabled'"
                    th:href="@{|?page=${paging.number-1}|}" th:data-page="${(paging.number)-1}">
                     <span>이전</span>
                 </a>
-                <a th:text="${page}" class="page-link btn btn-sm btn-outline btn-primary"
+                <a th:text="${page}" class="page-link btn btn-sm btn-outline"
                    th:each="page: ${#numbers.sequence(0, (paging.totalPages)-1)}"
                    th:if="${page >= (paging.number)-5 and page <= paging.number+5}"
                    th:href="@{|?page=${page}|}"
                    th:data-page="${page}"></a>
-                <a class="page-link btn btn-sm  btn-outline btn-primary" th:disabled="${!paging.hasNext} ? 'disabled'"
+                <a class="page-link btn btn-sm  btn-outline" th:disabled="${!paging.hasNext} ? 'disabled'"
                    th:href="@{|?page=${paging.number+1}|}" th:data-page="${paging.number+1}">
                     <span>다음</span>
                 </a>
