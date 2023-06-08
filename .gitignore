@@ -146,4 +146,7 @@ EmailConfig.java
 application-secret.yml
 application-test.yml
 
+# .gradle folder
+.gradle/
+
 # End of https://www.toptal.com/developers/gitignore/api/intellij,java
