@@ -46,7 +46,7 @@
                 <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="javascript:" onclick="$(this).next().submit();">로그아웃</a>
                 <a th:if="${@rq.logout}" class="btn btn-ghost rounded-btn" href="/usr/member/join">가입하기</a>
                 <form class="!hidden" hidden th:action="|/usr/member/logout|" method="POST"></form>
-                <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="/usr/member/myPage/me">내 정보</a>
+                <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="/usr/member/myPage">내 정보</a>
                 <div th:if="${@rq.login}" class="dropdown dropdown-end">
                     <label tabindex="0" class="btn btn-ghost rounded-btn">커뮤니티</label>
                     <ul tabindex="0" class="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-33 mt-4">

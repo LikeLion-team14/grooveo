@@ -23,21 +23,27 @@
                     </div>
                     <div class="my-4 ml-10 flex flex-col flex-grow">
                         <div class="flex">
-                            <span class="text-xl font-bold">sefsefsef</span>
+                            <span class="text-xl font-bold" th:text="${@rq.member.username}"></span>
                             <div class="dropdown dropdown-right ml-5">
-                                <label tabindex="0" class="btn btn-neutral btn-xs gap-1"><i class="fa-solid fa-lock"></i>Edit</label>
+                                <label tabindex="0" class="btn btn-neutral btn-xs gap-1"><i
+                                        class="fa-solid fa-lock"></i>Edit</label>
                                 <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
-                                    <li><a href="/usr/member/myPage/modifyNickName"><i class="fa-solid fa-user-pen"></i>닉네임 변경</a></li>
-                                    <li><a href="/usr/member/myPage/modifyEmail"><i class="fa-solid fa-envelope"></i>이메일 변경</a></li>
-                                    <li><a href="/usr/member/myPage/modifyPassword"><i class="fa-solid fa-unlock-keyhole"></i>비밀번호 변경</a></li>
+                                    <li><a href="/usr/member/myPage/modifyNickName"><i class="fa-solid fa-user-pen"></i>닉네임
+                                        변경</a></li>
+                                    <li><a href="/usr/member/myPage/modifyEmail"><i class="fa-solid fa-envelope"></i>이메일
+                                        변경</a></li>
+                                    <li><a href="/usr/member/myPage/modifyPassword"><i
+                                            class="fa-solid fa-unlock-keyhole"></i>비밀번호 변경</a></li>
                                 </ul>
                             </div>
                         </div>
-                        <span class="mt-5 mb-2">fesge gegese</span>
+                        <span class="mt-5 mb-2" th:text="${@rq.member.nickName}"></span>
                         <span>At home, Democratic People's Republic of Korea</span>
                         <div class="flex flex-grow justify-end items-end">
-                            <span class="badge badge-neutral p-2 mr-3">이메일</span><span class="mr-3">sefsef@gmail.com</span>
-                            <span class="badge badge-neutral p-2 mr-3">가입날짜</span><span class="mr-3">23.06.08</span>
+                            <span class="badge badge-neutral p-2 mr-3">이메일</span><span
+                                class="mr-3" th:text="${@rq.member.email}"></span>
+                            <span class="badge badge-neutral p-2 mr-3">가입날짜</span><span class="mr-3"
+                                                                                        th:text="${#temporals.format(@rq.member.createDate, 'yy.MM.dd')}"></span>
                         </div>
                     </div>
                 </div>
@@ -50,9 +56,14 @@
         </div>
         <div class="flex">
             <div class="flex flex-col mx-5">
-                <div class="flex my-10"><span class="mr-3 w-32 font-bold">Followers</span><span class="badge badge-lg rounded-pill badge-neutral">0</span></div>
-                <div class="flex my-10"><span class="mr-3 w-32 font-bold">Following</span><span class="badge badge-lg rounded-pill badge-neutral">0</span></div>
-                <div class="flex my-10"><span class="mr-3 w-32 font-bold">Tracks</span><span class="badge badge-lg rounded-pill badge-neutral">0</span></div>
+                <button onclick="follower_modal.showModal()" class="flex my-10"><span class="mr-3 w-32 font-bold">Follower</span><span
+                        id="followerCount" th:text="${@rq.member.getFollowingPeople().size()}"
+                        class="badge badge-lg rounded-pill badge-neutral">0</span></button>
+                <button onclick="follow_modal.showModal()" class="flex my-10"><span class="mr-3 w-32 font-bold">Follow</span><span
+                        id="followingCount" th:text="${@rq.member.getFollowerPeople().size()}"
+                        class="badge badge-lg rounded-pill badge-neutral">0</span></button>
+                <button class="flex my-10"><span class="mr-3 w-32 font-bold">Tracks</span><span
+                        class="badge badge-lg rounded-pill badge-neutral">0</span></button>
             </div>
             <div class="flex">
                 <div class="canvas-container2" style="height: 100%">
@@ -91,6 +102,58 @@
             </div>
         </div>
     </div>
+
+    <!-- Follower Modal -->
+    <dialog id="follower_modal" class="modal modal-bottom sm:modal-middle">
+        <form method="dialog" class="modal-box !max-w-none !w-[400px]">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-center flex-grow">Follower</h3>
+                <button class="btn btn-xs">X</button>
+            </div>
+            <div class="flex flex-col items-center mt-4" style="max-height: 400px; overflow-y: auto;">
+                <!-- 팔로워 리스트 시작 -->
+                <div th:unless="${!#lists.isEmpty(@rq.member.getFollowingPeople())}" class="text-center">
+                    <div class="mt-5"><i class="fa-regular fa-face-sad-tear"></i>아직 팔로워가 없습니다.</div>
+                </div>
+
+                <div th:if="${!#lists.isEmpty(@rq.member.getFollowingPeople())}" class="w-full max-w-xs" th:each="follower : ${@rq.member.getFollowingPeople()}">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <img src="/images/likelion.jpg" alt="프로필 사진" class="w-8 h-8 rounded-full">
+                        <span class="text-base font-medium !mr-auto"
+                              th:text="${follower.getFollower().username}"></span>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="delete_follow(this)">삭제
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Follow Modal -->
+    <dialog id="follow_modal" class="modal modal-bottom sm:modal-middle">
+        <form method="dialog" class="modal-box !max-w-none !w-[400px]">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-center flex-grow">Follow</h3>
+                <button class="btn btn-xs">X</button>
+            </div>
+            <div class="flex flex-col items-center mt-4" style="max-height: 400px; overflow-y: auto;">
+                <!-- 팔로잉 리스트 시작 -->
+                <div th:unless="${!#lists.isEmpty(@rq.member.getFollowerPeople())}" class="text-center">
+                    <div class="mt-5"><i class="fa-regular fa-face-sad-tear"></i>팔로잉이 없습니다.</div>
+                </div>
+
+                <div th:if="${!#lists.isEmpty(@rq.member.getFollowerPeople())}" class="w-full max-w-xs" th:each="following : ${@rq.member.getFollowerPeople()}">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <img src="/images/likelion.jpg" alt="프로필 사진" class="w-8 h-8 rounded-full">
+                        <span class="text-base font-medium !mr-auto"
+                              th:text="${following.getFollowing().username}"></span>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="delete_following(this)">팔로잉
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </dialog>
 
     <script>
         const pathArray = window.location.pathname.split('/');
@@ -143,6 +206,96 @@
         context2.moveTo(canvas2.width / 2, 0);
         context2.lineTo(canvas2.width / 2, canvas2.height);
         context2.stroke();
+
+        // // Delete Follow
+        // function delete_follow(button) {
+        //     var username = button.previousElementSibling.textContent;
+        //     var token = $("meta[name='_csrf']").attr("content");
+        //     var header = $("meta[name='_csrf_header']").attr("content");
+        //
+        //     // 확인 메시지 표시
+        //     if (confirm("정말로 삭제하시겠습니까?")) {
+        //         // Ajax 요청 설정
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "/api/deleteFollower",
+        //             beforeSend: function (xhr) {
+        //                 xhr.setRequestHeader(header, token);
+        //             },
+        //             data: {username: username},
+        //             success: function (result) {
+        //                 updateFollowerCount();
+        //
+        //                 // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
+        //                 button.disabled = true;
+        //                 button.textContent = "삭제됨";
+        //             },
+        //             error: function (error) {
+        //                 console.log("팔로우 취소 실패:", error);
+        //             }
+        //         });
+        //     } else {
+        //         console.log("삭제가 취소되었습니다.");
+        //     }
+        // }
+        //
+        // <!-- Update Follow Count -->
+        // function updateFollowerCount() {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/api/updateFollowerCount",
+        //         success: function (result) {
+        //             $("#followerCount").text(result);
+        //         },
+        //         error: function (error) {
+        //             console.log("팔로우 숫자 업데이트 실패:", error);
+        //         }
+        //     });
+        // }
+        //
+        // // Delete Following
+        // function delete_following(button) {
+        //     var username = button.previousElementSibling.textContent;
+        //     var token = $("meta[name='_csrf']").attr("content");
+        //     var header = $("meta[name='_csrf_header']").attr("content");
+        //
+        //     // 확인 메시지 표시
+        //     if (confirm("정말로 삭제하시겠습니까?")) {
+        //         // Ajax 요청 설정
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "/api/deleteFollowing",
+        //             beforeSend: function (xhr) {
+        //                 xhr.setRequestHeader(header, token);
+        //             },
+        //             data: {username: username},
+        //             success: function (result) {
+        //                 updateFollowingCount();
+        //
+        //                 // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
+        //                 button.disabled = true;
+        //                 button.textContent = "언팔로잉";
+        //             },
+        //             error: function (error) {
+        //             }
+        //         });
+        //     } else {
+        //     }
+        // }
+        //
+        // <!-- Update Following Count -->
+        // function updateFollowingCount() {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/api/updateFollowingCount",
+        //         success: function (result) {
+        //             $("#followingCount").text(result);
+        //         },
+        //         error: function (error) {
+        //             console.log("팔로잉 숫자 업데이트 실패:", error);
+        //         }
+        //     });
+        // }
     </script>
 </main>
 </body>
