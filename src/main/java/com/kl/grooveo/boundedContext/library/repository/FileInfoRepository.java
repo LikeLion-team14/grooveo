@@ -1,0 +1,9 @@
+package com.kl.grooveo.boundedContext.library.repository;
+
+import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
+}
