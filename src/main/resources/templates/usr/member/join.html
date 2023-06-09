@@ -194,9 +194,12 @@
         function sendAuthenticationCode() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
-            const userEmail = document.querySelector('.userEmail').value;
 
-            var inputElement = document.getElementById('email');
+            const inputElement = document.getElementById('email');
+            const userEmail = document.querySelector('.userEmail').value;
+            const button = document.getElementById('send-code-button');
+            const sendCodeBtn = document.getElementById('send-code-btn');
+
             $.ajax({
                 type: "POST",
                 url: "/usr/member/sendCode",
@@ -205,11 +208,13 @@
                     xhr.setRequestHeader(header, token);
                 },
                 success: function (data) {
+                    document.getElementById('email').disabled = true;
+                    inputElement.style.opacity = '0.5';
+                    sendCodeBtn.style.opacity = '0.5';
+                    button.disabled = true;
                     toastNotice('인증번호가 전송 되었습니다.');
                 }, error: function (data) {
                     toastWarning('인증번호 전송에 실패했습니다.')
-                    document.getElementById('email').disabled = true;
-                    inputElement.style.opacity = '0.5';
 
                 }
             });
@@ -308,8 +313,8 @@
                     <input type="text" name="email" id="email" placeholder="E-mail" autocomplete="off"
                            class="userEmail bg-black bg-opacity-10 h-10 p-4 w-60"/>
                     <button class="bg-black bg-opacity-10 h-10 p-4 w-32 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
-                            type="button" onclick="sendAuthenticationCode()">
-                        <span class="text-center">Send Code</span>
+                            type="button" onclick="sendAuthenticationCode()" id="send-code-button">
+                        <span id="send-code-btn" class="text-center">Send Code</span>
                     </button>
                 </div>
             </div>
