@@ -147,23 +147,23 @@
             }
 
             // email 이(가) 올바른지 체크
-            form.email.value = form.email.value.trim();
+            form.email_v1.value = form.email_v1.value.trim();
 
-            if (form.email.value.length === 0) {
-                form.email.focus();
+            if (form.email_v1.value.length === 0) {
+                form.email_v1.focus();
                 toastWarning('이메일을 입력해주세요.');
                 return;
             }
 
-            if (isValidEmail(form.email.value) === false) {
+            if (isValidEmail(form.email_v1.value) === false) {
                 toastWarning('이메일 형식으로 입력해주세요.');
-                form.email.focus();
+                form.email_v1.focus();
                 return;
             }
 
-            if (form.email.value.length > 30) {
+            if (form.email_v1.value.length > 30) {
                 toastWarning('이메일 총길이가 30자 이하로 입력해주세요.');
-                form.email.focus();
+                form.email_v1.focus();
                 return;
             }
 
@@ -197,8 +197,8 @@
 
             const inputElement = document.getElementById('email');
             const userEmail = document.querySelector('.userEmail').value;
-            const button = document.getElementById('send-code-button');
             const sendCodeBtn = document.getElementById('send-code-btn');
+            const sendCodeText = document.getElementById('send-code-text');
 
             $.ajax({
                 type: "POST",
@@ -208,14 +208,15 @@
                     xhr.setRequestHeader(header, token);
                 },
                 success: function (data) {
+                    // email 수정 금지
                     document.getElementById('email').disabled = true;
                     inputElement.style.opacity = '0.5';
-                    sendCodeBtn.style.opacity = '0.5';
-                    button.disabled = true;
+                    // Send Code 버튼 비활성화
+                    sendCodeText.style.opacity = '0.5';
+                    sendCodeBtn.disabled = true;
                     toastNotice('인증번호가 전송 되었습니다.');
                 }, error: function (data) {
                     toastWarning('인증번호 전송에 실패했습니다.')
-
                 }
             });
         }
@@ -225,15 +226,18 @@
             var header = $("meta[name='_csrf_header']").attr("content");
 
             let userEmail = document.getElementById('email').value;
-            let inputCode = document.getElementById('id-inputCode').value;
+            let inputCode = document.getElementById('id-inputCode');
 
             var button = document.getElementById('create-button');
             var text = document.getElementById('create-text');
 
+            const certifyBtn = document.getElementById('certify-btn');
+            const certifyText = document.getElementById('certify-text');
+
             $.ajax({
                 type: "POST",
                 url: "/usr/member/certification",
-                data: {"userEmail": userEmail, "inputCode": inputCode},
+                data: {"userEmail": userEmail, "inputCode": inputCode.value},
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
                 },
@@ -241,6 +245,13 @@
                 success: function (result) {
                     if (result === 'true') {
                         toastNotice('이메일 인증이 완료되었습니다.');
+                        // Authentication code
+                        inputCode.disabled = true;
+                        inputCode.style.opacity = '0.5';
+                        // Certify 버튼 비활성화
+                        certifyText.style.opacity = '0.5';
+                        certifyBtn.disabled = true;
+                        //Create account 버튼 활성화
                         text.style.opacity = '1';
                         button.disabled = false;
                     } else {
@@ -250,13 +261,17 @@
                 }
             });
         }
+
+        function copyEmailValue() {
+            document.getElementsByName('email')[0].value = document.getElementById('email').value;
+        }
     </script>
 
     <div class="mt-20 text-center font-bold text-4xl text-black">
         SIGN UP
     </div>
 
-    <form th:action method="POST" onsubmit="JoinForm__submit(this); return false;">
+    <form th:action method="POST" onsubmit="copyEmailValue();JoinForm__submit(this); return false;">
         <div class="flex justify-center">
             <div class="flex flex-col mt-5 items-start">
                 <div class="mb-1">ID</div>
@@ -310,11 +325,12 @@
             <div class="flex flex-col mt-5 items-start">
                 <div class="mb-1">E-mail</div>
                 <div class="flex items-center space-x-4">
-                    <input type="text" name="email" id="email" placeholder="E-mail" autocomplete="off"
+                    <input type="text" name="email_v1" id="email" placeholder="E-mail" autocomplete="off"
                            class="userEmail bg-black bg-opacity-10 h-10 p-4 w-60"/>
+                    <input type="hidden" name="email"/>
                     <button class="bg-black bg-opacity-10 h-10 p-4 w-32 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
-                            type="button" onclick="sendAuthenticationCode()" id="send-code-button">
-                        <span id="send-code-btn" class="text-center">Send Code</span>
+                            type="button" onclick="sendAuthenticationCode()" id="send-code-btn">
+                        <span id="send-code-text" class="text-center">Send Code</span>
                     </button>
                 </div>
             </div>
@@ -324,11 +340,10 @@
             <div class="flex items-center space-x-4">
                 <div class="relative flex">
                     <input id="id-inputCode" name="code" type="text" placeholder="Authentication code"
-                           autocomplete="off"
-                           class="bg-black bg-opacity-10 h-10 p-4 w-60"/>
+                           autocomplete="off" class="bg-black bg-opacity-10 h-10 p-4 w-60"/>
                     <button class="bg-black bg-opacity-10 h-10 p-4 w-32 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
-                            type="button" onclick="emailCertification()">
-                        <span class="text-center">Certify</span>
+                            id="certify-btn" type="button" onclick="emailCertification()">
+                        <span id="certify-text" class="text-center">Certify</span>
                     </button>
                 </div>
             </div>
