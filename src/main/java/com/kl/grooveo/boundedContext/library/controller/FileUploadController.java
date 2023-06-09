@@ -26,6 +26,8 @@ public class FileUploadController {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    private String region = "ap-northeast-2";
+
     @GetMapping
     public String displayForm() {
         return "usr/library/soundUpload";
@@ -39,7 +41,7 @@ public class FileUploadController {
             @RequestParam("file") MultipartFile file) {
         try {
             String fileName = file.getOriginalFilename();
-            String fileUrl = "https://" + bucket + "/test/" + fileName;
+            String fileUrl = "https://s3."+region+".amazonaws.com/" + bucket + "/sound/" + fileName;
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
