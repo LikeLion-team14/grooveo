@@ -5,9 +5,17 @@
         </div>
 
         <ul class="flex flex-col gap-1" th:if="${!#lists.isEmpty(notifications)}">
-            <a id="readAllDelete" style="cursor: pointer" th:data-id="1" class="text-sm mr-1 hover:underline" onclick="AllDelete(this)">
-                읽은 알림 삭제
-            </a>
+            <div class="flex justify-end">
+                <a id="readAllDelete" style="cursor: pointer" th:data-id="1" class="text-sm mr-5 hover:underline"
+                   onclick="if ( confirm('정말로 읽은 알림들을 전부 삭제하시겠습니까?') ) AllDelete(this);">
+                    읽은 알림 삭제
+                </a>
+                <a id="allDelete" style="cursor: pointer" th:data-id="2" class="text-sm mr-1 hover:underline"
+                   onclick="if ( confirm('정말로 알림들을 전부 삭제하시겠습니까?') ) AllDelete(this);">
+                    알림 모두 삭제
+                </a>
+            </div>
+
             <li th:each="notification, iterationStat: ${notifications}">
                 <div class="card bg-base-100 shadow-2xl">
                     <div class="card-body">
@@ -34,9 +42,6 @@
                                        onclick="if ( confirm('정말로 삭제하시겠습니까?') ) TrashCanIconClick(this);">
                                         <i class="fa-solid fa-trash-can"></i>
                                     </a>
-<!--                                    <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">-->
-<!--                                        <input type="hidden" name="_method" value="delete">-->
-<!--                                    </form>-->
                                 </div>
                             </div>
                         </div>

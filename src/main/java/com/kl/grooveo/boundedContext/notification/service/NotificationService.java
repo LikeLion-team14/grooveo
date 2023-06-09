@@ -107,9 +107,15 @@ public class NotificationService {
         List<Notification> notificationList = notificationRepository.findByToMember(rq.getMember());
         if (notificationList.size() == 0) return false;
 
-        notificationList.stream()
-                .filter(notification -> notification.getReadDate() != null)
-                .forEach(notificationRepository::delete);
+        if (deleteType == 1) {    // 읽은 알림 전체 삭제
+            notificationList.stream()
+                    .filter(notification -> notification.getReadDate() != null)
+                    .forEach(notificationRepository::delete);
+        }
+        else if (deleteType == 2) {   // 알림 전체 삭제
+            notificationRepository.deleteAll(notificationList);
+        }
+
         return true;
     }
 }

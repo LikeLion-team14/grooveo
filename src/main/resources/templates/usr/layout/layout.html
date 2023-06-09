@@ -161,7 +161,6 @@
             var header = $("meta[name='_csrf_header']").attr("content");
 
             const notificationId = $(el).attr("data-id");
-            console.log(notificationId)
             if (notificationId) {
                 // Ajax 요청 설정
                 $.ajax({
@@ -191,7 +190,6 @@
             var header = $("meta[name='_csrf_header']").attr("content");
 
             const notificationId = $(el).attr("data-id");
-            console.log(notificationId)
             if (notificationId) {
                 // Ajax 요청 설정
                 $.ajax({
@@ -206,7 +204,6 @@
                     dataType: "text",
                     success: function (result) {
                         if (result === 'success') {
-                            console.log("삭제 되었습니다.");
                             openModalButton.click();
                             openModalButton.click();
                         } else {
@@ -222,7 +219,6 @@
             var header = $("meta[name='_csrf_header']").attr("content");
 
             const deleteType = parseInt($(el).attr("data-id"));
-            console.log(deleteType)
             if (deleteType) {
                 // Ajax 요청 설정
                 $.ajax({
@@ -237,7 +233,6 @@
                     dataType: "text",
                     success: function (result) {
                         if (result === 'success') {
-                            console.log("삭제 되었습니다.");
                             openModalButton.click();
                             openModalButton.click();
                         } else {
