@@ -196,6 +196,7 @@
             var header = $("meta[name='_csrf_header']").attr("content");
             const userEmail = document.querySelector('.userEmail').value;
 
+            var inputElement = document.getElementById('email');
             $.ajax({
                 type: "POST",
                 url: "/usr/member/sendCode",
@@ -207,6 +208,9 @@
                     toastNotice('인증번호가 전송 되었습니다.');
                 }, error: function (data) {
                     toastWarning('인증번호 전송에 실패했습니다.')
+                    document.getElementById('email').disabled = true;
+                    inputElement.style.opacity = '0.5';
+
                 }
             });
         }
@@ -217,6 +221,9 @@
 
             let userEmail = document.getElementById('email').value;
             let inputCode = document.getElementById('id-inputCode').value;
+
+            var button = document.getElementById('create-button');
+            var text = document.getElementById('create-text');
 
             $.ajax({
                 type: "POST",
@@ -229,6 +236,8 @@
                 success: function (result) {
                     if (result === 'true') {
                         toastNotice('이메일 인증이 완료되었습니다.');
+                        text.style.opacity = '1';
+                        button.disabled = false;
                     } else {
                         toastWarning('인증코드가 일치하지 않습니다.');
                     }
@@ -309,7 +318,8 @@
         <div class="flex justify-center mt-5">
             <div class="flex items-center space-x-4">
                 <div class="relative flex">
-                    <input id="id-inputCode" name="code" type="text" placeholder="Authentication code" autocomplete="off"
+                    <input id="id-inputCode" name="code" type="text" placeholder="Authentication code"
+                           autocomplete="off"
                            class="bg-black bg-opacity-10 h-10 p-4 w-60"/>
                     <button class="bg-black bg-opacity-10 h-10 p-4 w-32 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
                             type="button" onclick="emailCertification()">
@@ -320,9 +330,9 @@
         </div>
 
         <div class="flex justify-center">
-            <button type="submit"
+            <button type="submit" id="create-button" disabled
                     class="bg-black bg-opacity-10 h-10 p-4 mt-5 text-sm flex items-center justify-center hover:bg-opacity-30 w-96">
-                <span class="text-center">Create account</span>
+                <span id="create-text" class="text-center" style="opacity: 0.5;">Create account</span>
             </button>
         </div>
     </form>
