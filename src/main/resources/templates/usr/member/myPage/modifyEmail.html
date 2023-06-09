@@ -1,57 +1,65 @@
-<html layout:decorate="~{usr/member/myPage.html}">
+<html layout:decorate="~{usr/layout/layout.html}">
+
 
 <head>
+    <title>이메일 변경</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>이메일 변경</title>
 </head>
 
-<div layout:fragment="content">
-    <h2 class="card-title">
-        <i class="fa-solid fa-envelope"></i>
-        이메일 변경
-    </h2>
-    <div class="flex justify-center">
-        <div class="card w-96 bg-base-100 shadow-xl">
-            <div class="card-body">
-                <form th:action method="POST" class="flex flex-col gap-6"
-                      onsubmit="ModifyEmailForm__submit(this); return false;">
+<body>
 
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">이메일</span>
-                        </label>
-                        <div class="relative">
-                            <input class="userEmail input input-bordered w-full pr-16" type="text" name="email"
-                                   id="email"
-                                   placeholder="이메일"/>
-                            <button type="button" onclick="sendAuthenticationCode()"
-                                    class="btn btn-primary absolute top-0 right-0 rounded-l-none">인증코드 발송
-                            </button>
+<main layout:fragment="main">
+
+    <div class="flex justify-center items-center h-screen">
+        <div>
+            <h2 class="card-title">
+                <i class="fa-solid fa-envelope"></i>
+                E-mail 변경
+            </h2>
+            <div class="card w-96 bg-base-100 shadow-xl mt-2">
+                <div class="card-body">
+                    <form th:action method="POST" class="flex flex-col gap-6"
+                          onsubmit="ModifyEmailForm__submit(this); return false;">
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">E-mail</span>
+                                <p></p>
+                            </label>
+                            <div class="relative">
+                                <input class="userEmail input input-bordered w-full pr-16" type="text" name="email"
+                                       id="email" autocomplete="off"
+                                       placeholder="이메일"/>
+                                <button type="button" onclick="sendAuthenticationCode()"
+                                        class="btn btn-outline absolute top-0 right-0 rounded-l-none">인증코드 발송
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">이메일 인증코드</span>
-                        </label>
-                        <div class="relative">
-                            <input class="input input-bordered w-full pr-16" type="text" id="inputCode"
-                                   placeholder="인증코드"/>
-                            <button type="button" onclick="emailCertification()"
-                                    class="btn btn-primary absolute top-0 right-0 rounded-l-none">이메일 인증
-                            </button>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">E-mail 인증코드</span>
+                            </label>
+                            <div class="relative">
+                                <input class="input input-bordered w-full pr-16" type="text" id="inputCode"
+                                       placeholder="인증코드" autocomplete="off"/>
+                                <button type="button" onclick="emailCertification()"
+                                        class="btn btn-outline absolute top-0 right-0 rounded-l-none">E-mail 인증
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="card-actions justify-end">
-                        <a href="/usr/member/myPage/me" class="btn btn-primary">취소</a>
-                        <input type="submit" value="수정" class="btn btn-primary gap-1">
-                    </div>
-                </form>
+                        <div class="mt-4 card-actions justify-end">
+                            <a href="/usr/member/myPage" class="btn btn-outline btn">취소</a>
+                            <input type="submit" value="변경" class="btn btn-outline">
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
     <script>
         function ModifyEmailForm__submit(form) {
             // email 이(가) 올바른지 체크
@@ -129,5 +137,9 @@
             });
         }
     </script>
-</div>
+
+</main>
+
+</body>
+
 </html>

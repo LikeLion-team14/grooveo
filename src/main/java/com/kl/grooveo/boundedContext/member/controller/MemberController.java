@@ -118,12 +118,6 @@ public class MemberController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/myPage/me")
-    public String showMe() {
-        return "usr/member/myPage/me";
-    }
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPage/post")
     public String showMyPost(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
         Member member = rq.getMember();

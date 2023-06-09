@@ -14,7 +14,6 @@
                 <th>번호</th>
                 <th>카테고리</th>
                 <th style="width:50%">제목</th>
-                <th>글쓴이</th>
                 <th>조회수</th>
                 <th>날짜</th>
             </tr>
@@ -29,7 +28,6 @@
                            th:text="${freedomPost.title}"></a>
                     </label>
                 </td>
-                <td th:text="${freedomPost.author.username}"></td>
                 <td th:text="${freedomPost.view}"></td>
                 <td>
                     <span th:text="${freedomPost.getAfterPost()}"></span>
