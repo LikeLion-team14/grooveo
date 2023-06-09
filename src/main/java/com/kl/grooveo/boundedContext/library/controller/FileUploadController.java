@@ -26,11 +26,12 @@ public class FileUploadController {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private String region = "ap-northeast-2";
+    @Value("${cloud.aws.region.static}")
+    private String region;
 
     @GetMapping
     public String displayForm() {
-        return "usr/library/soundUpload";
+        return "usr/library/fileUpload";
     }
 
     @PostMapping
@@ -42,6 +43,7 @@ public class FileUploadController {
         try {
             String fileName = file.getOriginalFilename();
             String fileUrl = "https://s3."+region+".amazonaws.com/" + bucket + "/sound/" + fileName;
+
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
