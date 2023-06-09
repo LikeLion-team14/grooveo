@@ -91,4 +91,13 @@ public class NotificationService {
     public boolean countUnreadNotificationsByToMember(Member member) {
         return notificationRepository.countByToMemberAndReadDateIsNull(member) > 0;
     }
+
+    @Transactional
+    public boolean deleteNotification(Long notificationId) {
+        Optional<Notification> notification = notificationRepository.findById(notificationId);
+        if (notification.isEmpty()) return false;
+
+        notificationRepository.delete(notification.get());
+        return true;
+    }
 }

@@ -26,6 +26,15 @@
                                         <i class="fa-regular fa-eye-slash"></i>
                                     </a>
                                 </div>
+                                <div>
+                                    <a style="cursor: pointer" class="flex items-center" th:data-id="${notification.id}"
+                                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) TrashCanIconClick(this);">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </a>
+<!--                                    <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">-->
+<!--                                        <input type="hidden" name="_method" value="delete">-->
+<!--                                    </form>-->
+                                </div>
                             </div>
                         </div>
                         <div class="mt-1 flex flex-col gap-2">

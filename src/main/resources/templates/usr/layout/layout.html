@@ -116,7 +116,6 @@
         const openModalButton = document.getElementById("openModalButton1");
         if (openModalButton != null) {
             openModalButton.onclick = function () {
-                console.log("click")
                 if (!modal.classList.contains("hidden")) {
                     closeModal();
                     return false;
@@ -132,7 +131,6 @@
 
                         // 모달 열기
                         const modal = document.getElementById("notificationModal");
-                        console.log("modal open")
                         modal.classList.remove("hidden");
                     },
                     error: function (xhr, status, error) {
@@ -180,6 +178,37 @@
                         if (result === 'success') {
                             const newHtml = '<i class="fa-regular fa-eye-slash"></i>'
                             $(el).html(newHtml)
+                        } else {
+                            toastWarning('해당 알림이 없습니다.');
+                        }
+                    }
+                });
+            }
+        }
+
+        function TrashCanIconClick(el) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            const notificationId = $(el).attr("data-id");
+            console.log(notificationId)
+            if (notificationId) {
+                // Ajax 요청 설정
+                $.ajax({
+                    type: "POST",
+                    url: "/usr/notification/deleteNotification",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: {
+                        notificationId: notificationId
+                    },
+                    dataType: "text",
+                    success: function (result) {
+                        if (result === 'success') {
+                            console.log("삭제 되었습니다.");
+                            openModalButton.click();
+                            openModalButton.click();
                         } else {
                             toastWarning('해당 알림이 없습니다.');
                         }

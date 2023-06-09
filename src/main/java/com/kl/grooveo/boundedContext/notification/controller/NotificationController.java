@@ -38,4 +38,14 @@ public class NotificationController {
         }
         return "fail";
     }
+
+    @PostMapping("/deleteNotification")
+    @ResponseBody
+    @PreAuthorize("isAuthenticated()")
+    public String deleteNotification(@RequestParam Long notificationId) {
+        if (notificationService.deleteNotification(notificationId)) {
+            return "success";
+        }
+        return "fail";
+    }
 }
