@@ -19,7 +19,9 @@
                                    class="fa-solid fa-fire text-red-500 ml-2"></i>
                                 <div class="flex flex-grow justify-end">
                                     <!-- 클릭 시 알림 읽음 처리(눈 아이콘) -->
-                                    <i class="fa-solid fa-eye mr-3"></i>
+                                    <a id="eyeIcon" style="cursor: pointer" class="flex items-center mr-2" th:data-id="${notification.id}" onclick="EyeIconClick(this)">
+                                        <i class="fa-solid fa-eye mr-3"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -53,11 +55,3 @@
     </div>
 </div>
 
-<script>
-    // 클릭 이벤트 핸들러 함수
-    function handleEyeIconClick() {
-        // 클릭한 아이콘에 대한 처리를 수행하세요
-        console.log("아이콘 클릭:", 5);
-        // 필요한 로직을 추가하세요
-    }
-</script>

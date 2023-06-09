@@ -155,8 +155,36 @@
             }
         };
 
-        // const closeModalButton = document.getElementsByclass("close1")[0];
-        // closeModalButton.onclick = closeModal;
+        // 클릭 이벤트 핸들러 함수
+        function EyeIconClick(el) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            const notificationId = $(el).attr("data-id");
+            console.log(notificationId)
+            if (notificationId) {
+                console.log("AAAA")
+                // Ajax 요청 설정
+                $.ajax({
+                    type: "POST",
+                    url: "/usr/notification/readNotification",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: {
+                        notificationId: notificationId
+                    },
+                    dataType: "text",
+                    success: function (result) {
+                        if (result === 'success') {
+                            toastNotice('성공');
+                        } else {
+                            toastWarning('해당 알림이 없습니다.');
+                        }
+                    }
+                });
+            }
+        }
     </script>
 
 </body>
