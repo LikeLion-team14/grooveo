@@ -5,6 +5,17 @@
         </div>
 
         <ul class="flex flex-col gap-1" th:if="${!#lists.isEmpty(notifications)}">
+            <div class="flex justify-end">
+                <a id="readAllDelete" style="cursor: pointer" th:data-id="1" class="text-sm mr-5 hover:underline"
+                   onclick="if ( confirm('정말로 읽은 알림들을 전부 삭제하시겠습니까?') ) AllDelete(this);">
+                    읽은 알림 삭제
+                </a>
+                <a id="allDelete" style="cursor: pointer" th:data-id="2" class="text-sm mr-1 hover:underline"
+                   onclick="if ( confirm('정말로 알림들을 전부 삭제하시겠습니까?') ) AllDelete(this);">
+                    알림 모두 삭제
+                </a>
+            </div>
+
             <li th:each="notification, iterationStat: ${notifications}">
                 <div class="card bg-base-100 shadow-2xl">
                     <div class="card-body">
@@ -19,7 +30,18 @@
                                    class="fa-solid fa-fire text-red-500 ml-2"></i>
                                 <div class="flex flex-grow justify-end">
                                     <!-- 클릭 시 알림 읽음 처리(눈 아이콘) -->
-                                    <i class="fa-solid fa-eye mr-3"></i>
+                                    <a style="cursor: pointer" class="flex items-center mr-2" th:if="${notification.readDate == null}" th:data-id="${notification.id}" onclick="EyeIconClick(this)">
+                                        <i class="fa-solid fa-eye mr-3"></i>
+                                    </a>
+                                    <a style="cursor: pointer" class="flex items-center mr-2" th:if="${notification.readDate != null}" th:data-id="${notification.id}" onclick="EyeIconClick(this)">
+                                        <i class="fa-regular fa-eye-slash"></i>
+                                    </a>
+                                </div>
+                                <div>
+                                    <a style="cursor: pointer" class="flex items-center" th:data-id="${notification.id}"
+                                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) TrashCanIconClick(this);">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -53,11 +75,3 @@
     </div>
 </div>
 
-<script>
-    // 클릭 이벤트 핸들러 함수
-    function handleEyeIconClick() {
-        // 클릭한 아이콘에 대한 처리를 수행하세요
-        console.log("아이콘 클릭:", 5);
-        // 필요한 로직을 추가하세요
-    }
-</script>

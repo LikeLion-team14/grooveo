@@ -38,4 +38,24 @@ public class NotificationController {
         }
         return "fail";
     }
+
+    @PostMapping("/deleteNotification")
+    @ResponseBody
+    @PreAuthorize("isAuthenticated()")
+    public String deleteNotification(@RequestParam Long notificationId) {
+        if (notificationService.deleteNotification(notificationId)) {
+            return "success";
+        }
+        return "fail";
+    }
+
+    @PostMapping("/allDelete")
+    @ResponseBody
+    @PreAuthorize("isAuthenticated()")
+    public String allDeleteNotification(@RequestParam Integer deleteType) {
+        if (notificationService.allDeleteNotification(deleteType)) {
+            return "success";
+        }
+        return "fail";
+    }
 }

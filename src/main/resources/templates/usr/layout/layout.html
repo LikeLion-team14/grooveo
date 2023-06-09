@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <!-- 제이쿼리 불러오기 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -114,7 +116,6 @@
         const openModalButton = document.getElementById("openModalButton1");
         if (openModalButton != null) {
             openModalButton.onclick = function () {
-                console.log("click")
                 if (!modal.classList.contains("hidden")) {
                     closeModal();
                     return false;
@@ -130,7 +131,6 @@
 
                         // 모달 열기
                         const modal = document.getElementById("notificationModal");
-                        console.log("modal open")
                         modal.classList.remove("hidden");
                     },
                     error: function (xhr, status, error) {
@@ -155,8 +155,93 @@
             }
         };
 
-        // const closeModalButton = document.getElementsByclass("close1")[0];
-        // closeModalButton.onclick = closeModal;
+        // 클릭 이벤트 핸들러 함수
+        function EyeIconClick(el) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            const notificationId = $(el).attr("data-id");
+            if (notificationId) {
+                // Ajax 요청 설정
+                $.ajax({
+                    type: "POST",
+                    url: "/usr/notification/readNotification",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: {
+                        notificationId: notificationId
+                    },
+                    dataType: "text",
+                    success: function (result) {
+                        if (result === 'success') {
+                            const newHtml = '<i class="fa-regular fa-eye-slash"></i>'
+                            $(el).html(newHtml)
+                        } else {
+                            toastWarning('해당 알림이 없습니다.');
+                        }
+                    }
+                });
+            }
+        }
+
+        function TrashCanIconClick(el) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            const notificationId = $(el).attr("data-id");
+            if (notificationId) {
+                // Ajax 요청 설정
+                $.ajax({
+                    type: "POST",
+                    url: "/usr/notification/deleteNotification",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: {
+                        notificationId: notificationId
+                    },
+                    dataType: "text",
+                    success: function (result) {
+                        if (result === 'success') {
+                            openModalButton.click();
+                            openModalButton.click();
+                        } else {
+                            toastWarning('해당 알림이 없습니다.');
+                        }
+                    }
+                });
+            }
+        }
+
+        function AllDelete(el) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            const deleteType = parseInt($(el).attr("data-id"));
+            if (deleteType) {
+                // Ajax 요청 설정
+                $.ajax({
+                    type: "POST",
+                    url: "/usr/notification/allDelete",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: {
+                        deleteType: deleteType
+                    },
+                    dataType: "text",
+                    success: function (result) {
+                        if (result === 'success') {
+                            openModalButton.click();
+                            openModalButton.click();
+                        } else {
+                            toastWarning('삭제하지 못 했습니다.');
+                        }
+                    }
+                });
+            }
+        }
     </script>
 
 </body>
