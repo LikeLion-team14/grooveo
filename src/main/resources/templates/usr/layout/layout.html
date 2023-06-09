@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <!-- 제이쿼리 불러오기 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -163,7 +165,6 @@
             const notificationId = $(el).attr("data-id");
             console.log(notificationId)
             if (notificationId) {
-                console.log("AAAA")
                 // Ajax 요청 설정
                 $.ajax({
                     type: "POST",
@@ -177,7 +178,8 @@
                     dataType: "text",
                     success: function (result) {
                         if (result === 'success') {
-                            toastNotice('성공');
+                            const newHtml = '<i class="fa-regular fa-eye-slash"></i>'
+                            $(el).html(newHtml)
                         } else {
                             toastWarning('해당 알림이 없습니다.');
                         }
