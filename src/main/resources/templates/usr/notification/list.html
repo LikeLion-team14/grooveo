@@ -5,6 +5,9 @@
         </div>
 
         <ul class="flex flex-col gap-1" th:if="${!#lists.isEmpty(notifications)}">
+            <a id="readAllDelete" style="cursor: pointer" th:data-id="1" class="text-sm mr-1 hover:underline" onclick="AllDelete(this)">
+                읽은 알림 삭제
+            </a>
             <li th:each="notification, iterationStat: ${notifications}">
                 <div class="card bg-base-100 shadow-2xl">
                     <div class="card-body">

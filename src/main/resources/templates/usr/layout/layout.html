@@ -216,6 +216,37 @@
                 });
             }
         }
+
+        function AllDelete(el) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            const deleteType = parseInt($(el).attr("data-id"));
+            console.log(deleteType)
+            if (deleteType) {
+                // Ajax 요청 설정
+                $.ajax({
+                    type: "POST",
+                    url: "/usr/notification/allDelete",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: {
+                        deleteType: deleteType
+                    },
+                    dataType: "text",
+                    success: function (result) {
+                        if (result === 'success') {
+                            console.log("삭제 되었습니다.");
+                            openModalButton.click();
+                            openModalButton.click();
+                        } else {
+                            toastWarning('삭제하지 못 했습니다.');
+                        }
+                    }
+                });
+            }
+        }
     </script>
 
 </body>

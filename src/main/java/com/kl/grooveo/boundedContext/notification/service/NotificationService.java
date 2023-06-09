@@ -1,6 +1,7 @@
 package com.kl.grooveo.boundedContext.notification.service;
 
 import com.kl.grooveo.base.exception.DataNotFoundException;
+import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
@@ -20,7 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-    private final FreedomPostService freedomPostService;
+    private final Rq rq;
 
     public List<Notification> findByToMember(Member toMember) {
         return notificationRepository.findByToMemberOrderByCreateDateDesc(toMember);
@@ -98,6 +99,17 @@ public class NotificationService {
         if (notification.isEmpty()) return false;
 
         notificationRepository.delete(notification.get());
+        return true;
+    }
+
+    @Transactional
+    public boolean allDeleteNotification(Integer deleteType) {
+        List<Notification> notificationList = notificationRepository.findByToMember(rq.getMember());
+        if (notificationList.size() == 0) return false;
+
+        notificationList.stream()
+                .filter(notification -> notification.getReadDate() != null)
+                .forEach(notificationRepository::delete);
         return true;
     }
 }
