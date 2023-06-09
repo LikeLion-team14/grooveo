@@ -59,7 +59,8 @@
                 <button onclick="follower_modal.showModal()" class="flex my-10"><span class="mr-3 w-32 font-bold">Follower</span><span
                         id="followerCount" th:text="${@rq.member.getFollowingPeople().size()}"
                         class="badge badge-lg rounded-pill badge-neutral">0</span></button>
-                <button onclick="follow_modal.showModal()" class="flex my-10"><span class="mr-3 w-32 font-bold">Follow</span><span
+                <button onclick="follow_modal.showModal()" class="flex my-10"><span
+                        class="mr-3 w-32 font-bold">Follow</span><span
                         id="followingCount" th:text="${@rq.member.getFollowerPeople().size()}"
                         class="badge badge-lg rounded-pill badge-neutral">0</span></button>
                 <button class="flex my-10"><span class="mr-3 w-32 font-bold">Tracks</span><span
@@ -105,7 +106,7 @@
 
     <!-- Follower Modal -->
     <dialog id="follower_modal" class="modal modal-bottom sm:modal-middle">
-        <form method="dialog" class="modal-box !max-w-none !w-[400px]">
+        <form method="dialog" class="modal-box !max-w-none !w-[200px]">
             <div class="flex justify-between items-center">
                 <h3 class="font-bold text-lg text-center flex-grow">Follower</h3>
                 <button class="btn btn-xs">X</button>
@@ -116,7 +117,8 @@
                     <div class="mt-5"><i class="fa-regular fa-face-sad-tear"></i>아직 팔로워가 없습니다.</div>
                 </div>
 
-                <div th:if="${!#lists.isEmpty(@rq.member.getFollowingPeople())}" class="w-full max-w-xs" th:each="follower : ${@rq.member.getFollowingPeople()}">
+                <div th:if="${!#lists.isEmpty(@rq.member.getFollowingPeople())}" class="w-full max-w-xs"
+                     th:each="follower : ${@rq.member.getFollowingPeople()}">
                     <div class="flex items-center space-x-4 mb-4">
                         <img src="/images/likelion.jpg" alt="프로필 사진" class="w-8 h-8 rounded-full">
                         <span class="text-base font-medium !mr-auto"
@@ -142,7 +144,8 @@
                     <div class="mt-5"><i class="fa-regular fa-face-sad-tear"></i>팔로잉이 없습니다.</div>
                 </div>
 
-                <div th:if="${!#lists.isEmpty(@rq.member.getFollowerPeople())}" class="w-full max-w-xs" th:each="following : ${@rq.member.getFollowerPeople()}">
+                <div th:if="${!#lists.isEmpty(@rq.member.getFollowerPeople())}" class="w-full max-w-xs"
+                     th:each="following : ${@rq.member.getFollowerPeople()}">
                     <div class="flex items-center space-x-4 mb-4">
                         <img src="/images/likelion.jpg" alt="프로필 사진" class="w-8 h-8 rounded-full">
                         <span class="text-base font-medium !mr-auto"
@@ -207,95 +210,95 @@
         context2.lineTo(canvas2.width / 2, canvas2.height);
         context2.stroke();
 
-        // // Delete Follow
-        // function delete_follow(button) {
-        //     var username = button.previousElementSibling.textContent;
-        //     var token = $("meta[name='_csrf']").attr("content");
-        //     var header = $("meta[name='_csrf_header']").attr("content");
-        //
-        //     // 확인 메시지 표시
-        //     if (confirm("정말로 삭제하시겠습니까?")) {
-        //         // Ajax 요청 설정
-        //         $.ajax({
-        //             type: "POST",
-        //             url: "/api/deleteFollower",
-        //             beforeSend: function (xhr) {
-        //                 xhr.setRequestHeader(header, token);
-        //             },
-        //             data: {username: username},
-        //             success: function (result) {
-        //                 updateFollowerCount();
-        //
-        //                 // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
-        //                 button.disabled = true;
-        //                 button.textContent = "삭제됨";
-        //             },
-        //             error: function (error) {
-        //                 console.log("팔로우 취소 실패:", error);
-        //             }
-        //         });
-        //     } else {
-        //         console.log("삭제가 취소되었습니다.");
-        //     }
-        // }
-        //
-        // <!-- Update Follow Count -->
-        // function updateFollowerCount() {
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "/api/updateFollowerCount",
-        //         success: function (result) {
-        //             $("#followerCount").text(result);
-        //         },
-        //         error: function (error) {
-        //             console.log("팔로우 숫자 업데이트 실패:", error);
-        //         }
-        //     });
-        // }
-        //
-        // // Delete Following
-        // function delete_following(button) {
-        //     var username = button.previousElementSibling.textContent;
-        //     var token = $("meta[name='_csrf']").attr("content");
-        //     var header = $("meta[name='_csrf_header']").attr("content");
-        //
-        //     // 확인 메시지 표시
-        //     if (confirm("정말로 삭제하시겠습니까?")) {
-        //         // Ajax 요청 설정
-        //         $.ajax({
-        //             type: "POST",
-        //             url: "/api/deleteFollowing",
-        //             beforeSend: function (xhr) {
-        //                 xhr.setRequestHeader(header, token);
-        //             },
-        //             data: {username: username},
-        //             success: function (result) {
-        //                 updateFollowingCount();
-        //
-        //                 // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
-        //                 button.disabled = true;
-        //                 button.textContent = "언팔로잉";
-        //             },
-        //             error: function (error) {
-        //             }
-        //         });
-        //     } else {
-        //     }
-        // }
-        //
-        // <!-- Update Following Count -->
-        // function updateFollowingCount() {
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "/api/updateFollowingCount",
-        //         success: function (result) {
-        //             $("#followingCount").text(result);
-        //         },
-        //         error: function (error) {
-        //             console.log("팔로잉 숫자 업데이트 실패:", error);
-        //         }
-        //     });
-        // }
+        // Delete Follow
+        function delete_follow(button) {
+            var username = button.previousElementSibling.textContent;
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            // 확인 메시지 표시
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                // Ajax 요청 설정
+                $.ajax({
+                    type: "POST",
+                    url: "/api/deleteFollower",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: {username: username},
+                    success: function (result) {
+                        updateFollowerCount();
+
+                        // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
+                        button.disabled = true;
+                        button.textContent = "삭제됨";
+                    },
+                    error: function (error) {
+                        console.log("팔로우 취소 실패:", error);
+                    }
+                });
+            } else {
+                console.log("삭제가 취소되었습니다.");
+            }
+        }
+
+        <!-- Update Follow Count -->
+        function updateFollowerCount() {
+            $.ajax({
+                type: "GET",
+                url: "/api/updateFollowerCount",
+                success: function (result) {
+                    $("#followerCount").text(result);
+                },
+                error: function (error) {
+                    console.log("팔로우 숫자 업데이트 실패:", error);
+                }
+            });
+        }
+
+        // Delete Following
+        function delete_following(button) {
+            var username = button.previousElementSibling.textContent;
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            // 확인 메시지 표시
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                // Ajax 요청 설정
+                $.ajax({
+                    type: "POST",
+                    url: "/api/deleteFollowing",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: {username: username},
+                    success: function (result) {
+                        updateFollowingCount();
+
+                        // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
+                        button.disabled = true;
+                        button.textContent = "언팔로잉";
+                    },
+                    error: function (error) {
+                    }
+                });
+            } else {
+            }
+        }
+
+        <!-- Update Following Count -->
+        function updateFollowingCount() {
+            $.ajax({
+                type: "GET",
+                url: "/api/updateFollowingCount",
+                success: function (result) {
+                    $("#followingCount").text(result);
+                },
+                error: function (error) {
+                    console.log("팔로잉 숫자 업데이트 실패:", error);
+                }
+            });
+        }
     </script>
 </main>
 </body>

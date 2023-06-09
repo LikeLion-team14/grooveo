@@ -1,13 +1,45 @@
 <html layout:decorate="~{usr/layout/layout.html}">
 
 <head>
+    <style>
+        /* 노말라이즈 */
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 라이브러리 */
+        .top-logo-bar {
+            width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 커스텀 */
+        html {
+            background-color: white;
+        }
+
+        input:focus {
+            outline: none;
+        }
+    </style>
+    <title>회원가입</title>
+
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>회원가입</title>
 </head>
 
 <body>
-<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+<main layout:fragment="main">
     <script>
         function JoinForm__submit(form) {
             // username 이(가) 올바른지 체크
@@ -135,6 +167,15 @@
                 return;
             }
 
+            // Authentication Code 이(가) 올바른지 체크
+            form.code.value = form.code.value.trim();
+
+            if (form.code.value.length === 0) {
+                form.code.focus();
+                toastWarning('인증코드를 입력해주세요.');
+                return;
+            }
+
             // 비밀번호 != 비밀번호 재확인
             if (form.confirmPassword.value !== form.password.value) {
                 form.confirmPassword.focus();
@@ -162,7 +203,6 @@
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
                 },
-                dataType: "text",
                 success: function (data) {
                     toastNotice('인증번호가 전송 되었습니다.');
                 }, error: function (data) {
@@ -176,7 +216,7 @@
             var header = $("meta[name='_csrf_header']").attr("content");
 
             let userEmail = document.getElementById('email').value;
-            let inputCode = document.getElementById('inputCode').value;
+            let inputCode = document.getElementById('id-inputCode').value;
 
             $.ajax({
                 type: "POST",
@@ -198,82 +238,97 @@
         }
     </script>
 
-    <div class="max-w-2xl w-full px-4">
-        <h1 class="mb-4">
-            <i class="fa-solid fa-user-plus"></i>
-            회원가입
-        </h1>
-
-        <form th:action method="POST" class="flex flex-col gap-6" onsubmit="JoinForm__submit(this); return false;">
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">아이디</span>
-                </label>
-                <input type="text" name="username" placeholder="아이디" class="input input-bordered" autofocus/>
-            </div>
-
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">비빌번호</span>
-                </label>
-                <input type="password" name="password" placeholder="비빌번호" class="input input-bordered"/>
-            </div>
-
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">비빌번호 확인</span>
-                </label>
-                <input type="password" name="confirmPassword" placeholder="비빌번호 확인" class="input input-bordered"/>
-            </div>
-
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">이름</span>
-                </label>
-                <input type="text" name="name" placeholder="이름" class="input input-bordered" autofocus/>
-            </div>
-
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">닉네임</span>
-                </label>
-                <input type="text" name="nickName" placeholder="닉네임" class="input input-bordered" autofocus/>
-            </div>
-
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">이메일</span>
-                </label>
-                <div class="relative">
-                    <input class="userEmail input input-bordered w-full pr-16" type="text" name="email" id="email"
-                           placeholder="이메일"/>
-                    <button type="button" onclick="sendAuthenticationCode()"
-                            class="btn btn-primary absolute top-0 right-0 rounded-l-none">인증코드 발송
-                    </button>
-                </div>
-            </div>
-
-            <div class="form-control">
-                <label class="label">
-                    <span class="label-text">이메일 인증코드</span>
-                </label>
-                <div class="relative">
-                    <input class="input input-bordered w-full pr-16" type="text" id="inputCode"
-                           placeholder="인증코드"/>
-                    <button type="button" onclick="emailCertification()"
-                            class="btn btn-primary absolute top-0 right-0 rounded-l-none">이메일 인증
-                    </button>
-                </div>
-            </div>
-
-            <button id="btn-join-1" class="btn btn-block btn-primary gap-1">
-                <i class="fa-solid fa-user-plus"></i>
-                <span>회원가입</span>
-            </button>
-        </form>
+    <div class="mt-20 text-center font-bold text-4xl text-black">
+        SIGN UP
     </div>
 
+    <form th:action method="POST" onsubmit="JoinForm__submit(this); return false;">
+        <div class="flex justify-center">
+            <div class="flex flex-col mt-5 items-start">
+                <div class="mb-1">ID</div>
+                <div class="flex items-center space-x-4">
+                    <input type="text" name="username" placeholder="ID" autocomplete="off"
+                           class="bg-black bg-opacity-10 h-10 p-4 w-96"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center">
+            <div class="flex flex-col mt-5 items-start">
+                <div class="mb-1">Password</div>
+                <div class="flex items-center space-x-4">
+                    <input type="password" name="password" placeholder="Password" autocomplete="off"
+                           class="bg-black bg-opacity-10 h-10 p-4 w-96"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center mt-5">
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <input type="password" name="confirmPassword" placeholder="Confirm password" autocomplete="off"
+                           class="bg-black bg-opacity-10 h-10 p-4 w-96"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center">
+            <div class="flex flex-col mt-5 items-start">
+                <div class="mb-1">Name</div>
+                <div class="flex items-center space-x-4">
+                    <input type="text" name="name" placeholder="Name" autocomplete="off"
+                           class="bg-black bg-opacity-10 h-10 p-4 w-96"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center">
+            <div class="flex flex-col mt-5 items-start">
+                <div class="mb-1">NickName</div>
+                <div class="flex items-center space-x-4">
+                    <input id="id-input" type="text" name="nickName" placeholder="NickName" autocomplete="off"
+                           class="bg-black bg-opacity-10 h-10 p-4 w-96"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center">
+            <div class="flex flex-col mt-5 items-start">
+                <div class="mb-1">E-mail</div>
+                <div class="flex items-center space-x-4">
+                    <input type="text" name="email" id="email" placeholder="E-mail" autocomplete="off"
+                           class="userEmail bg-black bg-opacity-10 h-10 p-4 w-60"/>
+                    <button class="bg-black bg-opacity-10 h-10 p-4 w-32 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
+                            type="button" onclick="sendAuthenticationCode()">
+                        <span class="text-center">Send Code</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center mt-5">
+            <div class="flex items-center space-x-4">
+                <div class="relative flex">
+                    <input id="id-inputCode" name="code" type="text" placeholder="Authentication code" autocomplete="off"
+                           class="bg-black bg-opacity-10 h-10 p-4 w-60"/>
+                    <button class="bg-black bg-opacity-10 h-10 p-4 w-32 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
+                            type="button" onclick="emailCertification()">
+                        <span class="text-center">Certify</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center">
+            <button type="submit"
+                    class="bg-black bg-opacity-10 h-10 p-4 mt-5 text-sm flex items-center justify-center hover:bg-opacity-30 w-96">
+                <span class="text-center">Create account</span>
+            </button>
+        </div>
+    </form>
+
 </main>
+
 </body>
 
 </html>
