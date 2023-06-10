@@ -37,7 +37,6 @@ public class FileUploadController {
     @PostMapping
     public ResponseEntity<String> uploadFile(
             @RequestParam("title") String title,
-            @RequestParam("author") String author,
             @RequestParam("description") String description,
             @RequestParam("file") MultipartFile file) {
         try {
@@ -51,13 +50,12 @@ public class FileUploadController {
 
             // 사용자로부터 받은 정보를 metadata에 추가
             metadata.addUserMetadata("title", title);
-            metadata.addUserMetadata("author", author);
             metadata.addUserMetadata("description", description);
 
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata));
 
             // DB에 파일 정보를 저장
-            fileInfoService.saveFileInfo(title, author, description, fileUrl);
+            fileInfoService.saveFileInfo(title, description, fileUrl);
 
             return ResponseEntity.ok(fileUrl);
         } catch (IOException e) {

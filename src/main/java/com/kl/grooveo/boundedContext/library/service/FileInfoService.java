@@ -13,10 +13,9 @@ public class FileInfoService {
         this.fileInfoRepository = fileInfoRepository;
     }
 
-    public FileInfo saveFileInfo(String title, String author, String description, String fileUrl) {
+    public FileInfo saveFileInfo(String title, String description, String fileUrl) {
         FileInfo fileInfo = new FileInfo();
         fileInfo.setTitle(title);
-        fileInfo.setAuthor(author);
         fileInfo.setDescription(description);
         fileInfo.setFileUrl(fileUrl);
 
