@@ -185,7 +185,7 @@ public class MemberController {
             return rq.historyBack(member);
         }
 
-        return rq.redirectWithMsg("/usr/member/myPage/me", member);
+        return rq.redirectWithMsg("/usr/member/myPage", member);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -203,6 +203,6 @@ public class MemberController {
             return rq.historyBack(member);
         }
 
-        return rq.redirectWithMsg("/usr/member/myPage/me", member);
+        return rq.redirectWithMsg("/usr/member/myPage", member);
     }
 }
