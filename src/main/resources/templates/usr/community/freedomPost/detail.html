@@ -99,13 +99,22 @@
                 </form>
             </div>
 
-            <div class="">
+            <div class="mt-5">
                 <!-- 코멘트 제목 -->
-                <div class="border-b border-gray-400 pb-2 flex">
+                <div class="border-b border-gray-400 flex py-2 items-center">
                     <div class="text-gray-600 ml-2">
                         COMMENT
                     </div>
                     <div class="text-gray-600 ml-3"><span th:text="${#lists.size(freedomPost.commentList)}"></span></div>
+                    <div class="flex-grow"></div>
+                    <div class="flex-shrink-0">
+                        <a id="so_btn1" th:name="${name1}" type="button" class="so-link hover:underline mr-3 text-xs" style="cursor: pointer"
+                                th:data-so="create">등록순
+                        </a>
+                        <a id="so_btn2" th:name="${name2}" type="button" class="so-link hover:underline text-xs" style="cursor: pointer"
+                                th:data-so="recent">최신순
+                        </a>
+                    </div>
                 </div>
 
                 <!-- 댓글 카드 1개 (1) -->
@@ -208,6 +217,7 @@
                 <!-- 댓글 페이징처리 끝 -->
                 <form th:action="@{|/community/freedomPost/detail/${freedomPost.id}#comment-start|}" method="get" id="commentForm">
                     <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">
+                    <input type="hidden" id="so" name="so" th:value="${so}">
                 </form>
 
                 <!-- 댓글 입력칸 -->
@@ -225,6 +235,21 @@
     </div>
 
     <script th:inline="javascript">
+        const so_elements = document.getElementsByClassName("so-link");
+        Array.from(so_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (element.id === 'so_btn1') {
+                    document.getElementById('so_btn1').setAttribute('name', 'so_btn1');
+                    document.getElementById('so_btn2').setAttribute('name', 'so_btn2');
+                } else {
+                    document.getElementById('so_btn1').setAttribute('name', 'so_btn2');
+                    document.getElementById('so_btn2').setAttribute('name', 'so_btn1');
+                }
+                document.getElementById('so').value = this.getAttribute('data-so');
+                document.getElementById('commentForm').submit();
+            });
+        });
+
         const page_elements = document.getElementsByClassName("page-link");
         Array.from(page_elements).forEach(function (element) {
             element.addEventListener('click', function () {

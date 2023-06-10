@@ -38,7 +38,7 @@ public class FreedomPostCommentController {
         FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
         Member member = memberService.findByUsername(rq.getMember().getUsername()).orElseThrow();
 
-        Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage);
+        Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage, "create");
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("freedomPost", freedomPost);
