@@ -97,7 +97,7 @@
             <tr class="text-center">
                 <th>번호</th>
                 <th>카테고리</th>
-                <th style="width:50%">제목</th>
+                <th>제목</th>
                 <th>글쓴이</th>
                 <th>조회수</th>
                 <th>날짜</th>
@@ -107,7 +107,7 @@
             <tr class="text-center hover" th:each="freedomPost, loop : ${paging}">
                 <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                 <td th:text="${freedomPost.categoryDisplayName()}"></td>
-                <td class="text-left">
+                <td class="text-left" style="width:750px; max-width: 750px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
                     <label for="subject">
                         <a id="subject" th:href="@{|/community/freedomPost/detail/${freedomPost.id}|}"
                            th:text="${freedomPost.title}"></a>
