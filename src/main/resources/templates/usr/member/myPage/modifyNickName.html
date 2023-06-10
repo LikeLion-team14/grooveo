@@ -15,9 +15,9 @@
                 <i class="fa-regular fa-pen-to-square"></i>
                 닉네임 변경
             </h2>
-            <div class="card bg-base-100 shadow-xl mt-2" style="width: 350px">
+            <div class="card bg-base-100 shadow-xl mt-2" style="width: 380px">
                 <div class="card-body">
-                    <form th:action method="POST" class="flex flex-col gap-6"
+                    <form th:action method="POST" class="flex flex-col"
                           onsubmit="ModifyNickNameForm__submit(this); return false;">
                         <div class="flex justify-center">
                             <div class="flex flex-col mt-5 items-start">
@@ -25,12 +25,12 @@
                                 <p class="mb-3"><i class="fa-regular fa-face-smile"></i> 변경하실 닉네임을 입력해 주세요.</p>
                                 <div class="flex items-center space-x-4">
                                     <input type="text" name="nickName" placeholder="닉네임" autocomplete="off"
-                                           class="userEmail bg-black bg-opacity-10 h-10 p-4 w-120"/>
-                                    <input type="hidden" name="email"/>
+                                           class="bg-black bg-opacity-10 h-10 p-4 w-120"/>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-2 card-actions justify-end">
+
+                        <div class="mt-5 card-actions justify-end">
                             <a href="/usr/member/myPage"
                                class="bg-black bg-opacity-10 h-10 p-4 w-16 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30">취소</a>
                             <button class="bg-black bg-opacity-10 h-10 p-4 w-16 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
