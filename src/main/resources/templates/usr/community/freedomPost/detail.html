@@ -159,7 +159,7 @@
 
                         <!-- 답글 창-->
                         <div class="list-group">
-                            <div th:each="i: ${#numbers.sequence(comment.getReplyList().size()-1, 0, -1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">
+                            <div th:each="i: ${#numbers.sequence(0, comment.getReplyList().size()-1, 1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">
                                 <div>
                                     <div class="flex">
                                         <div>⎿</div>
