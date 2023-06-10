@@ -7,6 +7,7 @@ import com.kl.grooveo.boundedContext.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,7 +112,7 @@ public class MemberService {
 
     @Transactional
     public RsData<Member> modifyPassword(Member actor, String previousPassword, String newPassword, String confirmNewPassword) {
-        if (passwordEncoder.matches(actor.getPassword(), previousPassword)) {
+        if (!passwordEncoder.matches(previousPassword, actor.getPassword())) {
             return RsData.of("F-1", "비밀번호가 일치하지 않습니다.");
         }
 
