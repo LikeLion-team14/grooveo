@@ -17,42 +17,49 @@
                 <i class="fa-solid fa-envelope"></i>
                 E-mail 변경
             </h2>
-            <div class="card w-96 bg-base-100 shadow-xl mt-2">
+            <div class="card bg-base-100 shadow-xl mt-2" style="width: 500px">
                 <div class="card-body">
-                    <form th:action method="POST" class="flex flex-col gap-6"
-                          onsubmit="ModifyEmailForm__submit(this); return false;">
+                    <form th:action method="POST" class="flex flex-col gap-3"
+                          onsubmit="copyEmailValue();ModifyEmailForm__submit(this); return false;">
 
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text">E-mail</span>
-                                <p></p>
-                            </label>
-                            <div class="relative">
-                                <input class="userEmail input input-bordered w-full pr-16" type="text" name="email"
-                                       id="email" autocomplete="off"
-                                       placeholder="이메일"/>
-                                <button type="button" onclick="sendAuthenticationCode()"
-                                        class="btn btn-outline absolute top-0 right-0 rounded-l-none">인증코드 발송
-                                </button>
+                        <div class="flex justify-center">
+                            <div class="flex flex-col mt-5 items-start">
+                                <div class="mb-1">E-mail</div>
+                                <div class="flex items-center space-x-4">
+                                    <input type="text" name="email_v1" id="email" placeholder="E-mail"
+                                           autocomplete="off"
+                                           class="userEmail bg-black bg-opacity-10 h-10 p-4 w-60"/>
+                                    <input type="hidden" name="email"/>
+                                    <button class="bg-black bg-opacity-10 h-10 p-4 w-32 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
+                                            type="button" onclick="sendAuthenticationCode()" id="send-code-btn">
+                                        <span id="send-code-text" class="text-center">Send Code</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text">E-mail 인증코드</span>
-                            </label>
-                            <div class="relative">
-                                <input class="input input-bordered w-full pr-16" type="text" id="inputCode"
-                                       placeholder="인증코드" autocomplete="off"/>
-                                <button type="button" onclick="emailCertification()"
-                                        class="btn btn-outline absolute top-0 right-0 rounded-l-none">E-mail 인증
-                                </button>
+                        <div class="flex justify-center">
+                            <div class="flex flex-col mt-5 items-start">
+                                <div class="mb-1">인증코드</div>
+                                <div class="flex items-center space-x-4">
+                                    <input type="text" name="code" id="id-inputCode" placeholder="인증코드"
+                                           autocomplete="off"
+                                           class="userEmail bg-black bg-opacity-10 h-10 p-4 w-60"/>
+                                    <button class="bg-black bg-opacity-10 h-10 p-4 w-32 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
+                                            type="button" onclick="emailCertification()" id="certify-btn">
+                                        <span id="certify-text" class="text-center">인증하기</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mt-4 card-actions justify-end">
-                            <a href="/usr/member/myPage" class="btn btn-outline btn">취소</a>
-                            <input type="submit" value="변경" class="btn btn-outline">
+                        <div class="mt-2 card-actions justify-end mt-3">
+                            <a href="/usr/member/myPage"
+                               class="bg-black bg-opacity-10 h-10 p-4 w-16 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30">취소</a>
+                            <button class="bg-black bg-opacity-10 h-10 p-4 w-16 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
+                                    type="submit" onclick="emailCertification()">
+                                <span class="text-center">변경</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -94,7 +101,11 @@
         function sendAuthenticationCode() {
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
+
+            const inputElement = document.getElementById('email');
             const userEmail = document.querySelector('.userEmail').value;
+            const sendCodeBtn = document.getElementById('send-code-btn');
+            const sendCodeText = document.getElementById('send-code-text');
 
             $.ajax({
                 type: "POST",
@@ -103,8 +114,13 @@
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
                 },
-                dataType: "text",
                 success: function (data) {
+                    // email 수정 금지
+                    document.getElementById('email').disabled = true;
+                    inputElement.style.opacity = '0.5';
+                    // Send Code 버튼 비활성화
+                    sendCodeText.style.opacity = '0.5';
+                    sendCodeBtn.disabled = true;
                     toastNotice('인증번호가 전송 되었습니다.');
                 }, error: function (data) {
                     toastWarning('인증번호 전송에 실패했습니다.')
@@ -117,12 +133,15 @@
             var header = $("meta[name='_csrf_header']").attr("content");
 
             let userEmail = document.getElementById('email').value;
-            let inputCode = document.getElementById('inputCode').value;
+            let inputCode = document.getElementById('id-inputCode');
+
+            const certifyBtn = document.getElementById('certify-btn');
+            const certifyText = document.getElementById('certify-text');
 
             $.ajax({
                 type: "POST",
                 url: "/usr/member/certification",
-                data: {"userEmail": userEmail, "inputCode": inputCode},
+                data: {"userEmail": userEmail, "inputCode": inputCode.value},
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
                 },
@@ -130,11 +149,23 @@
                 success: function (result) {
                     if (result === 'true') {
                         toastNotice('이메일 인증이 완료되었습니다.');
+                        // Authentication code
+                        inputCode.disabled = true;
+                        inputCode.style.opacity = '0.5';
+                        // Certify 버튼 비활성화
+                        certifyText.style.opacity = '0.5';
+                        certifyBtn.disabled = true;
+                        //Create account 버튼 활성화
                     } else {
                         toastWarning('인증코드가 일치하지 않습니다.');
                     }
+
                 }
             });
+        }
+
+        function copyEmailValue() {
+            document.getElementsByName('email')[0].value = document.getElementById('email').value;
         }
     </script>
 

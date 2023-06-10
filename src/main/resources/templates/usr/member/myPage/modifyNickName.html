@@ -15,22 +15,28 @@
                 <i class="fa-regular fa-pen-to-square"></i>
                 닉네임 변경
             </h2>
-
-            <div class="card w-96 bg-base-100 shadow-xl">
+            <div class="card bg-base-100 shadow-xl mt-2" style="width: 380px">
                 <div class="card-body">
-
-                    <form th:action method="POST" class="flex flex-col gap-6"
+                    <form th:action method="POST" class="flex flex-col"
                           onsubmit="ModifyNickNameForm__submit(this); return false;">
-                        <div class="form-control gap-2">
-                            <span class="text-lg">닉네임</span>
-                            <p class="mb-3"><i class="fa-regular fa-face-smile"></i> 변경하실 닉네임을 입력해 주세요.</p>
-                            <input type="text" name="nickName" maxlength="30" placeholder="닉네임"
-                                   class="input input-bordered">
+                        <div class="flex justify-center">
+                            <div class="flex flex-col mt-5 items-start">
+                                <div class="mb-2 text-lg">닉네임</div>
+                                <p class="mb-3"><i class="fa-regular fa-face-smile"></i> 변경하실 닉네임을 입력해 주세요.</p>
+                                <div class="flex items-center space-x-4">
+                                    <input type="text" name="nickName" placeholder="닉네임" autocomplete="off"
+                                           class="bg-black bg-opacity-10 h-10 p-4 w-120"/>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="mt-4 card-actions justify-end">
-                            <a href="/usr/member/myPage" class="btn btn-outline">취소</a>
-                            <input type="submit" value="변경" class="btn btn-outline" autocomplete="off">
+                        <div class="mt-5 card-actions justify-end">
+                            <a href="/usr/member/myPage"
+                               class="bg-black bg-opacity-10 h-10 p-4 w-16 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30">취소</a>
+                            <button class="bg-black bg-opacity-10 h-10 p-4 w-16 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30"
+                                    type="submit" onclick="emailCertification()">
+                                <span class="text-center">변경</span>
+                            </button>
                         </div>
                     </form>
                 </div>
