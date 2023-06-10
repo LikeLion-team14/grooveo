@@ -46,8 +46,8 @@
 
 <main layout:fragment="main">
     <div class="flex justify-center mx-auto w-4/6 my-3">
-        <div class="posts-box mt-8">
-            <div class="flex justify-center">
+        <div class="posts-box mt-8 w-full mx-10">
+            <div class="flex justify-center" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
                 <span class="text-3xl font-bold" th:text="${freedomPost.title}"></span>
             </div>
 
@@ -99,13 +99,22 @@
                 </form>
             </div>
 
-            <div class="">
+            <div class="mt-5">
                 <!-- 코멘트 제목 -->
-                <div class="border-b border-gray-400 pb-2 flex">
+                <div class="border-b border-gray-400 flex py-2 items-center">
                     <div class="text-gray-600 ml-2">
                         COMMENT
                     </div>
                     <div class="text-gray-600 ml-3"><span th:text="${#lists.size(freedomPost.commentList)}"></span></div>
+                    <div class="flex-grow"></div>
+                    <div class="flex-shrink-0">
+                        <a id="so_btn1" th:name="${name1}" type="button" class="so-link hover:underline mr-3 text-xs" style="cursor: pointer"
+                                th:data-so="create">등록순
+                        </a>
+                        <a id="so_btn2" th:name="${name2}" type="button" class="so-link hover:underline text-xs" style="cursor: pointer"
+                                th:data-so="recent">최신순
+                        </a>
+                    </div>
                 </div>
 
                 <!-- 댓글 카드 1개 (1) -->
@@ -144,25 +153,13 @@
                         </div>
                     </div>
 
-                    <!-- 답글 등록 창-->
                     <div class="comment-reply flex m-6 justify-center hidden" th:id="${comment.id}"
                          th:classappend="|cm_${comment.getId()}|">
                         <a th:id="|comment-${comment.id}|"></a>
-                        <div class="form-floating comment_box">
-                            <form th:action="@{|/reply/create/${comment.id}|}" th:object="${commentForm}" method="post" onsubmit="replyForm__submit(this); return false;"
-                                  class="my-3">
-                                <div class="flex items-center">
-                                    <textarea class="border border-gray-300 resize-none p-4 mr-5" placeholder="답글을 남겨보세요"
-                                              th:field="*{content}" cols="90" rows="2"></textarea>
-                                    <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
-                                    <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>
-                                </div>
-                            </form>
-                        </div>
 
-                        <!-- 댓글 창-->
+                        <!-- 답글 창-->
                         <div class="list-group">
-                            <div th:each="i: ${#numbers.sequence(comment.getReplyList().size()-1, 0, -1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">
+                            <div th:each="i: ${#numbers.sequence(0, comment.getReplyList().size()-1, 1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">
                                 <div>
                                     <div class="flex">
                                         <div>⎿</div>
@@ -182,8 +179,19 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- 답글 등록 창-->
+                        <div class="form-floating comment_box">
+                            <form th:action="@{|/reply/create/${comment.id}|}" th:object="${commentForm}" method="post" onsubmit="replyForm__submit(this); return false;"
+                                  class="my-3">
+                                <div class="flex items-center justify-center">
+                                    <textarea class="border border-gray-300 resize-none p-4 mr-5" placeholder="답글을 남겨보세요"
+                                              th:field="*{content}" cols="90" rows="2"></textarea>
+                                    <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
+                                    <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-
                 </div>
 
                 <!-- 페이징처리 시작 -->
@@ -209,23 +217,37 @@
                 <!-- 댓글 페이징처리 끝 -->
                 <form th:action="@{|/community/freedomPost/detail/${freedomPost.id}#comment-start|}" method="get" id="commentForm">
                     <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">
+                    <input type="hidden" id="so" name="so" th:value="${so}">
                 </form>
 
                 <!-- 댓글 입력칸 -->
-                <div class="flex m-4 justify-center">
-                    <form th:action="@{|/comment/create/${freedomPost.id}|}" th:object="${commentForm}" method="post" onsubmit="commentForm__submit(this); return false;">
-                        <div class="flex items-center">
-                            <textarea cols="95" rows="2" placeholder="댓글을 남겨보세요" class="border border-gray-300 resize-none p-4 mr-5" th:field="*{content}"></textarea>
-                            <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
-                            <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>
-                        </div>
-                    </form>
-                </div>
+                <form th:action="@{|/comment/create/${freedomPost.id}|}" th:object="${commentForm}" method="post" onsubmit="commentForm__submit(this); return false;">
+                    <div class="flex items-center justify-center">
+                        <textarea cols="95" rows="2" placeholder="댓글을 남겨보세요" class="border border-gray-300 resize-none p-4 mr-5" th:field="*{content}"></textarea>
+                        <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
+                        <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <script th:inline="javascript">
+        const so_elements = document.getElementsByClassName("so-link");
+        Array.from(so_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (element.id === 'so_btn1') {
+                    document.getElementById('so_btn1').setAttribute('name', 'so_btn1');
+                    document.getElementById('so_btn2').setAttribute('name', 'so_btn2');
+                } else {
+                    document.getElementById('so_btn1').setAttribute('name', 'so_btn2');
+                    document.getElementById('so_btn2').setAttribute('name', 'so_btn1');
+                }
+                document.getElementById('so').value = this.getAttribute('data-so');
+                document.getElementById('commentForm').submit();
+            });
+        });
+
         const page_elements = document.getElementsByClassName("page-link");
         Array.from(page_elements).forEach(function (element) {
             element.addEventListener('click', function () {

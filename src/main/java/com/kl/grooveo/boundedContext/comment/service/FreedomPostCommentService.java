@@ -47,9 +47,13 @@ public class FreedomPostCommentService {
         this.freedomPostCommentRepository.delete(freedomPostComment);
     }
 
-    public Page<FreedomPostComment> getList(FreedomPost freedomPost, int commentPage) {
+    public Page<FreedomPostComment> getList(FreedomPost freedomPost, int commentPage, String so) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+        if (so.equals("create")){
+            sorts.add(Sort.Order.asc("createDate"));
+        } else{
+            sorts.add(Sort.Order.desc("createDate"));
+        }
 
         Pageable pageable = PageRequest.of(commentPage, 5, Sort.by(sorts));
         return this.freedomPostCommentRepository.findAllByFreedomPost(freedomPost, pageable);

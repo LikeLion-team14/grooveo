@@ -52,6 +52,7 @@ public class FreedomPostController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/detail/{id}")
     public String showMoreDetail(Model model, @PathVariable("id") Long id,
+                                 @RequestParam(value = "so", defaultValue = "create") String so,
                                  @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm, ReplyForm replyForm,
                                  HttpServletRequest request, HttpServletResponse response) {
         FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
@@ -90,10 +91,19 @@ public class FreedomPostController {
             response.addCookie(newCookie);
         }
 
-        Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage);
+        if (so.equals("create")){
+            model.addAttribute("name1", "so_btn1");
+            model.addAttribute("name2", "so_btn2");
+        } else{
+            model.addAttribute("name1", "so_btn2");
+            model.addAttribute("name2", "so_btn1");
+        }
+
+        Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage, so);
 
         model.addAttribute("commentPaging", commentPaging);
         model.addAttribute("freedomPost", freedomPost);
+        model.addAttribute("so", so);
 
         return "usr/community/freedomPost/detail";
     }
