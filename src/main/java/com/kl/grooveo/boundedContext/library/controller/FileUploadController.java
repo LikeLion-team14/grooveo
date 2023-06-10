@@ -1,8 +1,10 @@
 package com.kl.grooveo.boundedContext.library.controller;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class FileUploadController {
 
-    private final AmazonS3Client amazonS3Client;
+    private final AmazonS3 amazonS3Client;
     private final FileInfoService fileInfoService;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -35,29 +37,40 @@ public class FileUploadController {
     }
 
     @PostMapping
-    public ResponseEntity<String> uploadFile(
+    public ResponseEntity<String> uploadFiles(
             @RequestParam("title") String title,
             @RequestParam("description") String description,
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("albumCover") MultipartFile albumCover,
+            @RequestParam("sound") MultipartFile sound) {
         try {
-            String fileName = file.getOriginalFilename();
-            String fileUrl = "https://s3."+region+".amazonaws.com/" + bucket + "/sound/" + fileName;
+            String albumCoverName = albumCover.getOriginalFilename();
+            String albumCoverUrl = "https://s3." + region + ".amazonaws.com/"  + bucket + "/albumCover/" + albumCoverName;
+            String soundName = sound.getOriginalFilename();
+            String soundUrl = "https://s3." + region + ".amazonaws.com/"  + bucket + "/sound/" + soundName;
 
+            ObjectMetadata albumCoverMetadata = new ObjectMetadata();
+            albumCoverMetadata.setContentType(albumCover.getContentType());
+            albumCoverMetadata.setContentLength(albumCover.getSize());
+            albumCoverMetadata.addUserMetadata("title", title);
+            albumCoverMetadata.addUserMetadata("description", description);
 
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(file.getContentType());
-            metadata.setContentLength(file.getSize());
+            ObjectMetadata soundMetadata = new ObjectMetadata();
+            soundMetadata.setContentType(sound.getContentType());
+            soundMetadata.setContentLength(sound.getSize());
+            soundMetadata.addUserMetadata("title", title);
+            soundMetadata.addUserMetadata("description", description);
 
-            // 사용자로부터 받은 정보를 metadata에 추가
-            metadata.addUserMetadata("title", title);
-            metadata.addUserMetadata("description", description);
+            amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName, albumCover.getInputStream(), albumCoverMetadata));
+            amazonS3Client.putObject(new PutObjectRequest(bucket, "sound/" + soundName, sound.getInputStream(), soundMetadata));
 
-            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata));
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setTitle(title);
+            fileInfo.setDescription(description);
+            fileInfo.setAlbumCoverUrl(albumCoverUrl);
+            fileInfo.setSoundUrl(soundUrl);
+            fileInfoService.saveFileInfo(fileInfo);
 
-            // DB에 파일 정보를 저장
-            fileInfoService.saveFileInfo(title, description, fileUrl);
-
-            return ResponseEntity.ok(fileUrl);
+            return ResponseEntity.ok("업로드 성공하였습니다. 앨범커버 URL : " + albumCoverUrl + ", 음원 URL : " + soundUrl);
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
