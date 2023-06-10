@@ -1,65 +1,132 @@
 <html layout:decorate="~{usr/layout/layout.html}">
 
 <head>
+    <style>
+        /* 노말라이즈 */
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 라이브러리 */
+        .top-logo-bar {
+            width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 커스텀 */
+        html {
+            background-color: white;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .or-line::before,
+        .or-line::after {
+            content: "";
+            width: 90px;
+            height: 1px;
+            background-color: rgb(107, 114, 128);
+        }
+
+        .or-line::before {
+            margin-right: 20px;
+        }
+
+        .or-line::after {
+            margin-left: 20px;
+        }
+
+        .login-box {
+        }
+    </style>
     <title>로그인</title>
+    <meta th:if="${error}" name="errorMsg" th:content="${exception}"/>
 </head>
 
 <body>
 <main layout:fragment="main">
-    <div class="flex-grow flex items-center justify-center">
-        <div class="max-w-2xl w-full px-4">
-            <h1 class="mb-4">
-                <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                로그인
-            </h1>
+    <form th:action method="POST" onsubmit="LoginForm__submit(this); return false;">
+        <div class="login-box mt-28">
+            <div class="mt-20 text-center font-bold text-4xl text-black">
+                LOGIN
+            </div>
 
-            <form th:action method="POST" class="flex flex-col gap-6" onsubmit="LoginForm__submit(this); return false;">
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">
-                            <i class="fa-regular fa-id-badge"></i>
-                            아이디
-                        </span>
-                    </label>
-                    <input type="text" name="username" placeholder="아이디" class="input input-bordered" autofocus/>
+            <script th:if="${error}">
+                const errorMsg = $("meta[name='errorMsg']").attr("content");
+                toastWarning(errorMsg);
+            </script>
+
+            <div class="flex justify-center mt-14">
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input id="id-input" name="username" type="text" placeholder="ID"
+                               class="bg-black bg-opacity-10 h-10 p-4 w-60"/>
+                    </div>
                 </div>
+            </div>
 
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">
-                            <i class="fa-solid fa-key"></i>
-                            비밀번호
-                        </span>
-                    </label>
-                    <input type="password" name="password" placeholder="비밀번호" class="input input-bordered"/>
+            <div class="flex justify-center mt-5">
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input id="pw-input" name="password" type="password" placeholder="PW"
+                               class="bg-black bg-opacity-10 h-10 p-4 w-60"/>
+                    </div>
                 </div>
+            </div>
 
-                <div>
-                    <input type="submit" value="로그인" class="btn btn-block btn-primary gap-1">
-                </div>
-                <a href="/oauth2/authorization/kakao" class="btn btn-ghost btn-outline btn-info gap-1">
-                    <i class="fa-solid fa-comment text-[color:#ffe812]"></i> 카카오 로그인
-                </a>
+            <div class="flex justify-center">
+                <a href="/usr/member/findUsername"
+                   class="mr-16 mt-2 text-sm text-gray-500 hover:text-gray-800 hover:underline">ID 찾기</a>
+                <a href="/usr/member/findPassword"
+                   class="mt-2 text-sm text-gray-500 hover:text-gray-800 hover:underline">PW 찾기</a>
+            </div>
 
-                <a href="/oauth2/authorization/google" class="btn btn-ghost btn-outline btn-info gap-1">
-                    <i class="fa-brands fa-google text-[color:#4285f4]"></i> 구글 로그인
-                </a>
-            </form>
-            <div class="flex flex-wrap justify-center gap-2">
-                <a href="/usr/member/findUsername" class="btn btn-outline btn-sm">
-                    <i class="fa-solid fa-magnifying-glass"></i> 아이디 찾기
-                </a>
+            <div class="flex justify-center">
+                <button type="submit"
+                        class="bg-black bg-opacity-10 h-10 p-4 w-28 mt-5 mr-4 text-sm flex items-center justify-center hover:bg-opacity-30">
+                    <span class="text-center">LOGIN</span>
+                </button>
+                <button class="bg-black bg-opacity-10 h-10 p-4 w-28 mt-5 text-sm flex items-center justify-center hover:bg-opacity-30">
+                    <span class="text-center">SIGN UP</span>
+                </button>
+            </div>
 
-                <a href="/usr/member/findPassword" class="btn btn-outline btn-sm">
-                    <i class="fa-solid fa-key"></i> 비밀번호 찾기
+            <div class="or-line flex justify-center items-center mt-5 text-gray-500">OR</div>
+
+            <div class="flex justify-center">
+                <a href="/oauth2/authorization/kakao"
+                   class="bg-black bg-opacity-10 h-10 p-4 w-60 mt-5 text-sm flex items-center justify-center hover:bg-opacity-30">
+                    <i class="fas fa-comment fa-xs mr-2" style="color: #2e2e2e;"></i>
+                    <span class="text-center">카카오톡 로그인</span>
                 </a>
             </div>
+            <div class="flex justify-center">
+                <a href="/oauth2/authorization/google"
+                   class="bg-black bg-opacity-10 h-10 p-4 w-60 mt-5 text-sm flex items-center justify-center hover:bg-opacity-30">
+                    <i class="fab fa-google fa-xs mr-2" style="color: #2e2e2e;"></i>
+                    <span class="text-center">구글 로그인</span>
+                </a>
+            </div>
+
         </div>
-    </div>
+    </form>
+
     <script>
         function LoginForm__submit(form) {
             // username 이(가) 올바른지 체크
-            form.username.value = form.username.value.trim(); // 입력란의 입력값에 있을지 모르는 좌우공백제거
+            form.username.value = form.username.value.trim();
 
             if (form.username.value.length === 0) {
                 toastWarning('아이디를 입력해주세요.');

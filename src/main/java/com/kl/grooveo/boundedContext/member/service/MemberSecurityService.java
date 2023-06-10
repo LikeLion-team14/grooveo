@@ -23,6 +23,7 @@ public class MemberSecurityService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final String ROLE_ADMIN = "admin";
+    private final String ROLE_USER = "user";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -35,7 +36,7 @@ public class MemberSecurityService implements UserDetailsService {
         if ("admin".equals(username)) {
             authorities.add(new SimpleGrantedAuthority(ROLE_ADMIN));
         } else {
-            authorities.add(new SimpleGrantedAuthority(member.getRole()));
+            authorities.add(new SimpleGrantedAuthority(ROLE_USER));
         }
         return new User(member.getUsername(), member.getPassword(), authorities);
     }
