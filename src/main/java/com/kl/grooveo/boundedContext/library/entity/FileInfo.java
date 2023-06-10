@@ -15,6 +15,7 @@ public class FileInfo {
 
     private String title;
     private String description;
-    private String fileUrl;
+    private String albumCoverUrl;
+    private String soundUrl;
 
 }
