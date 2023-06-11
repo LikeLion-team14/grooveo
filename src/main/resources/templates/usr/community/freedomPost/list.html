@@ -111,6 +111,7 @@
                     <label for="subject">
                         <a id="subject" th:href="@{|/community/freedomPost/detail/${freedomPost.id}|}"
                            th:text="${freedomPost.title}"></a>
+                        <span th:if="${freedomPost.commentList.size() != 0}" th:text="'[' + ${freedomPost.commentList.size() + ']'}" style="color: red;"></span>
                     </label>
                 </td>
                 <td>
