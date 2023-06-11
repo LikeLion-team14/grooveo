@@ -12,15 +12,16 @@
             <thead class="table-dark">
             <tr class="text-center">
                 <th>번호</th>
-                <th style="width:50%">내용</th>
+                <th>내용</th>
                 <th>댓글 작성 게시물</th>
                 <th>날짜</th>
             </tr>
             </thead>
             <tbody>
-            <tr class="text-center" th:each="freedomPostComment, loop : ${paging}">
+            <tr class="text-center hover" th:each="freedomPostComment, loop : ${paging}">
                 <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
-                <td th:text="${freedomPostComment.content}"></td>
+                <td style="width:380px; max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
+                    th:text="${freedomPostComment.content}"></td>
                 <td>
                     <label for="subject">
                         <a id="subject"
