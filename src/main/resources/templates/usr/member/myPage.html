@@ -31,9 +31,9 @@
                                 <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                                     <li><a href="/usr/member/myPage/modifyNickName"><i class="fa-solid fa-user-pen"></i>닉네임
                                         변경</a></li>
-                                    <li><a href="/usr/member/myPage/modifyEmail"><i class="fa-solid fa-envelope"></i>이메일
+                                    <li th:if="${@rq.member.providerTypeCode == 'GROOVEO'}"><a href="/usr/member/myPage/modifyEmail"><i class="fa-solid fa-envelope"></i>이메일
                                         변경</a></li>
-                                    <li><a href="/usr/member/myPage/modifyPassword"><i
+                                    <li th:if="${@rq.member.providerTypeCode == 'GROOVEO'}"><a href="/usr/member/myPage/modifyPassword"><i
                                             class="fa-solid fa-unlock-keyhole"></i>비밀번호 변경</a></li>
                                     <li><a href="/usr/member/myPage/modifyProfileImage"><i
                                             class="fa-regular fa-image"></i>프로필 이미지 변경</a></li>
