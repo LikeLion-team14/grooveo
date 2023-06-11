@@ -119,6 +119,7 @@
 
                 <!-- 댓글 카드 1개 (1) -->
                 <div class="m-3 border-b border-gray-300" th:each="comment : ${commentPaging}">
+                    <a th:id="|comment-${comment.id}|"></a>
                     <!-- 댓글 작성자 -->
                     <div class="flex mt-7 justify-between">
                         <div class="flex justify-start items-center">
@@ -215,13 +216,13 @@
                 <!-- 페이징처리 끝 -->
 
                 <!-- 댓글 페이징처리 끝 -->
-                <form th:action="@{|/community/freedomPost/detail/${freedomPost.id}#comment-start|}" method="get" id="commentForm">
+                <form th:action="@{|/community/freedomPost/detail/${freedomPost.id}}" method="get" id="commentForm">
                     <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">
                     <input type="hidden" id="so" name="so" th:value="${so}">
                 </form>
 
                 <!-- 댓글 입력칸 -->
-                <form th:action="@{|/comment/create/${freedomPost.id}|}" th:object="${commentForm}" method="post" onsubmit="commentForm__submit(this); return false;">
+                <form th:action="@{|/comment/create/${freedomPost.id}?commentPage=${commentPaging.number}&so=${so}|}" th:object="${commentForm}" method="post" onsubmit="commentForm__submit(this); return false;">
                     <div class="flex items-center justify-center">
                         <textarea cols="95" rows="2" placeholder="댓글을 남겨보세요" class="border border-gray-300 resize-none p-4 mr-5" th:field="*{content}"></textarea>
                         <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
