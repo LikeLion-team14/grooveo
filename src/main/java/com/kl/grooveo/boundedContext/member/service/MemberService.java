@@ -26,8 +26,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    private final FileInfoRepository fileInfoRepository;
-
+    private final String DEFALT_IMG = "https://grooveobucket.s3.ap-northeast-2.amazonaws.com/albumCover/free-icon-user-5264565.png";
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
@@ -53,6 +52,7 @@ public class MemberService {
                 .name(name)
                 .nickName(nickName)
                 .email(email)
+                .profileImageUrl(DEFALT_IMG)
                 .build();
 
         memberRepository.save(actor);
