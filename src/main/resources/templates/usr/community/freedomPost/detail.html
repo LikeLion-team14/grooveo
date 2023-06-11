@@ -108,10 +108,10 @@
                     <div class="text-gray-600 ml-3"><span th:text="${#lists.size(freedomPost.commentList)}"></span></div>
                     <div class="flex-grow"></div>
                     <div class="flex-shrink-0">
-                        <a id="so_btn1" th:name="${name1}" type="button" class="so-link hover:underline mr-3 text-xs" style="cursor: pointer"
+                        <a id="so_btn1" class="so-link hover:underline mr-3 text-xs" style="cursor: pointer"
                                 th:data-so="create">등록순
                         </a>
-                        <a id="so_btn2" th:name="${name2}" type="button" class="so-link hover:underline text-xs" style="cursor: pointer"
+                        <a id="so_btn2" class="so-link hover:underline text-xs" style="cursor: pointer"
                                 th:data-so="recent">최신순
                         </a>
                     </div>
@@ -238,13 +238,6 @@
         const so_elements = document.getElementsByClassName("so-link");
         Array.from(so_elements).forEach(function (element) {
             element.addEventListener('click', function () {
-                if (element.id === 'so_btn1') {
-                    document.getElementById('so_btn1').setAttribute('name', 'so_btn1');
-                    document.getElementById('so_btn2').setAttribute('name', 'so_btn2');
-                } else {
-                    document.getElementById('so_btn1').setAttribute('name', 'so_btn2');
-                    document.getElementById('so_btn2').setAttribute('name', 'so_btn1');
-                }
                 document.getElementById('so').value = this.getAttribute('data-so');
                 document.getElementById('commentForm').submit();
             });
