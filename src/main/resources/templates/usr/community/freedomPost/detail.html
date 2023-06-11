@@ -141,6 +141,7 @@
                                 <a href="javascript:void(0);" class="comment-answer reply-link text-xs mr-1 hover:underline" th:data-num="${comment.id}">
                                     답글 쓰기
                                 </a>
+                                <p class="text-red-500 text-xs mr-2" th:text="|[${comment.replyList.size()}]|"></p>
                                 <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
                                    th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
                                    onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
