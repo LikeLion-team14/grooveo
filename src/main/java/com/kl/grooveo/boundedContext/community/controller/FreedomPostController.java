@@ -91,14 +91,6 @@ public class FreedomPostController {
             response.addCookie(newCookie);
         }
 
-        if (so.equals("create")){
-            model.addAttribute("name1", "so_btn1");
-            model.addAttribute("name2", "so_btn2");
-        } else{
-            model.addAttribute("name1", "so_btn2");
-            model.addAttribute("name2", "so_btn1");
-        }
-
         Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage, so);
 
         model.addAttribute("commentPaging", commentPaging);
