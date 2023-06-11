@@ -19,6 +19,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -226,11 +228,12 @@ public class MemberController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/myPage/modifyProfileImage")
-    public String uploadFile(@RequestParam MultipartFile profileImage) {
+    @ResponseBody
+    public ResponseEntity<String> uploadFile(@RequestParam("profileImage") MultipartFile profileImage) {
         Member actor = rq.getMember();
 
         try {
-            String fileName = "profileImage_userId" + actor.getId();
+            String fileName = "profileImage_userId_" + actor.getId();
             String profileUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/profileImages/" + fileName;
 
             ObjectMetadata metadata = new ObjectMetadata();
@@ -243,10 +246,10 @@ public class MemberController {
             // DB에 파일 정보를 저장
             memberService.saveProfileImage(actor, profileUrl);
 
-            return rq.redirectWithMsg("/usr/member/myPage", "프로필 사진이 변경되었습니다.");
+            return ResponseEntity.ok().body("프로필 사진이 변경되었습니다.");
         } catch (IOException e) {
             e.printStackTrace();
-            return rq.historyBack("문제가 발생했습니다. 관리자에게 문의하세요");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("문제가 발생했습니다. 관리자에게 문의하세요");
         }
     }
 }
