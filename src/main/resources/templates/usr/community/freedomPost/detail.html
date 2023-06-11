@@ -120,41 +120,40 @@
                 <!-- 댓글 카드 1개 (1) -->
                 <div class="m-3 border-b border-gray-300" th:each="comment : ${commentPaging}">
                     <a th:id="|comment-${comment.id}|"></a>
-                    <!-- 댓글 작성자 -->
-                    <div class="flex mt-7 justify-between">
-                        <div class="flex justify-start items-center">
-                            <img th:src="${comment.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover m-3 rounded-full border-2">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <div class=""><p th:text="${comment.getAuthor().username}"></p></div>
-                                </div>
+                    <!-- 댓글 리스트 -->
+                    <div class="flex my-3 w-full">
+                        <div class="w-11 h-full mr-1">
+                            <img th:src="${comment.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">
+                        </div>
+                        <div class="w-full">
+                            <div class="flex items-center mb-1">
+                                <div class=""><p th:text="${comment.getAuthor().username}"></p></div>
+                            </div>
 
-                                <div class="flex">
-                                    <div class="text-xs mr-2"><p th:text="${#temporals.format(comment.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>
-                                    <a href="javascript:void(0);" class="comment-answer reply-link text-xs mr-1 hover:underline" th:data-num="${comment.id}">
-                                        답글 쓰기
-                                    </a>
-                                    <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
-                                       th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
-                                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
-                                        삭제
-                                    </a>
-                                    <form hidden th:action="@{|/comment/${comment.id}|}" method="POST">
-                                        <input type="hidden" name="_method" value="delete">
-                                    </form>
+                            <!-- 댓글 내용 -->
+                            <div class="flex mb-2">
+                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
+                                    <p th:text="${comment.content}"></p>
                                 </div>
+                            </div>
+                            <div class="flex">
+                                <div class="text-xs mr-2"><p th:text="${#temporals.format(comment.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>
+                                <a href="javascript:void(0);" class="comment-answer reply-link text-xs mr-1 hover:underline" th:data-num="${comment.id}">
+                                    답글 쓰기
+                                </a>
+                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
+                                   th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                                    삭제
+                                </a>
+                                <form hidden th:action="@{|/comment/${comment.id}|}" method="POST">
+                                    <input type="hidden" name="_method" value="delete">
+                                </form>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 댓글 내용 -->
-                    <div class="flex  mb-2 ml-3 mr-3">
-                        <div class="" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
-                            <p th:text="${comment.content}"></p>
-                        </div>
-                    </div>
-
-                    <div class="comment-reply flex m-6 justify-center hidden" th:id="${comment.id}"
+                    <div class="comment-reply flex ml-11 justify-center hidden" th:id="${comment.id}"
                          th:classappend="|cm_${comment.getId()}|">
                         <a th:id="|comment-${comment.id}|"></a>
 
@@ -163,20 +162,34 @@
                             <div th:each="i: ${#numbers.sequence(0, comment.getReplyList().size()-1, 1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">
                                 <a th:id="|reply-${comment.id}|"></a>
                                 <div>
-                                    <div class="flex">
-                                        <div>⎿</div>
-                                        <div class="p-2" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;" th:text="${reply.content}"></div>
-                                    </div>
+                                    <!-- 답글 리스트 -->
+                                    <div class="flex my-3 w-full">
+                                        <div class="w-11 h-full mr-1">
+                                            <img th:src="${reply.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">
+                                        </div>
+                                        <div class="w-full">
+                                            <div class="flex items-center mb-1">
+                                                <div class=""><p th:text="${reply.getAuthor().username}"></p></div>
+                                            </div>
 
-                                    <div class="flex justify-end">
-                                        <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
-                                           th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"
-                                           onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
-                                            삭제
-                                        </a>
-                                        <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">
-                                            <input type="hidden" name="_method" value="delete">
-                                        </form>
+                                            <!-- 답글 내용 -->
+                                            <div class="flex mb-2">
+                                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
+                                                    <p th:text="${reply.content}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="flex">
+                                                <div class="text-xs mr-2"><p th:text="${#temporals.format(comment.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>
+                                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
+                                                   th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"
+                                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                                                    삭제
+                                                </a>
+                                                <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">
+                                                    <input type="hidden" name="_method" value="delete">
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
