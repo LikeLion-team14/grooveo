@@ -14,8 +14,8 @@ public class FileInfo {
     private Long id;
 
     private String title;
-    private String author;
     private String description;
-    private String fileUrl;
+    private String albumCoverUrl;
+    private String soundUrl;
 
 }
