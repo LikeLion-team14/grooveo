@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,7 @@ import java.io.IOException;
 
 
 @Controller
-@RequestMapping("/upload")
+@RequestMapping("/library")
 @RequiredArgsConstructor
 public class FileUploadController {
 
@@ -30,12 +31,20 @@ public class FileUploadController {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
-    public String displayForm() {
-        return "usr/library/fileUpload";
+    public String showLibrary() {
+        return "usr/library/library";
     }
 
-    @PostMapping
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/soundupload")
+    public String showSoundUpload() {
+        return "usr/library/soundUpload";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/soundupload")
     public ResponseEntity<String> uploadFiles(
             @RequestParam("title") String title,
             @RequestParam("description") String description,
