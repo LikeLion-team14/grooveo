@@ -1,0 +1,124 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+
+
+<head>
+    <title>닉네임 변경</title>
+    <style>
+        /* 노말라이즈 */
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 라이브러리 */
+        .top-logo-bar {
+            width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 커스텀 */
+        html {
+            background-color: white;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        button[type="submit"]:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<main layout:fragment="main">
+
+    <div class="flex justify-center items-center h-screen">
+        <div>
+            <h2 class="card-title">
+                <i class="fa-regular fa-image"></i>
+                프로필 이미지 변경
+            </h2>
+            <div class="card bg-base-100 shadow-xl mt-2" style="width: 500px">
+                <div class="card-body">
+                    <form th:action method="POST" class="flex flex-col" enctype="multipart/form-data">
+                        <div class="flex justify-center">
+                            <!-- 프로필 사진 등록 -->
+                            <div>
+                                <div class="w-80 h-80 border border-black border-opacity-10 flex items-end justify-center">
+                                    <div class="file-upload-container flex items-center">
+                                        <input type="file" name="profileImage" id="profile-file" accept="image/*"
+                                               style="display:none;">
+                                        <button id="custom-img-button"
+                                                class="cursor-pointer bg-black bg-opacity-10 h-10 p-2 w-32 text-sm flex items-center justify-center hover:bg-opacity-30 mb-5">
+                                            Upload Image
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- BTN -->
+                        <div class="mt-5 card-actions justify-end">
+                            <a href="/usr/member/myPage"
+                               class="bg-black bg-opacity-10 h-10 p-4 w-16 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30">취소</a>
+                            <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
+                                    type="submit">
+                                <span class="text-center">변경</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // 이미지 선택 버튼 클릭 이벤트
+        document
+            .getElementById("custom-img-button")
+            .addEventListener("click", function (event) {
+                // 기본 이벤트(폼 제출 등) 방지
+                event.preventDefault();
+                document.getElementById("profile-file").click();
+            });
+
+        // 이미지 파일 선택 후 미리보기 표시
+        // document.getElementById("profile-file").addEventListener("change", function () {
+        //     if (this.files && this.files[0]) {
+        //         var reader = new FileReader();
+        //         reader.onload = function (e) {
+        //             var imageContainer = document.createElement("img");
+        //             imageContainer.setAttribute("src", e.target.result);
+        //             imageContainer.style.width = "100%";
+        //             imageContainer.style.height = "100%";
+        //             var container = document.querySelector(".w-80");
+        //             container.innerHTML = "";
+        //             container.appendChild(imageContainer);
+        //         };
+        //         reader.readAsDataURL(this.files[0]);
+        //     }
+        // });
+    </script>
+
+</main>
+
+</body>
+
+</html>

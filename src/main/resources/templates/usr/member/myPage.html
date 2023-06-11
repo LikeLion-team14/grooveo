@@ -19,7 +19,8 @@
             <div class="card shadow-xl">
                 <div class="card-body flex flex-row">
                     <div>
-                        <img src="/images/likelion.jpg" style="width: 300px; height: 300px; border-radius: 50%;">
+                        <img th:src="${@rq.member.profileImageUrl}"
+                             style="width: 300px; height: 300px; border-radius: 50%;">
                     </div>
                     <div class="my-4 ml-10 flex flex-col flex-grow">
                         <div class="flex">
@@ -34,6 +35,8 @@
                                         변경</a></li>
                                     <li><a href="/usr/member/myPage/modifyPassword"><i
                                             class="fa-solid fa-unlock-keyhole"></i>비밀번호 변경</a></li>
+                                    <li><a href="/usr/member/myPage/modifyProfileImage"><i
+                                            class="fa-regular fa-image"></i>프로필 이미지 변경</a></li>
                                 </ul>
                             </div>
                         </div>

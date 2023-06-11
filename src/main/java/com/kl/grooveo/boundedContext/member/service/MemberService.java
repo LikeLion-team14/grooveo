@@ -2,6 +2,9 @@ package com.kl.grooveo.boundedContext.member.service;
 
 import com.kl.grooveo.base.email.service.EmailService;
 import com.kl.grooveo.base.rsData.RsData;
+import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
+import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +26,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-
+    private final String DEFALT_IMG = "https://grooveobucket.s3.ap-northeast-2.amazonaws.com/albumCover/free-icon-user-5264565.png";
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
@@ -49,6 +52,7 @@ public class MemberService {
                 .name(name)
                 .nickName(nickName)
                 .email(email)
+                .profileImageUrl(DEFALT_IMG)
                 .build();
 
         memberRepository.save(actor);
@@ -163,5 +167,10 @@ public class MemberService {
 
     public Optional<Member> findById(Long memberId) {
         return memberRepository.findById(memberId);
+    }
+
+    @Transactional
+    public void saveProfileImage(Member actor, String fileUrl) {
+        actor.updateProfileImageUrl(fileUrl);
     }
 }
