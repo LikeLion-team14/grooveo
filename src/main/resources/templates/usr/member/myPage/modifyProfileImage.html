@@ -43,6 +43,9 @@
             cursor: pointer;
         }
     </style>
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
 <body>
@@ -57,7 +60,7 @@
             </h2>
             <div class="card bg-base-100 shadow-xl mt-2" style="width: 500px">
                 <div class="card-body">
-                    <form th:action method="POST" class="flex flex-col" enctype="multipart/form-data">
+                    <form th:action method="POST" id="image-form" class="flex flex-col" enctype="multipart/form-data" onsubmit="ProfileForm__submit(this); return false;">
                         <div class="flex justify-center">
                             <!-- 프로필 사진 등록 -->
                             <div>
@@ -65,11 +68,13 @@
                                     <div class="file-upload-container flex items-center">
                                         <input type="file" name="profileImage" id="profile-file" accept="image/*"
                                                style="display:none;">
-                                        <button id="custom-img-button"
-                                                class="cursor-pointer bg-black bg-opacity-10 h-10 p-2 w-32 text-sm flex items-center justify-center hover:bg-opacity-30 mb-5">
-                                            Upload Image
-                                        </button>
                                     </div>
+                                </div>
+                                <div class="flex justify-center mt-5">
+                                    <button id="custom-img-button"
+                                            class="cursor-pointer bg-black bg-opacity-10 h-10 p-2 w-32 text-sm flex items-center justify-center hover:bg-opacity-30 mb-5">
+                                        Upload Image
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +83,7 @@
                             <a href="/usr/member/myPage"
                                class="bg-black bg-opacity-10 h-10 p-4 w-16 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30">취소</a>
                             <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
-                                    type="submit">
+                                    id="change-button" type="submit">
                                 <span class="text-center">변경</span>
                             </button>
                         </div>
@@ -91,30 +96,60 @@
 
     <script>
         // 이미지 선택 버튼 클릭 이벤트
-        document
-            .getElementById("custom-img-button")
-            .addEventListener("click", function (event) {
-                // 기본 이벤트(폼 제출 등) 방지
-                event.preventDefault();
-                document.getElementById("profile-file").click();
-            });
+        document.getElementById("custom-img-button").addEventListener("click", function (event) {
+            // 기본 이벤트(폼 제출 등) 방지
+            event.preventDefault();
+            document.getElementById("profile-file").click();
+        });
 
-        // 이미지 파일 선택 후 미리보기 표시
-        // document.getElementById("profile-file").addEventListener("change", function () {
-        //     if (this.files && this.files[0]) {
-        //         var reader = new FileReader();
-        //         reader.onload = function (e) {
-        //             var imageContainer = document.createElement("img");
-        //             imageContainer.setAttribute("src", e.target.result);
-        //             imageContainer.style.width = "100%";
-        //             imageContainer.style.height = "100%";
-        //             var container = document.querySelector(".w-80");
-        //             container.innerHTML = "";
-        //             container.appendChild(imageContainer);
-        //         };
-        //         reader.readAsDataURL(this.files[0]);
-        //     }
-        // });
+        // 프로필 선택 이미지 미리보기
+        document.getElementById("profile-file").addEventListener("change", function () {
+            var fileInput = this;
+            var file = fileInput.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var imageContainer = document.createElement("img");
+                    imageContainer.src = e.target.result;
+                    imageContainer.style.width = "100%";
+                    imageContainer.style.height = "100%";
+
+                    var container = document.querySelector(".w-80");
+                    var existingImage = container.querySelector("img");
+                    if (existingImage) {
+                        existingImage.remove();
+                    }
+                    container.appendChild(imageContainer);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function ProfileForm__submit(form) {
+            var selectedImage = document.getElementById("profile-file").files[0];
+            if (!selectedImage) {
+                return false;
+            }
+
+            var formData = new FormData(form);
+            formData.append("profileImage", selectedImage);
+
+            fetch(form.action, {
+                method: "POST",
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("이미지 업로드 성공");
+                        window.location.href = "/usr/member/myPage"; // myPage로 이동
+                    } else {
+                        console.error("이미지 업로드 실패");
+                    }
+                })
+                .catch(error => {
+                    console.error("이미지 업로드 실패", error);
+                });
+        }
     </script>
 
 </main>
