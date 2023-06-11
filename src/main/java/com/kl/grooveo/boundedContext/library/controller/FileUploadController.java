@@ -1,7 +1,6 @@
 package com.kl.grooveo.boundedContext.library.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
