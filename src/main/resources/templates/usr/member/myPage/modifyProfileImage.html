@@ -57,13 +57,13 @@
             </h2>
             <div class="card bg-base-100 shadow-xl mt-2" style="width: 500px">
                 <div class="card-body">
-                    <form th:action method="POST" class="flex flex-col">
+                    <form th:action method="POST" class="flex flex-col" enctype="multipart/form-data">
                         <div class="flex justify-center">
                             <!-- 프로필 사진 등록 -->
                             <div>
                                 <div class="w-80 h-80 border border-black border-opacity-10 flex items-end justify-center">
                                     <div class="file-upload-container flex items-center">
-                                        <input type="file" name="profileImage" id="profile-file" accept="imgage/*"
+                                        <input type="file" name="profileImage" id="profile-file" accept="image/*"
                                                style="display:none;">
                                         <button id="custom-img-button"
                                                 class="cursor-pointer bg-black bg-opacity-10 h-10 p-2 w-32 text-sm flex items-center justify-center hover:bg-opacity-30 mb-5">
@@ -100,21 +100,21 @@
             });
 
         // 이미지 파일 선택 후 미리보기 표시
-        document.getElementById("profile-file").addEventListener("change", function () {
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var imageContainer = document.createElement("img");
-                    imageContainer.setAttribute("src", e.target.result);
-                    imageContainer.style.width = "100%";
-                    imageContainer.style.height = "100%";
-                    var container = document.querySelector(".w-80");
-                    container.innerHTML = "";
-                    container.appendChild(imageContainer);
-                };
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
+        // document.getElementById("profile-file").addEventListener("change", function () {
+        //     if (this.files && this.files[0]) {
+        //         var reader = new FileReader();
+        //         reader.onload = function (e) {
+        //             var imageContainer = document.createElement("img");
+        //             imageContainer.setAttribute("src", e.target.result);
+        //             imageContainer.style.width = "100%";
+        //             imageContainer.style.height = "100%";
+        //             var container = document.querySelector(".w-80");
+        //             container.innerHTML = "";
+        //             container.appendChild(imageContainer);
+        //         };
+        //         reader.readAsDataURL(this.files[0]);
+        //     }
+        // });
     </script>
 
 </main>

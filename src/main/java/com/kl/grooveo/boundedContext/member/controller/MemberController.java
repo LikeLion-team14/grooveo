@@ -1,5 +1,8 @@
 package com.kl.grooveo.boundedContext.member.controller;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.base.email.service.EmailService;
 import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.base.rsData.RsData;
@@ -14,12 +17,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -32,6 +38,12 @@ public class MemberController {
     private final FreedomPostCommentService freedomPostCommentService;
     private final EmailService emailService;
     private final Rq rq;
+    private final AmazonS3 amazonS3Client;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
 
     @GetMapping("/join")
     public String showJoin() {
@@ -204,5 +216,37 @@ public class MemberController {
         }
 
         return rq.redirectWithMsg("/usr/member/myPage", member);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myPage/modifyProfileImage")
+    public String showModifyProfileImage() {
+        return "usr/member/myPage/modifyProfileImage";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/myPage/modifyProfileImage")
+    public String uploadFile(@RequestParam MultipartFile profileImage) {
+        Member actor = rq.getMember();
+
+        try {
+            String fileName = "profileImage_userId" + actor.getId();
+            String profileUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/profileImages/" + fileName;
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentType(profileImage.getContentType());
+            metadata.setContentLength(profileImage.getSize());
+
+            // 사용자로부터 받은 정보를 metadata에 추가
+            amazonS3Client.putObject(new PutObjectRequest(bucket, "profileImages/" + fileName, profileImage.getInputStream(), metadata));
+
+            // DB에 파일 정보를 저장
+            memberService.saveProfileImage(actor, profileUrl);
+
+            return rq.redirectWithMsg("/usr/member/myPage", "프로필 사진이 변경되었습니다.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return rq.historyBack("문제가 발생했습니다. 관리자에게 문의하세요");
+        }
     }
 }

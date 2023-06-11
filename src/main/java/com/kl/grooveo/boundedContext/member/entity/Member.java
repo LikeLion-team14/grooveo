@@ -32,6 +32,7 @@ public class Member extends BaseEntity {
     @Builder.Default
     private String role = "user";
     private String providerTypeCode;
+    private String profileImageUrl;
 
     @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
     @Builder.Default
@@ -74,5 +75,9 @@ public class Member extends BaseEntity {
 
     public void updateEmail(String email) {
         this.email = email;
+    }
+
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

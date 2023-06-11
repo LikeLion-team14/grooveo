@@ -2,6 +2,9 @@ package com.kl.grooveo.boundedContext.member.service;
 
 import com.kl.grooveo.base.email.service.EmailService;
 import com.kl.grooveo.base.rsData.RsData;
+import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
+import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +26,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final FileInfoRepository fileInfoRepository;
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -163,5 +167,10 @@ public class MemberService {
 
     public Optional<Member> findById(Long memberId) {
         return memberRepository.findById(memberId);
+    }
+
+    @Transactional
+    public void saveProfileImage(Member actor, String fileUrl) {
+        actor.updateProfileImageUrl(fileUrl);
     }
 }
