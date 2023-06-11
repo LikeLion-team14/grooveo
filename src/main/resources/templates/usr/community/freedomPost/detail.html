@@ -169,6 +169,7 @@
                                     </div>
 
                                     <div class="flex justify-end">
+                                        <p class="text-xs mr-2" th:text="${reply.author.username}"></p>
                                         <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
                                            th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"
                                            onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
