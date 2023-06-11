@@ -196,7 +196,8 @@
                         </div>
                         <!-- 답글 등록 창-->
                         <div class="form-floating comment_box">
-                            <form th:action="@{|/reply/create/${comment.id}|}" th:object="${commentForm}" method="post" onsubmit="replyForm__submit(this); return false;"
+                            <form th:action="@{|/reply/create/${comment.id}?commentPage=${commentPaging.number}&so=${so}|}"
+                                  th:object="${replyForm}" method="post" onsubmit="replyForm__submit(this); return false;"
                                   class="my-3">
                                 <div class="flex items-center justify-center">
                                     <textarea class="border border-gray-300 resize-none p-4 mr-5" placeholder="답글을 남겨보세요"
