@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sound Detail</title>
+    <style>
+        img {
+            max-width: 10%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<h1>음원 상세</h1>
+<p>음원명: <span th:text="${fileInfo.title}"></span></p>
+<p>설명: <span th:text="${fileInfo.description}"></span></p>
+<img th:src="${fileInfo.albumCoverUrl}" alt="Album Cover">
+<audio controls>
+    <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">
+</audio>
+</body>
+</html>
