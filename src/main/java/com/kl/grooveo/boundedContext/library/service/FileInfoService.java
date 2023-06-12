@@ -4,6 +4,8 @@ import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class FileInfoService {
 
@@ -15,5 +17,10 @@ public class FileInfoService {
 
     public FileInfo saveFileInfo(FileInfo fileInfo) {
         return fileInfoRepository.save(fileInfo);
+    }
+
+    public FileInfo findById(Long id) {
+        Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(id);
+        return optionalFileInfo.orElse(null);
     }
 }
