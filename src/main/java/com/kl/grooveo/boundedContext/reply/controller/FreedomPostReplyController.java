@@ -36,6 +36,7 @@ public class FreedomPostReplyController {
     @PostMapping("/create/{id}")
     public String create(Model model, @PathVariable("id") Long id,
                          @Valid ReplyForm replyForm, @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
+                         @RequestParam(value = "so", defaultValue = "create") String so,
                          BindingResult bindingResult, CommentForm commentForm) {
 
         FreedomPostComment freedomPostComment = this.freedomPostCommentService.getComment(id);
@@ -55,8 +56,8 @@ public class FreedomPostReplyController {
         FreedomPostReply freedomPostReply = this.freedomPostReplyService.create(freedomPostComment, replyForm.getContent(), member);
         model.addAttribute("freedomPost", freedomPost);
         model.addAttribute("commentPaging", commentPaging);
-        return String.format("redirect:/community/freedomPost/detail/%s?commentPage=%s#reply-%s",
-                freedomPostReply.getFreedomPostComment().getFreedomPost().getId(), commentPage, freedomPostReply.getFreedomPostComment().getId());
+        return String.format("redirect:/community/freedomPost/detail/%s?commentPage=%s&so=%s#reply-%s",
+                freedomPostReply.getFreedomPostComment().getFreedomPost().getId(), commentPage, so, freedomPostReply.getFreedomPostComment().getId());
     }
 
     @PreAuthorize("isAuthenticated()")
