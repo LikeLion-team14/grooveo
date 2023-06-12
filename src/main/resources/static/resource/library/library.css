@@ -1,0 +1,64 @@
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* 라이브러리 */
+.top-logo-bar {
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 커스텀 */
+html {
+    background-color: white;
+}
+
+input:focus {
+    outline: none;
+}
+
+.table thead tr:first-child th:first-child,
+.table thead tr:first-child td:first-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.table thead tr:first-child th:last-child,
+.table thead tr:first-child td:last-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.table thead tr:first-child th,
+.table thead tr:first-child td {
+    background-color: #e5e5e5;
+}
+
+.table tbody tr:last-child td,
+.table tbody tr:last-child th {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#top:checked + label {
+    color: rgb(31, 41, 55);
+    text-decoration: underline;
+}
+
+#latest:checked + label {
+    color: rgb(31, 41, 55);
+    text-decoration: underline;
+}
+
+.table tbody tr td,
+.table thead tr th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tbody tr td img {
+    display: block;
+    margin: auto;
+}

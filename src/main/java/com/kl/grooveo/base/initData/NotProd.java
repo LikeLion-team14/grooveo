@@ -4,6 +4,8 @@ import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.follow.service.FollowService;
+import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import com.kl.grooveo.boundedContext.notification.service.NotificationService;
@@ -23,7 +25,8 @@ public class NotProd {
             FreedomPostService freedomPostService,
             FreedomPostCommentService freedomPostCommentService,
             NotificationService notificationService,
-            FollowService followService
+            FollowService followService,
+            FileInfoService fileInfoService
     ) {
         return new CommandLineRunner() {
             @Override
@@ -51,6 +54,17 @@ public class NotProd {
 //                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser3));
 //                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser4));
 //                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser5));
+
+                for(int i = 0 ; i < 11 ; i++) {
+                    FileInfo fileInfo = FileInfo.builder()
+                            .title("제목" + i)
+                            .artist(memberUser1)
+                            .albumCoverUrl("https://grooveobucket.s3.ap-northeast-2.amazonaws.com/albumCover/free-icon-user-5264565.png")
+                            .description("설명" + i)
+                            .soundUrl("https://grooveobucket.s3.ap-northeast-2.amazonaws.com/sound/testSound.m4a")
+                            .build();
+                    fileInfoService.saveFileInfo(fileInfo);
+                }
 
 
             }

@@ -33,12 +33,6 @@ public class FileUploadController {
     private String region;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping
-    public String showLibrary() {
-        return "usr/library/library";
-    }
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/soundupload")
     public String showSoundUpload() {
         return "usr/library/soundUpload";
