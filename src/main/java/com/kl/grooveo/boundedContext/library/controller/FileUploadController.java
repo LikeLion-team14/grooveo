@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 
 @Controller
@@ -76,6 +77,7 @@ public class FileUploadController {
             fileInfo.setDescription(description);
             fileInfo.setAlbumCoverUrl(albumCoverUrl);
             fileInfo.setSoundUrl(soundUrl);
+            fileInfo.setCreateDate(LocalDateTime.now());
             fileInfoService.saveFileInfo(fileInfo);
 
             System.out.println(ResponseEntity.ok("업로드 성공하였습니다. 앨범커버 URL : " + albumCoverUrl + ", 음원 URL : " + soundUrl));
