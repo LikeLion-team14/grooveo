@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -17,5 +19,7 @@ public class FileInfo {
     private String description;
     private String albumCoverUrl;
     private String soundUrl;
+
+    private LocalDateTime createDate;
 
 }

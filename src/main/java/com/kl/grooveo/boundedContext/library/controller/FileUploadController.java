@@ -1,24 +1,25 @@
 package com.kl.grooveo.boundedContext.library.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 
 @Controller
-@RequestMapping("/upload")
+@RequestMapping("/library")
 @RequiredArgsConstructor
 public class FileUploadController {
 
@@ -31,13 +32,21 @@ public class FileUploadController {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
-    public String displayForm() {
-        return "usr/library/fileUpload";
+    public String showLibrary() {
+        return "usr/library/library";
     }
 
-    @PostMapping
-    public ResponseEntity<String> uploadFiles(
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/soundupload")
+    public String showSoundUpload() {
+        return "usr/library/soundUpload";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/soundupload")
+    public String uploadFiles(
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("albumCover") MultipartFile albumCover,
@@ -68,12 +77,26 @@ public class FileUploadController {
             fileInfo.setDescription(description);
             fileInfo.setAlbumCoverUrl(albumCoverUrl);
             fileInfo.setSoundUrl(soundUrl);
+            fileInfo.setCreateDate(LocalDateTime.now());
             fileInfoService.saveFileInfo(fileInfo);
 
-            return ResponseEntity.ok("업로드 성공하였습니다. 앨범커버 URL : " + albumCoverUrl + ", 음원 URL : " + soundUrl);
+            System.out.println(ResponseEntity.ok("업로드 성공하였습니다. 앨범커버 URL : " + albumCoverUrl + ", 음원 URL : " + soundUrl));
+
+            return "redirect:/library/soundDetail/" + fileInfo.getId();
         } catch (IOException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return "redirect:/library/soundUpload";
         }
     }
+
+    @GetMapping("/soundDetail/{id}")
+    public String showFileDetail(@PathVariable Long id, Model model) {
+        FileInfo fileInfo = fileInfoService.findById(id);
+        if (fileInfo == null) {
+            return "redirect:/library/library";
+        }
+        model.addAttribute("fileInfo", fileInfo);
+        return "usr/library/soundDetail";
+    }
+
 }
