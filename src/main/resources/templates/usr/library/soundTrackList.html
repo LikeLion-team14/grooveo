@@ -72,7 +72,7 @@
                                             <img th:src="${fileInfo.getAlbumCoverUrl()}" alt="" class="w-16 h-16 object-cover">
                                             <a class="play-button flex items-center justify-center p-3 hover:text-gray-300 mr-4"
                                                th:onclick="playMusic(/*[[${fileInfo.getSoundUrl}]]*/ null,
-                                               /*[[${fileInfo.title}]]*/ null, /*[[${fileInfo.artist.username}]]*/ null)">
+                                               /*[[${fileInfo.title}]]*/ null, /*[[${fileInfo.artist.username}]]*/ null, this)">
                                                 <i class="fas fa-play text-5xl"></i>
                                             </a>
                                         </div>
@@ -200,38 +200,48 @@
     </script>
 
     <script>
+        let currentButton = null; // 전역 변수로 버튼을 저장할 변수를 선언합니다.
+
         // 타임바 업데이트 함수
         const audio = document.getElementById('audio');
         const playPauseButton = document.getElementById('playPauseButton');
         const songSlider = document.getElementById('songSlider');
         const currentTime = document.getElementById('currentTime');
         const totalTime = document.getElementById('totalTime');
+
         // Set initial max value for slider (it can be any value greater than 0)
         songSlider.max = 1;
         audio.addEventListener('loadedmetadata', function() {
             totalTime.textContent = formatTime(audio.duration);
             songSlider.max = audio.duration;
         });
+
         audio.addEventListener('timeupdate', function() {
             currentTime.textContent = formatTime(audio.currentTime);
             songSlider.value = audio.currentTime;
             const progress = (audio.currentTime / audio.duration) * 100;
             songSlider.style.background = `linear-gradient(to right, black ${progress}%, #d3d3d3 ${progress}%)`;
         });
+
         songSlider.addEventListener('input', function() {
             audio.currentTime = songSlider.value;
         });
+
         playPauseButton.addEventListener('click', function() {
             if (audio.paused) {
                 audio.play();
                 playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+                currentButton.innerHTML = '<i class="fas fa-pause text-5xl"></i>';
             } else {
                 audio.pause();
                 playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+                currentButton.innerHTML = '<i class="fas fa-play text-5xl"></i>';
             }
         });
+
         audio.addEventListener('ended', function() {
             playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            currentButton.innerHTML = '<i class="fas fa-play text-5xl"></i>';
         });
 
         function formatTime(seconds) {
@@ -249,24 +259,33 @@
             // 다음곡 재생 기능을 구현하세요.
         }
 
-        function playMusic(soundUrl, title, artist) {
-            console.log(soundUrl)
-            console.log(title)
-            console.log(artist)
-            const audio = document.getElementById('audio');
+        function playMusic(soundUrl, title, artist, button) {
             const st_title = document.getElementById('st_title');
             const st_artist = document.getElementById('st_artist');
-            audio.src = soundUrl; // 소스 경로 수정
+
+            if (soundUrl && audio.src !== soundUrl) {
+                audio.src = soundUrl; // 소스 경로 수정
+            }
 
             st_title.textContent = title;
             st_artist.textContent = artist;
+
+            if (currentButton !== null && currentButton !== button) {
+                // 이전 버튼이 존재하고 현재 버튼과 다른 경우
+                currentButton.innerHTML = '<i class="fas fa-play text-5xl"></i>'; // 이전 버튼을 일시정지 아이콘으로 변경
+            }
+
             if (audio.paused) {
                 audio.play();
+                button.innerHTML = '<i class="fas fa-pause text-5xl"></i>';
                 playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
             } else {
                 audio.pause();
+                button.innerHTML = '<i class="fas fa-play text-5xl"></i>';
                 playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
             }
+
+            currentButton = button; // 현재 버튼을 전역 변수에 저장합니다.
         }
     </script>
 </main>
