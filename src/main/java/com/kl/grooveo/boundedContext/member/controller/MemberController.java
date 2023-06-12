@@ -111,24 +111,6 @@ public class MemberController {
         return rq.redirectWithMsg("/usr/member/login", findPasswordRs);
     }
 
-    @PostMapping("/sendCode")
-    @ResponseBody
-    public String sendVerificationCode(HttpServletRequest request, String userEmail) {
-        HttpSession session = request.getSession();
-
-        emailService.sendVerificationCode(session, userEmail);
-
-        return "";
-    }
-
-    @PostMapping("/certification")
-    @ResponseBody
-    public boolean checkVerificationCode(HttpServletRequest request, String userEmail, String inputCode) {
-        HttpSession session = request.getSession();
-
-        return emailService.emailCertification(session, userEmail, inputCode);
-    }
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPage")
     public String showMyPage() {

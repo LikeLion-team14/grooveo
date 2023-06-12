@@ -109,7 +109,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/usr/member/sendCode",
+                url: "/api/sendCode",
                 data: {"userEmail": userEmail},
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
@@ -140,7 +140,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/usr/member/certification",
+                url: "/api/certification",
                 data: {"userEmail": userEmail, "inputCode": inputCode.value},
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
