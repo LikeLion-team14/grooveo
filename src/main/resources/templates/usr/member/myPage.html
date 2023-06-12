@@ -19,7 +19,7 @@
             <div class="card shadow-xl">
                 <div class="card-body flex flex-row">
                     <div>
-                        <img th:src="${@rq.member.profileImageUrl}" class="border-4"
+                        <img th:src="${@rq.member.profileImageUrl}" class="border border-gray-100"
                              style="width: 300px; height: 300px; border-radius: 50%;">
                     </div>
                     <div class="my-4 ml-10 flex flex-col flex-grow">
@@ -125,7 +125,7 @@
                 <div th:if="${!#lists.isEmpty(@rq.member.getFollowingPeople())}" class="w-full max-w-xs"
                      th:each="follower : ${@rq.member.getFollowingPeople()}">
                     <div class="flex items-center space-x-4 mb-4">
-                        <img th:src="${follower.follower.profileImageUrl}" alt="프로필 사진" class="w-11 h-11 rounded-full">
+                        <img th:src="${follower.follower.profileImageUrl}" alt="프로필 사진" class="w-11 h-11 rounded-full border border-gray-100">
                         <span class="text-base font-medium flex flex-grow"
                               th:text="${follower.follower.username}"></span>
                         <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
@@ -155,7 +155,7 @@
                      th:each="following : ${@rq.member.getFollowerPeople()}">
                     <div class="flex items-center space-x-4 mb-4">
                         <img th:src="${following.following.profileImageUrl}" alt="프로필 사진"
-                             class="w-11 h-11 rounded-full">
+                             class="w-11 h-11 rounded-full border border-gray-100">
                         <span class="text-base font-medium flex flex-grow"
                               th:text="${following.following.username}"></span>
                         <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
