@@ -31,9 +31,11 @@
                                 <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
                                     <li><a href="/usr/member/myPage/modifyNickName"><i class="fa-solid fa-user-pen"></i>닉네임
                                         변경</a></li>
-                                    <li><a href="/usr/member/myPage/modifyEmail"><i class="fa-solid fa-envelope"></i>이메일
+                                    <li th:if="${@rq.member.providerTypeCode == 'GROOVEO'}"><a
+                                            href="/usr/member/myPage/modifyEmail"><i class="fa-solid fa-envelope"></i>이메일
                                         변경</a></li>
-                                    <li><a href="/usr/member/myPage/modifyPassword"><i
+                                    <li th:if="${@rq.member.providerTypeCode == 'GROOVEO'}"><a
+                                            href="/usr/member/myPage/modifyPassword"><i
                                             class="fa-solid fa-unlock-keyhole"></i>비밀번호 변경</a></li>
                                     <li><a href="/usr/member/myPage/modifyProfileImage"><i
                                             class="fa-regular fa-image"></i>프로필 이미지 변경</a></li>
@@ -108,8 +110,8 @@
     </div>
 
     <!-- Follower Modal -->
-    <dialog id="follower_modal" class="modal modal-bottom sm:modal-middle">
-        <form method="dialog" class="modal-box !max-w-none !w-[200px]">
+    <dialog id="follower_modal" class="modal" onclose="refreshPage()">
+        <form method="dialog" class="modal-box w-80">
             <div class="flex justify-between items-center">
                 <h3 class="font-bold text-lg text-center flex-grow">Follower</h3>
                 <button class="btn btn-xs">X</button>
@@ -123,10 +125,12 @@
                 <div th:if="${!#lists.isEmpty(@rq.member.getFollowingPeople())}" class="w-full max-w-xs"
                      th:each="follower : ${@rq.member.getFollowingPeople()}">
                     <div class="flex items-center space-x-4 mb-4">
-                        <img src="/images/likelion.jpg" alt="프로필 사진" class="w-8 h-8 rounded-full">
-                        <span class="text-base font-medium !mr-auto"
-                              th:text="${follower.getFollower().username}"></span>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="delete_follow(this)">삭제
+                        <img th:src="${follower.follower.profileImageUrl}" alt="프로필 사진" class="w-11 h-11 rounded-full">
+                        <span class="text-base font-medium flex flex-grow"
+                              th:text="${follower.follower.username}"></span>
+                        <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
+                                type="button" onclick="delete_follow(this)">
+                            <span id="delete-follower-text" class="text-center">삭제</span>
                         </button>
                     </div>
                 </div>
@@ -135,8 +139,8 @@
     </dialog>
 
     <!-- Follow Modal -->
-    <dialog id="follow_modal" class="modal modal-bottom sm:modal-middle">
-        <form method="dialog" class="modal-box !max-w-none !w-[400px]">
+    <dialog id="follow_modal" class="modal" onclose="refreshPage()">
+        <form method="dialog" class="modal-box w-80">
             <div class="flex justify-between items-center">
                 <h3 class="font-bold text-lg text-center flex-grow">Follow</h3>
                 <button class="btn btn-xs">X</button>
@@ -144,17 +148,21 @@
             <div class="flex flex-col items-center mt-4" style="max-height: 400px; overflow-y: auto;">
                 <!-- 팔로잉 리스트 시작 -->
                 <div th:unless="${!#lists.isEmpty(@rq.member.getFollowerPeople())}" class="text-center">
-                    <div class="mt-5"><i class="fa-regular fa-face-sad-tear"></i>팔로잉이 없습니다.</div>
+                    <div class="mt-5"><i class="fa-regular fa-face-sad-tear"></i>아직 팔로잉이 없습니다.</div>
                 </div>
 
                 <div th:if="${!#lists.isEmpty(@rq.member.getFollowerPeople())}" class="w-full max-w-xs"
                      th:each="following : ${@rq.member.getFollowerPeople()}">
                     <div class="flex items-center space-x-4 mb-4">
-                        <img src="/images/likelion.jpg" alt="프로필 사진" class="w-8 h-8 rounded-full">
-                        <span class="text-base font-medium !mr-auto"
-                              th:text="${following.getFollowing().username}"></span>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="delete_following(this)">팔로잉
+                        <img th:src="${following.following.profileImageUrl}" alt="프로필 사진"
+                             class="w-11 h-11 rounded-full">
+                        <span class="text-base font-medium flex flex-grow"
+                              th:text="${following.following.username}"></span>
+                        <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
+                                type="button" onclick="delete_following(this)">
+                            <span id="delete-follow-text" class="text-center">삭제</span>
                         </button>
+
                     </div>
                 </div>
             </div>
@@ -162,6 +170,10 @@
     </dialog>
 
     <script>
+        function refreshPage() {
+            location.reload();
+        }
+
         const pathArray = window.location.pathname.split('/');
         const post = pathArray[pathArray.length - 1];
         console.log(post);
@@ -216,6 +228,7 @@
         // Delete Follow
         function delete_follow(button) {
             var username = button.previousElementSibling.textContent;
+            var text = document.getElementById('delete-follower-text');
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -230,18 +243,18 @@
                     },
                     data: {username: username},
                     success: function (result) {
-                        updateFollowerCount();
-
                         // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
                         button.disabled = true;
-                        button.textContent = "삭제됨";
+                        text.textContent = "삭제됨";
+                        text.style.opacity = '0.5';
+
+                        // 팔로워수 업데이트
+                        updateFollowerCount();
                     },
                     error: function (error) {
                         console.log("팔로우 취소 실패:", error);
                     }
                 });
-            } else {
-                console.log("삭제가 취소되었습니다.");
             }
         }
 
@@ -262,6 +275,8 @@
         // Delete Following
         function delete_following(button) {
             var username = button.previousElementSibling.textContent;
+            var text = document.getElementById('delete-follow-text');
+
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -276,16 +291,17 @@
                     },
                     data: {username: username},
                     success: function (result) {
-                        updateFollowingCount();
-
                         // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
                         button.disabled = true;
-                        button.textContent = "언팔로잉";
+                        text.textContent = "언팔로잉";
+                        text.style.opacity = '0.5';
+
+                        // 팔로잉 숫자 업데이트
+                        updateFollowingCount();
                     },
                     error: function (error) {
                     }
                 });
-            } else {
             }
         }
 

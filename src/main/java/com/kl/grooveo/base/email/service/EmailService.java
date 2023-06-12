@@ -87,11 +87,10 @@ public class EmailService {
                                 
                 회원님께서는 비밀번호 분실을 요청하셨습니다. 임시 비밀번호를 안내해 드립니다. 로그인 후에는 반드시 비밀번호를 변경해 주세요.
                                 
-                아이디 : %s
                 임시 비밀번호 : %s
                 로그인 후에는 개인정보 보호를 위해 임시 비밀번호를 즉시 변경해 주시기 바랍니다. 비밀번호 변경을 원하지 않으셨거나 문제가 발생하면 고객 지원팀에 문의해 주세요.
                                 
-                감사합니다.""").formatted(member.getUsername(), temporaryPassword));
+                감사합니다.""").formatted(temporaryPassword));
 
         javaMailSender.send(simpleMailMessage);
 
