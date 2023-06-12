@@ -165,26 +165,47 @@
     </div>
 
     <!-- Profile_modal -->
-    <dialog id="profile_modal" class="modal modal-bottom sm:modal-middle">
-        <form method="dialog" class="modal-box">
-            <div class="modal-action">
-                <button class="btn btn-sm btn-active btn-accent">X</button>
-            </div>
-            <div class="flex flex-col items-center justify-center gap-1">
-                <img src="/images/likelion.jpg" style="width: 200px; height: 150px;">
-                <span class="mt-1 btn btn-active btn-secondary btn-sm">ID</span>
-                <span id="modal-username"></span>
-                <span class="mt-1 btn btn-active btn-secondary btn-sm">업로드한 곡수</span>
-                <span id="upload-count">0</span>
-                <span class="mt-1 btn btn-active btn-secondary btn-sm">팔로우</span>
-                <span id="follower-count">0</span>
-                <span class="mt-1 btn btn-active btn-secondary btn-sm">팔로잉</span>
-                <span id="following-count">0</span>
-                <button th:if="${@rq.login}" id="follow-button" type="button"
-                        class="followBtn btn btn-active btn-accent btn-xs mt-4">
-                    Follow
-                </button>
-            </div>
+    <dialog id="profile_modal" class="modal">
+        <form method="dialog" class="modal-box" style="width: 400px; overflow-y: auto;">
+                <div class="modal-action">
+                    <button class="btn btn-xs btn-outline">X</button>
+                </div>
+                <div class="flex flex-wrap gap-4">
+                    <img id="profile-image" src="" class="border-2 border-gray-100" style="width: 70px; height: 70px; border-radius: 50%;">
+                    <section class="flex flex-col justify-center">
+                        <span class="text-lg" id="modal-username"></span>
+                        <span class="text-sm text-gray-600">Kim Jun Tae</span>
+                    </section>
+                </div>
+
+                <div class="flex flex-wrap justify-between mt-4">
+                    <section class="flex flex-col">
+                        <span class="flex justify-center font-bold" id="track-count">0</span>
+                        <span class="text-sm">음원수</span>
+                    </section>
+
+                    <section class="flex flex-col">
+                        <span class="flex justify-center font-bold" id="post-count">0</span>
+                        <span class="text-sm">게시글</span>
+                    </section>
+
+                    <section class="flex flex-col">
+                        <span class="flex justify-center font-bold" id="follower-count">0</span>
+                        <span class="text-sm">팔로우</span>
+                    </section>
+
+                    <section class="flex flex-col">
+                        <span class="flex justify-center font-bold" id="following-count">0</span>
+                        <span class="text-sm">팔로잉</span>
+                    </section>
+                </div>
+
+                <div class="flex justify-center">
+                    <button th:if="${@rq.login}" id="follow-button" type="button"
+                            class="followBtn btn btn-sm mt-4 rounded-none">
+                        Follow
+                    </button>
+                </div>
         </form>
     </dialog>
 
@@ -230,16 +251,22 @@
                 url: "/api/member/getProfile",
                 data: {username: username},
                 success: function (response) {
+
                     // 프로필 정보를 성공적으로 가져왔을 때 처리할 로직
+                    const profileImageUrl = response.profileImageUrl;
                     const followingCount = response.followingPeopleCount;
                     const followerCount = response.followerPeopleCount;
-                    const uploadCount = 10; // TODO:음원업로드시 수정예정
+                    const postCount = response.postCount;
+                    //const trackCount = response.trackCount; // TODO:음원업로드시 수정예정
                     const isFollowing = response.following;
+
                     // 가져온 프로필 정보를 원하는 대로 처리합니다. (콜백방식)
+                    $('#profile-image').attr('src', profileImageUrl);
                     $('#modal-username').text(username);
+                    //$('#track-count').text(trackCount); // TODO:음원업로드시 수정예정
+                    $('#post-count').text(postCount);
                     $('#following-count').text(followingCount);
                     $('#follower-count').text(followerCount);
-                    $('#upload-count').text(uploadCount); // TODO:음원업로드시 수정예정
 
                     // 버튼의 텍스트 변경
                     if (isFollowing) {
