@@ -24,7 +24,15 @@ public class NotificationController {
 
         List<Notification> notifications = notificationService.findByToMember(rq.getMember());
 
-        model.addAttribute("notifications", notifications);
+        /*
+            본인에 의한 알림 제외
+            알림 자체가 생성되지 않도록 추후 수정 필요
+         */
+        List<Notification> filteredNotifications = notifications.stream()
+                .filter(notification -> !notification.getFromMember().getUsername().equals(rq.getMember().getUsername()))
+                .toList();
+
+        model.addAttribute("notifications", filteredNotifications);
 
         return "usr/notification/list";
     }
