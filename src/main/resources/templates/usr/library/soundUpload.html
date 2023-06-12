@@ -63,11 +63,10 @@
 
                         <!-- 앨범 커버 등록 -->
                         <div>
+                            <input type="file" name="albumCover" id="album-file" accept="image/*" style="display:none;">
+                            <button id="custom-img-button" class="cursor-pointer bg-black bg-opacity-10 h-10 p-2 w-32 text-sm flex items-center justify-center hover:bg-opacity-30 mb-5">Upload AlbumCover</button>
                             <div class="w-52 h-52 border border-black border-opacity-10 flex items-end justify-center">
-                                <div class="file-upload-container flex items-center">
-                                    <input type="file" name="albumCover" id="album-file" accept="image/*" style="display:none;">
-                                    <button id="custom-img-button" class="cursor-pointer bg-black bg-opacity-10 h-10 p-2 w-32 text-sm flex items-center justify-center hover:bg-opacity-30 mb-5">Upload Image</button>
-                                </div>
+                                <div id="image-preview"></div>
                             </div>
                         </div>
 
@@ -115,50 +114,46 @@
         </form>
     </div>
     <script>
-        // 음원 선택 버튼 클릭 이벤트
-        document
-            .getElementById("custom-button")
-            .addEventListener("click", function (event) {
-                // 기본 이벤트(폼 제출 등) 방지
+            // 음원 선택 버튼 클릭 이벤트
+            document.getElementById("custom-button").addEventListener("click", function (event) {
                 event.preventDefault();
                 document.getElementById("sound-file").click();
             });
 
-        // 음원 파일이 선택되면 파일 이름 표시
-        document.getElementById("sound-file").addEventListener("change", function () {
-            if (this.files && this.files[0]) {
+                // 음원 파일이 선택되면 파일 이름 표시
+                document.getElementById("sound-file").addEventListener("change", function () {
+                if (this.files && this.files[0]) {
                 document.getElementById("file-name").textContent = this.files[0].name;
             } else {
                 document.getElementById("file-name").textContent = "선택된 파일 없음";
             }
-        });
+            });
 
-        // 이미지 선택 버튼 클릭 이벤트
-        document
-            .getElementById("custom-img-button")
-            .addEventListener("click", function (event) {
-                // 기본 이벤트(폼 제출 등) 방지
-                event.preventDefault();
+                // 이미지 선택 버튼 클릭 이벤트
+            document
+                .getElementById("custom-img-button")
+                .addEventListener("click", function (event) {
+                    // 기본 이벤트(폼 제출 등) 방지
+                    event.preventDefault();
                 document.getElementById("album-file").click();
             });
 
-        // 이미지 파일 선택 후 미리보기 표시
-        document.getElementById("album-file").addEventListener("change", function () {
-            if (this.files && this.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    var imageContainer = document.createElement("img");
-                    imageContainer.setAttribute("src", e.target.result);
-                    imageContainer.style.width = "100%";
-                    imageContainer.style.height = "100%";
-                    var container = document.querySelector(".w-52");
-                    container.innerHTML = "";
-                    container.appendChild(imageContainer);
-                };
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
-
+            // 이미지 파일 선택 후 미리보기 표시
+            document.getElementById("album-file").addEventListener("change", function () {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imageContainer = document.createElement("img");
+                        imageContainer.setAttribute("src", e.target.result);
+                        imageContainer.style.width = "100%";
+                        imageContainer.style.height = "100%";
+                        var container = document.querySelector(".w-52");
+                        container.innerHTML = "";
+                        container.appendChild(imageContainer);
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
     </script>
 </main>
 </body>
