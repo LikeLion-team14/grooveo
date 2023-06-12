@@ -301,7 +301,7 @@
 
                         } else if (response.result === "unliked") {  // 좋아요 데이터가 있음 -> 좋아요 표시X
                             console.log("좋아요 취소")
-                            const newHtml = '<i class="fa-solid fa-heart"></i>'
+                            const newHtml = '<i class="fa-solid fa-heart" style="color: #e60f2f;"></i>'
                             likeButton.html(newHtml)
                         }
                         console.log("pass")
@@ -342,7 +342,7 @@
                             likeButton.html(newHtml)
                         } else if (response.result === "unliked") {
                             // 좋아요 데이터가 있음 -> 좋아요 표시X
-                            const newHtml = '<i class="fa-solid fa-heart"></i>'
+                            const newHtml = '<i class="fa-solid fa-heart" style="color: #e60f2f;"></i>'
                             likeButton.html(newHtml)
                         }
                         $('#likeCnt').text(response.likeCnt)
