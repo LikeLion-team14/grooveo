@@ -36,7 +36,9 @@ public class restMemberController {
         boolean isFollowing = followService.isFollowing(followUser, followingUser);
 
         return MemberProfileDto.builder()
+                .profileImageUrl(followingUser.getProfileImageUrl())
                 .username(followingUser.getUsername())
+                .postCount(followingUser.getFreedomPosts().size())
                 .followerPeopleCount(followingUser.getFollowerPeople().size())
                 .followingPeopleCount(followingUser.getFollowingPeople().size())
                 .nickName(followingUser.getNickName())

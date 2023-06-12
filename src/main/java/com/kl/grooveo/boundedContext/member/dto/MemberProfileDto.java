@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberProfileDto {
 
+    private String profileImageUrl;
     private String username;
+    private int trackCount;
+    private int postCount;
     private int followerPeopleCount;
     private int followingPeopleCount;
     private String nickName;
