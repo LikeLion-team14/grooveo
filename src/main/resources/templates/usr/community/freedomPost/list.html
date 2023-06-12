@@ -1,7 +1,7 @@
 <html layout:decorate="~{usr/layout/layout.html}">
 
 <head>
-    <title></title>
+    <title>게시판</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <meta th:if="${@rq.isLogin()}" name="currentUsername" th:content="${@rq.getMember().getUsername()}"/>

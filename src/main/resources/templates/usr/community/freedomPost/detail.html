@@ -3,7 +3,7 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title></title>
+    <title th:text="${freedomPost.title}"></title>
 
     <script>
         function commentForm__submit(form) {
@@ -57,14 +57,14 @@
                     <img th:src="${freedomPost.getAuthor().getProfileImageUrl()}" alt="" class="w-11 h-11 object-cover m-3 rounded-full border-2">
                     <div>
                         <div class="flex items-center mb-1">
-                            <span th:text="${freedomPost.getAuthor().username}"></span>
+                            <span class="font-bold" th:text="${freedomPost.getAuthor().username}"></span>
                             <div class="bg-black bg-opacity-10 h-7 ml-2 p-1 w-16 text-xs flex items-center justify-center">
                                 <span th:text="${freedomPost.categoryDisplayName()}"></span>
                             </div>
                         </div>
 
                         <div class="flex">
-                            <div class="text-xs mr-2"><span th:text="${#temporals.format(freedomPost.createDate, 'yyyy.MM.dd HH:mm')}"></span></div>
+                            <div class="text-gray-500 text-xs mr-2"><span th:text="${#temporals.format(freedomPost.createDate, 'yyyy.MM.dd HH:mm')}"></span></div>
                             <div class="text-xs mr-1">조회수</div>
                             <div class="text-xs"><span id="viewCnt"></span></div>
                         </div>
@@ -109,10 +109,10 @@
                     <div class="flex-grow"></div>
                     <div class="flex-shrink-0">
                         <a id="so_btn1" class="so-link hover:underline mr-3 text-xs" style="cursor: pointer"
-                                th:data-so="create">등록순
+                           th:data-so="create">등록순
                         </a>
                         <a id="so_btn2" class="so-link hover:underline text-xs" style="cursor: pointer"
-                                th:data-so="recent">최신순
+                           th:data-so="recent">최신순
                         </a>
                     </div>
                 </div>
@@ -120,41 +120,41 @@
                 <!-- 댓글 카드 1개 (1) -->
                 <div class="m-3 border-b border-gray-300" th:each="comment : ${commentPaging}">
                     <a th:id="|comment-${comment.id}|"></a>
-                    <!-- 댓글 작성자 -->
-                    <div class="flex mt-7 justify-between">
-                        <div class="flex justify-start items-center">
-                            <img th:src="${comment.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover m-3 rounded-full border-2">
-                            <div>
-                                <div class="flex items-center mb-1">
-                                    <div class=""><p th:text="${comment.getAuthor().username}"></p></div>
-                                </div>
+                    <!-- 댓글 리스트 -->
+                    <div class="flex my-3 w-full">
+                        <div class="w-11 h-full mr-1">
+                            <img th:src="${comment.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">
+                        </div>
+                        <div class="w-full">
+                            <div class="flex items-center mb-1">
+                                <span class="font-bold" th:text="${comment.getAuthor().username}"></span>
+                            </div>
 
-                                <div class="flex">
-                                    <div class="text-xs mr-2"><p th:text="${#temporals.format(comment.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>
-                                    <a href="javascript:void(0);" class="comment-answer reply-link text-xs mr-1 hover:underline" th:data-num="${comment.id}">
-                                        답글 쓰기
-                                    </a>
-                                    <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
-                                       th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
-                                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
-                                        삭제
-                                    </a>
-                                    <form hidden th:action="@{|/comment/${comment.id}|}" method="POST">
-                                        <input type="hidden" name="_method" value="delete">
-                                    </form>
+                            <!-- 댓글 내용 -->
+                            <div class="flex mb-2">
+                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
+                                    <p class="text-gray-800" th:text="${comment.content}"></p>
                                 </div>
+                            </div>
+                            <div class="flex">
+                                <div class="text-gray-500 text-xs mr-2"><p th:text="${#temporals.format(comment.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>
+                                <a href="javascript:void(0);" class="comment-answer reply-link text-xs mr-1 hover:underline" th:data-num="${comment.id}">
+                                    답글 쓰기
+                                </a>
+                                <p class="text-red-500 text-xs mr-2" th:text="|[${comment.replyList.size()}]|"></p>
+                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
+                                   th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                                    삭제
+                                </a>
+                                <form hidden th:action="@{|/comment/${comment.id}|}" method="POST">
+                                    <input type="hidden" name="_method" value="delete">
+                                </form>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 댓글 내용 -->
-                    <div class="flex  mb-2 ml-3 mr-3">
-                        <div class="" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
-                            <p th:text="${comment.content}"></p>
-                        </div>
-                    </div>
-
-                    <div class="comment-reply flex m-6 justify-center hidden" th:id="${comment.id}"
+                    <div class="comment-reply flex ml-11 justify-center hidden" th:id="${comment.id}"
                          th:classappend="|cm_${comment.getId()}|">
                         <a th:id="|comment-${comment.id}|"></a>
 
@@ -163,28 +163,42 @@
                             <div th:each="i: ${#numbers.sequence(0, comment.getReplyList().size()-1, 1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">
                                 <a th:id="|reply-${comment.id}|"></a>
                                 <div>
-                                    <div class="flex">
-                                        <div>⎿</div>
-                                        <div class="p-2" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;" th:text="${reply.content}"></div>
-                                    </div>
+                                    <!-- 답글 리스트 -->
+                                    <div class="flex my-3 w-full">
+                                        <div class="w-11 h-full mr-1">
+                                            <img th:src="${reply.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">
+                                        </div>
+                                        <div class="w-full">
+                                            <div class="flex items-center mb-1">
+                                                <span class="font-bold" th:text="${reply.getAuthor().username}"></span>
+                                            </div>
 
-                                    <div class="flex justify-end">
-                                        <p class="text-xs mr-2" th:text="${reply.author.username}"></p>
-                                        <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
-                                           th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"
-                                           onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
-                                            삭제
-                                        </a>
-                                        <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">
-                                            <input type="hidden" name="_method" value="delete">
-                                        </form>
+                                            <!-- 답글 내용 -->
+                                            <div class="flex mb-2">
+                                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
+                                                    <p class="text-gray-800" th:text="${reply.content}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="flex">
+                                                <div class="text-gray-500 text-xs mr-2"><p th:text="${#temporals.format(reply.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>
+                                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
+                                                   th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"
+                                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                                                    삭제
+                                                </a>
+                                                <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">
+                                                    <input type="hidden" name="_method" value="delete">
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- 답글 등록 창-->
                         <div class="form-floating comment_box">
-                            <form th:action="@{|/reply/create/${comment.id}|}" th:object="${commentForm}" method="post" onsubmit="replyForm__submit(this); return false;"
+                            <form th:action="@{|/reply/create/${comment.id}?commentPage=${commentPaging.number}&so=${so}|}"
+                                  th:object="${replyForm}" method="post" onsubmit="replyForm__submit(this); return false;"
                                   class="my-3">
                                 <div class="flex items-center justify-center">
                                     <textarea class="border border-gray-300 resize-none p-4 mr-5" placeholder="답글을 남겨보세요"
@@ -287,7 +301,7 @@
 
                         } else if (response.result === "unliked") {  // 좋아요 데이터가 있음 -> 좋아요 표시X
                             console.log("좋아요 취소")
-                            const newHtml = '<i class="fa-solid fa-heart"></i>'
+                            const newHtml = '<i class="fa-solid fa-heart" style="color: #e60f2f;"></i>'
                             likeButton.html(newHtml)
                         }
                         console.log("pass")
@@ -328,7 +342,7 @@
                             likeButton.html(newHtml)
                         } else if (response.result === "unliked") {
                             // 좋아요 데이터가 있음 -> 좋아요 표시X
-                            const newHtml = '<i class="fa-solid fa-heart"></i>'
+                            const newHtml = '<i class="fa-solid fa-heart" style="color: #e60f2f;"></i>'
                             likeButton.html(newHtml)
                         }
                         $('#likeCnt').text(response.likeCnt)
@@ -363,7 +377,17 @@
 
             const urlParams = new URL(location.href).searchParams;
             let currentPage = parseInt(urlParams.get('commentPage'));
+            let currentSort = urlParams.get('so');
             const pageButtons = document.getElementsByClassName("page-link");
+
+            // 페이지 로드 시 현재 정렬 기준에 font-bold 적용
+            if (currentSort === "recent") {
+                document.getElementById('so_btn1').classList.remove('font-bold');
+                document.getElementById('so_btn2').classList.add('font-bold');
+            } else {
+                document.getElementById('so_btn1').classList.add('font-bold');
+                document.getElementById('so_btn2').classList.remove('font-bold');
+            }
 
             for (let i = 0; i < pageButtons.length; i++) {
                 const pageButton = pageButtons[i];
