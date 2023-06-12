@@ -66,6 +66,31 @@ public class NotProd {
                     fileInfoService.saveFileInfo(fileInfo);
                 }
 
+                FileInfo fileInfo = FileInfo.builder()
+                        .title("Five")
+                        .artist(memberUser3)
+                        .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
+                        .description("Marcel Pequel")
+                        .soundUrl("//cdn.atrera.com/audio/Marcel_Pequel_-_05_-_Five.mp3")
+                        .build();
+                fileInfoService.saveFileInfo(fileInfo);
+                FileInfo fileInfo2 = FileInfo.builder()
+                        .title("Six")
+                        .artist(memberUser3)
+                        .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
+                        .description("Marcel Pequel")
+                        .soundUrl("//cdn.atrera.com/audio/Marcel_Pequel_-_06_-_Six.mp3")
+                        .build();
+                fileInfoService.saveFileInfo(fileInfo2);
+                FileInfo fileInfo3 = FileInfo.builder()
+                        .title("Seven")
+                        .artist(memberUser3)
+                        .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
+                        .description("Marcel Pequel")
+                        .soundUrl("//cdn.atrera.com/audio/Marcel_Pequel_-_07_-_Seven.mp3")
+                        .build();
+                fileInfoService.saveFileInfo(fileInfo3);
+
 
             }
         };

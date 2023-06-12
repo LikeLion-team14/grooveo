@@ -62,3 +62,60 @@ input:focus {
     display: block;
     margin: auto;
 }
+
+/* 플레이어 바를 페이지 하단에 고정 */
+.player-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 650px;
+    height: 7px;
+    background: #F6F6F6;
+    outline: none;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.slider::-moz-range-progress {
+    background-color: black;
+}
+
+.image-container {
+    position: relative;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-container:hover .play-button {
+    opacity: 1;
+}

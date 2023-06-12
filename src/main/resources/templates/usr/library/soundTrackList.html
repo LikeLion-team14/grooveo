@@ -7,48 +7,6 @@
     <!-- 라이브러리 CSS 불러오기 -->
     <link rel="stylesheet" href="/resource/library/library.css">
 
-    <style>
-        /* 플레이어 바를 페이지 하단에 고정 */
-        .player-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-        }
-
-        .slider {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 650px;
-            height: 7px;
-            background: #F6F6F6;
-            outline: none;
-            opacity: 1;
-            transition: opacity 0.2s;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 15px;
-            height: 15px;
-            background: none;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-
-        .slider::-moz-range-thumb {
-            width: 15px;
-            height: 15px;
-            background: none;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-
-        .slider::-moz-range-progress {
-            background-color: black;
-        }
-    </style>
-
     <title>라이브러리</title>
     <meta th:if="${error}" name="errorMsg" th:content="${exception}"/>
 </head>
@@ -110,7 +68,14 @@
                                 <tr class="hover" th:each="fileInfo, loop : ${paging}">
                                     <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                                     <td>
-                                        <img th:src="${fileInfo.getAlbumCoverUrl()}" alt="" class="w-16 h-16 object-cover">
+                                        <div class="image-container">
+                                            <img th:src="${fileInfo.getAlbumCoverUrl()}" alt="" class="w-16 h-16 object-cover">
+                                            <a class="play-button flex items-center justify-center p-3 hover:text-gray-300 mr-4"
+                                               th:onclick="playMusic(/*[[${fileInfo.getSoundUrl}]]*/ null,
+                                               /*[[${fileInfo.title}]]*/ null, /*[[${fileInfo.artist.username}]]*/ null)">
+                                                <i class="fas fa-play text-5xl"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                     <td>
                                         <a id="subject"
@@ -179,8 +144,8 @@
             <div class="flex items-center">
                 <img src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/IU-album.jpg" alt="" class="w-10 h-10 object-cover mr-3">
                 <div class="flex flex-col w-56">
-                    <span class="text-xs" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">제목</span>
-                    <span class="text-xs" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">아티스트</span>
+                    <span id="st_title" class="text-xs" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">제목</span>
+                    <span id="st_artist" class="text-xs" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">아티스트</span>
                 </div>
             </div>
         </div>
@@ -192,7 +157,7 @@
     </form>
 
     <!-- 오디오 올린 음원-->
-    <audio id="audio" style="display:none;" autoplay>
+    <audio id="audio" style="display:none;">
         <source src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/Spring On by jurunde .mp3" type="audio/mpeg">
     </audio>
 
@@ -282,6 +247,26 @@
 
         function playNext() {
             // 다음곡 재생 기능을 구현하세요.
+        }
+
+        function playMusic(soundUrl, title, artist) {
+            console.log(soundUrl)
+            console.log(title)
+            console.log(artist)
+            const audio = document.getElementById('audio');
+            const st_title = document.getElementById('st_title');
+            const st_artist = document.getElementById('st_artist');
+            audio.src = soundUrl; // 소스 경로 수정
+
+            st_title.textContent = title;
+            st_artist.textContent = artist;
+            if (audio.paused) {
+                audio.play();
+                playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audio.pause();
+                playPauseButton.innerHTML = '<i class="fas fa-play"></i>';
+            }
         }
     </script>
 </main>
