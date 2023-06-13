@@ -8,8 +8,10 @@ import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.notification.entity.Notification;
 import com.kl.grooveo.boundedContext.notification.repository.NotificationRepository;
+import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,18 @@ public class NotificationService {
 
     public List<Notification> findByToMember(Member toMember) {
         return notificationRepository.findByToMemberOrderByCreateDateDesc(toMember);
+    }
+
+    @Transactional
+    public void whenAfterSoundLike(SoundThumbsUp soundThumbsUp) {
+        Notification notification = Notification
+                .builder()
+                .fromMember(soundThumbsUp.getMember())
+                .toMember(soundThumbsUp.getFileInfo().getArtist())
+                .typeCode("soundLike")
+                .build();
+
+        notificationRepository.save(notification);
     }
 
     @Transactional

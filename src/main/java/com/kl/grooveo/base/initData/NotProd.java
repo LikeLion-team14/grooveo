@@ -52,8 +52,6 @@ public class NotProd {
                     freedomPostCommentService.create(freedomPost, "댓글 내용" + i, memberUser2);
                 }
 
-
-
 //                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser2));
 //                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser3));
 //                notificationService.whenAfterPostLike(new ThumbsUp(199L, memberUser4));
