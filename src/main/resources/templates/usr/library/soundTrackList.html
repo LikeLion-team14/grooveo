@@ -86,10 +86,14 @@
                                         <button id="author" th:text="${fileInfo.artist.username}"></button>
                                     </td>
                                     <td>
-                                        <a href="#">
-                                            <i class="far fa-heart text-gray-600"></i>
-                                            131
-                                        </a>
+                                        <div class="flex justify-center items-center">
+                                            <a style="cursor: pointer" class="flex items-center mr-2" th:onclick="likeBtnClick(/*[[${fileInfo.id}]]*/ null, this)">
+                                                <i th:if="${fileInfo.soundThumbsUpSummary == null}" class="fa-regular fa-heart"></i>
+                                                <i th:unless="${fileInfo.soundThumbsUpSummary == null}" class="fa-solid fa-heart" style="color: #e60f2f;"></i>
+                                            </a>
+                                            <span th:if="${fileInfo.soundThumbsUpSummary == null}" class="text-sm">0</span>
+                                            <span th:unless="${fileInfo.soundThumbsUpSummary == null}" class="text-sm" th:text="${fileInfo.soundThumbsUpSummary.likeCount}"></span>
+                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -198,6 +202,37 @@
                 }
             }
         });
+
+        function likeBtnClick(postId, heart) {
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const token = $("meta[name='_csrf']").attr("content");
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+            if (postId) {
+                $.ajax({
+                    type: "POST",
+                    url: "/soundTrack/pushLike", // 좋아요 요청을 보낼 URL
+                    data: {
+                        postId: postId
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.result === "liked") { // 좋아요 데이터가 없음 -> 좋아요 표시
+                            heart.innerHTML = '<i class="fa-regular fa-heart"></i>'
+                            heart.nextElementSibling.textContent = response.likeCnt;
+                        } else if (response.result === "unliked") {  // 좋아요 데이터가 있음 -> 좋아요 표시X
+                            heart.innerHTML = '<i class="fa-solid fa-heart" style="color: #e60f2f;"></i>'
+                            heart.nextElementSibling.textContent = response.likeCnt;
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+
     </script>
 
     <script>

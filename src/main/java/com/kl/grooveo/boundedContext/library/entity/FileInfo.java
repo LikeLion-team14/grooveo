@@ -2,6 +2,8 @@ package com.kl.grooveo.boundedContext.library.entity;
 
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.member.entity.Member;
+import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp;
+import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp_summary;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +38,12 @@ public class FileInfo {
 
     @OneToMany(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
     private List<SoundPostComment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
+    private List<SoundThumbsUp> soundThumbsUpList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
+    private SoundThumbsUp_summary soundThumbsUpSummary;
 
     private String albumCoverUrl;
     private String soundUrl;

@@ -29,7 +29,6 @@ public class FileUploadController {
 
     private final AmazonS3 amazonS3Client;
     private final FileInfoService fileInfoService;
-    private final Rq rq;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
