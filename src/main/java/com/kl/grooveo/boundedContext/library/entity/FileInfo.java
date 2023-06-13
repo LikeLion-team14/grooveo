@@ -23,9 +23,6 @@ public class FileInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Member author;
-
     private String title;
 
     @ManyToOne

@@ -2,14 +2,311 @@
 
 <head>
     <title>메인</title>
+
+    <!-- 슬라이드 -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <style>
+        /* 노말라이즈 */
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 라이브러리 */
+        .top-logo-bar {
+            width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 커스텀 */
+        html {
+            background-color: white;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .w-custom {
+            width: 32rem; /* 원하는 너비로 설정하세요 */
+        }
+
+        /* 슬라이드 */
+
+        /* 전체 풀 스크린 레이아웃 */
+        .wrap {
+            width: 100%;
+            height: 40vh;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* 기본 슬라이드 프레임 */
+        .wrap .swiper-wrapper {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide {
+            width: 250px; /* 기존의 500px에서 250px로 줄입니다. */
+            height: 250px; /* 기존의 500px에서 250px로 줄입니다. */
+            position: relative;
+            top: 50%;
+            margin-top: -130px; /* 기존의 -230px에서 -130px로 줄입니다. */
+        }
+
+        .wrap .swiper-wrapper .swiper-slide .inner {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0.4;
+            transition: 1s;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide-active .inner {
+            opacity: 1;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide .inner::before,
+        .wrap .swiper-wrapper .swiper-slide .inner::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            opacity: 0;
+            background: #fff;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide-prev .inner,
+        .wrap .swiper-wrapper .swiper-slide-next .inner {
+            opacity: 0.7;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide .inner .con {
+            position: relative;
+            z-index: 10;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide .inner .con .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 160px; /* 이미지의 높이와 동일하게 설정 */
+        }
+
+        .wrap .swiper-wrapper .swiper-slide .inner .con img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide .inner .con h2 {
+            font-weight: normal;
+            font-size: 20px; /* 기존의 40px에서 20px로 줄입니다. */
+            font-family: "roboto";
+            color: #111;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide .inner .con h2::after {
+            content: "";
+            display: block;
+            width: 30px;
+            height: 1px;
+            background-color: #888;
+            margin-top: 5px;
+            transition: 1s 0.5s;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide-active .inner .con h2::after {
+            width: 100px;
+        }
+
+        .wrap .swiper-wrapper .swiper-slide .inner .con p {
+            font-weight: normal;
+            font-size: 13px;
+            font-family: "arial";
+            line-height: 1.3;
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+
+        /* 좌우 버튼  */
+        .wrap .swiper-button-prev {
+            left: 50px; /* 좌측으로 위치 조정 */
+            right: auto;
+            top: 50%; /* 상하 중간에 위치하도록 변경 */
+            bottom: auto;
+            filter: grayscale(100%) brightness(3);
+            transform: scale(0.5);
+            color: black;
+        }
+
+        .wrap .swiper-button-next {
+            left: auto;
+            right: 50px; /* 우측으로 위치 조정 */
+            top: 50%; /* 상하 중간에 위치하도록 변경 */
+            bottom: auto;
+            filter: grayscale(100%) brightness(3);
+            transform: scale(0.5);
+            color: black;
+        }
+
+        /* 페이지네이션 */
+        .swiper-pagination-fraction {
+            bottom: auto;
+            top: 50px;
+            left: auto;
+            right: 50px;
+            width: auto;
+            font-size: 16px;
+            font-family: "orbitron";
+            letter-spacing: 1px;
+            color: #eee;
+        }
+
+        .swiper-pagination-fraction span:nth-of-type(1) {
+            font-size: 30px;
+            color: #fff;
+        }
+
+        .my-bullet {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            opacity: 1;
+            display: inline-block;
+            border-radius: 100%;
+            margin: 0 5px;
+        }
+
+        .my-bullet-active {
+            background: black;
+        }
+
+        .my-bullet:hover {
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
 
 <main layout:fragment="main">
-    <div class="flex justify-center">
-        메인입니다.
+    <!-- 배너 -->
+    <div class="top-image-bar mt-10">
+        <img src="/images/grooveo.jpg" alt="banner" class="w-screen">
     </div>
+    <div class="search-box flex justify-center mt-20 mb-10">
+        <form th:method="GET" th:action="@{/library/list}" class="relative">
+            <input name="kw" type="text" placeholder="노래 / 아티스트 검색"
+                   class="bg-black bg-opacity-10 h-12 w-custom p-4 pr-12"/>
+            <button
+                    class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-2xl pr-3">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+    <div class="text-center">최신 음원</div>
+    <!-- 최신 음원 10곡 -->
+    <div class="wrap">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" th:each="song : ${latestSongs}">
+                <div class="inner">
+                    <div class="con">
+                            <div class="image-container">
+                                <img th:src="${song.albumCoverUrl}">
+                            </div>
+                            <h2 th:text="${song.title}">노래 제목</h2>
+                            <p th:text="${song.artist.username}">아티스트 이름</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 좌우버튼 -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+
+        <!-- 페이징 버튼 -->
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <div class="text-center mt-5">인기 음원</div>
+    <div class="wrap">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="inner">
+                    <div class="con">
+                        <div class="image-container">
+                            <img src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/ea6345acc53bb8cbac3564f661ae9dd4.png">
+                        </div>
+                        <h2>노래 제목 </h2>
+                        <p>아티스트 이름</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 좌우버튼 -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+
+        <!-- 페이징 버튼 -->
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <script>
+        const swiper = new Swiper('.wrap', {
+            direction: "horizontal",
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                bulletClass: 'my-bullet',
+                bulletActiveClass: 'my-bullet-active',
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            spaceBetween: 0,
+            slidesPerView: "auto",
+            grabCursor: true,
+            centeredSlides: true,
+            speed: 1000,
+            effect: "coverflow",
+            coverflowEffect: {
+                rotate: 50,
+                stretch: -100,
+                depth: 400,
+                modifier: 1,
+                slideShadows: false,
+            },
+            autoplay: {
+                delay: 1000,
+                disableOnInteraction: true
+            }
+        });
+    </script>
 </main>
 
 </body>

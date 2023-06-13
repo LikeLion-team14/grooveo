@@ -3,7 +3,6 @@ package com.kl.grooveo.boundedContext.member.controller;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.kl.grooveo.base.email.service.EmailService;
 import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
@@ -38,7 +37,6 @@ public class MemberController {
     private final MemberService memberService;
     private final FreedomPostService freedomPostService;
     private final FreedomPostCommentService freedomPostCommentService;
-    private final EmailService emailService;
     private final Rq rq;
     private final AmazonS3 amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")

@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     Page<FileInfo> findAll(Specification<FileInfo> spec, Pageable pageable);
@@ -18,6 +20,7 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     @Query("update FileInfo fi set fi.view = fi.view + 1 where fi.id = :id")
     int updateView(@Param("id") Long id);
   
-    Page<FileInfo> findAllByAuthorId(Long username, Pageable pageable);
+    Page<FileInfo> findAllByArtistId(Long username, Pageable pageable);
 
+    List<FileInfo> findTop10ByOrderByCreateDateDesc();
 }

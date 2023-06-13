@@ -6,6 +6,7 @@ import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,5 +36,14 @@ public class FileInfoService {
         fileInfo.setDescription(description);
         fileInfo.setModifyDate(LocalDateTime.now());
         this.fileInfoRepository.save(fileInfo);
+    }
+
+    public void delete(Long id) {
+        FileInfo fileInfo = getFileInfo(id);
+        fileInfoRepository.delete(fileInfo);
+    }
+
+    public List<FileInfo> getLatestSongs() {
+        return fileInfoRepository.findTop10ByOrderByCreateDateDesc();
     }
 }
