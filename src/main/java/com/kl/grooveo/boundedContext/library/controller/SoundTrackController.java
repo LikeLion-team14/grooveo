@@ -1,7 +1,6 @@
 package com.kl.grooveo.boundedContext.library.controller;
 
 import com.kl.grooveo.base.rq.Rq;
-import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
 import com.kl.grooveo.boundedContext.form.CommentForm;
@@ -112,7 +111,7 @@ public class SoundTrackController {
     public String soundTrackModify(SoundTrackForm soundTrackForm, @PathVariable("id") Long id) {
         FileInfo fileInfo = this.soundTrackService.getSoundTrack(id);
 
-        if(!fileInfo.getArtist().getUsername().equals(rq.getMember().getUsername())) {
+        if (!fileInfo.getArtist().getUsername().equals(rq.getMember().getUsername())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
 
@@ -124,7 +123,7 @@ public class SoundTrackController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/soundTrack/modify/{id}")
     public String soundTrackModify(@Valid SoundTrackForm soundTrackForm, BindingResult bindingResult,
-                                    @PathVariable("id") Long id) {
+                                   @PathVariable("id") Long id) {
         if (bindingResult.hasErrors()) {
             return "usr/library/soundUpload";
         }

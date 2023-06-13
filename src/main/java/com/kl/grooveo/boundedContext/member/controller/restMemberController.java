@@ -66,4 +66,19 @@ public class restMemberController {
 
         return emailService.emailCertification(session, userEmail, inputCode);
     }
+
+    @GetMapping("/isFollowing")
+    @ResponseBody
+    public boolean isFollowing(@RequestParam String username) throws Exception {
+        Optional<Member> opFollowingUser = memberService.findByUsername(username);
+
+        if (opFollowingUser.isEmpty()) {
+            throw new Exception("존재하지 않는 User 입니다.");
+        }
+
+        Member followUser = rq.getMember();
+        Member followingUser = opFollowingUser.get();
+
+        return followService.isFollowing(followUser, followingUser);
+    }
 }

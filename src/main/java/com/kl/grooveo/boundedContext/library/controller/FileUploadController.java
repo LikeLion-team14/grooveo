@@ -29,6 +29,7 @@ public class FileUploadController {
 
     private final AmazonS3 amazonS3Client;
     private final FileInfoService fileInfoService;
+    private final Rq rq;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -72,6 +73,7 @@ public class FileUploadController {
 
             FileInfo fileInfo = new FileInfo();
             fileInfo.setTitle(title);
+            fileInfo.setArtist(rq.getMember());
             fileInfo.setDescription(description);
             fileInfo.setAlbumCoverUrl(albumCoverUrl);
             fileInfo.setSoundUrl(soundUrl);
