@@ -25,7 +25,9 @@ public class FileInfo {
     @ManyToOne
     private Member artist;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
+
     private String albumCoverUrl;
     private String soundUrl;
 
