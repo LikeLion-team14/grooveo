@@ -8,12 +8,12 @@
         <div>작성한 게시물이 없습니다.</div>
     </div>
     <div th:if="${!#lists.isEmpty(freedomPosts)}">
-        <table class="table mt-4 w-full">
+        <table class="table mt-4 w-full table-fixed">
             <colgroup>
-                <col width="60">
+                <col width="70">
                 <col width="100">
                 <col>
-                <col width="50">
+                <col width="60">
                 <col width="100">
             </colgroup>
             <thead class="table-dark">
@@ -29,13 +29,15 @@
             <tr class="text-center hover" th:each="freedomPost, loop : ${paging}">
                 <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                 <td th:text="${freedomPost.categoryDisplayName()}"></td>
-                <td class="text-left"
-                    style="width:350px; max-width: 350px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
-                    <label for="subject">
-                        <a id="subject" th:href="@{|/community/freedomPost/detail/${freedomPost.id}|}"
-                           th:text="${freedomPost.title}"></a>
-                        <span th:if="${freedomPost.commentList.size() != 0}"
-                              th:text="'[' + ${freedomPost.commentList.size() + ']'}" style="color: red;"></span>
+                <td class="text-left">
+                    <label for="subject" style="">
+                        <section class="flex gap-1">
+                            <a id="subject" th:href="@{|/community/freedomPost/detail/${freedomPost.id}|}"
+                               th:text="${freedomPost.title}" style="line-height: 40px"
+                               class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"></a>
+                            <span th:if="${freedomPost.commentList.size() != 0}"
+                                  th:text="'[' + ${freedomPost.commentList.size() + ']'}" style="color: red; line-height: 40px"></span>
+                        </section>
                     </label>
                 </td>
                 <td th:text="${freedomPost.view}"></td>
