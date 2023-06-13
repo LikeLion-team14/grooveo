@@ -45,7 +45,8 @@
 <body>
 
 <main layout:fragment="main">
-    <div class="flex justify-center mx-auto max-w-7xl w-full my-3">
+    <div class="flex justify-center mx-auto max-w-7xl my-3">
+
         <div class="posts-box mt-8 w-full mx-10">
             <div class="flex justify-center" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
                 <span class="text-3xl font-bold" th:text="${freedomPost.title}"></span>
@@ -73,7 +74,7 @@
                 </div>
                 <div class="flex items-center">
                     <a id="likeBtn" style="cursor: pointer" class="flex items-center mr-2">
-                        <i class="far fa-heart fa-xs"></i>
+                        <i class="fa-regular fa-heart"></i>
                     </a>
                     <span id="likeCnt" class="text-sm"></span>
                 </div>

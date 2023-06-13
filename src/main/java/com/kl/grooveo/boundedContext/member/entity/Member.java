@@ -35,6 +35,10 @@ public class Member extends BaseEntity {
     private String providerTypeCode;
     private String profileImageUrl;
 
+    @OneToMany(mappedBy = "artist", cascade = {CascadeType.ALL})
+    @Builder.Default
+    private List<FileInfo> filesInfo = new ArrayList<>();
+
     @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
     @Builder.Default
     private List<FreedomPost> freedomPosts = new ArrayList<>();

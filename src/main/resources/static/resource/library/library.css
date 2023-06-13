@@ -1,0 +1,121 @@
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* 라이브러리 */
+.top-logo-bar {
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 커스텀 */
+html {
+    background-color: white;
+}
+
+input:focus {
+    outline: none;
+}
+
+.table thead tr:first-child th:first-child,
+.table thead tr:first-child td:first-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.table thead tr:first-child th:last-child,
+.table thead tr:first-child td:last-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.table thead tr:first-child th,
+.table thead tr:first-child td {
+    background-color: #e5e5e5;
+}
+
+.table tbody tr:last-child td,
+.table tbody tr:last-child th {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#top:checked + label {
+    color: rgb(31, 41, 55);
+    text-decoration: underline;
+}
+
+#latest:checked + label {
+    color: rgb(31, 41, 55);
+    text-decoration: underline;
+}
+
+.table tbody tr td,
+.table thead tr th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tbody tr td img {
+    display: block;
+    margin: auto;
+}
+
+/* 플레이어 바를 페이지 하단에 고정 */
+.player-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 650px;
+    height: 7px;
+    background: #F6F6F6;
+    outline: none;
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.slider::-moz-range-progress {
+    background-color: black;
+}
+
+.image-container {
+    position: relative;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-container:hover .play-button {
+    opacity: 1;
+}
