@@ -36,7 +36,7 @@ public class SoundTrackService {
     }
     public Page<FileInfo> getList(String kw, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+        sorts.add(Sort.Order.asc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         Specification<FileInfo> spec = search(kw);
         return this.fileInfoRepository.findAll(spec, pageable);
