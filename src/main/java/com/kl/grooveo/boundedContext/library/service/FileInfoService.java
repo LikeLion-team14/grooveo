@@ -36,4 +36,9 @@ public class FileInfoService {
         fileInfo.setModifyDate(LocalDateTime.now());
         this.fileInfoRepository.save(fileInfo);
     }
+
+    public void delete(Long id) {
+        FileInfo fileInfo = getFileInfo(id);
+        fileInfoRepository.delete(fileInfo);
+    }
 }
