@@ -212,19 +212,20 @@
 
 <main layout:fragment="main">
     <!-- 배너 -->
-    <div class="top-image-bar mt-10 w-screen">
-        <img src="/images/grooveo.jpg" alt="">
+    <div class="top-image-bar mt-10">
+        <img src="/images/grooveo.jpg" alt="banner" class="w-screen">
+    </div>
+    <div class="search-box flex justify-center mt-20 mb-10">
+        <form th:method="GET" th:action="@{/library}" class="relative">
+            <input name="keyword" type="text" placeholder="노래 / 아티스트 검색"
+                   class="bg-black bg-opacity-10 h-12 w-custom p-4 pr-12"/>
+            <button
+                    class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-2xl pr-3">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
     </div>
 
-    <div class="search-box flex justify-center mt-20 mb-10">
-        <div class="relative">
-            <input type="text" placeholder="노래 / 아티스트 검색" class="bg-black bg-opacity-10 h-12 w-custom p-4 pr-12"/>
-            <a href="#"
-               class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-2xl pr-3">
-                <i class="fas fa-search"></i>
-            </a>
-        </div>
-    </div>
     <!-- 인기 음원 10곡 -->
     <div class="wrap">
         <div class="swiper-wrapper">
