@@ -11,7 +11,7 @@
 <body>
 
 <main layout:fragment="main">
-    <div class="flex flex-col align-center mx-auto w-4/6 my-3">
+    <div class="flex flex-col align-center mx-auto max-w-7xl w-full my-3">
         <span th:if="${boardType == 1}" class="text-3xl font-bold mt-8 text-center">국외 게시판</span>
         <span th:if="${boardType == 2}" class="text-3xl font-bold mt-8 text-center">국내 게시판</span>
         <div class="mt-3">
@@ -96,10 +96,10 @@
             <colgroup>
                 <col width="60">
                 <col width="100">
-                <col width="500">
+                <col>
                 <col width="120">
                 <col width="60">
-                <col>
+                <col width="120">
             </colgroup>
             <thead class="table-dark">
             <tr class="text-center">

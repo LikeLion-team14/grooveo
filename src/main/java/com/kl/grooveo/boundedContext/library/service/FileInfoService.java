@@ -27,13 +27,8 @@ public class FileInfoService {
     }
 
     public FileInfo getFileInfo(Long id) {
-        return this.fileInfoRepository.findById(id).orElseThrow(
-                () -> new DataNotFoundException("해당 글을 찾을 수 없습니다.")
-        );
-    }
-
-    public void delete(Long id) {
-        fileInfoRepository.deleteById(id);
+        Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(id);
+        return optionalFileInfo.get();
     }
 
     public void modify(FileInfo fileInfo, String description) {
@@ -41,6 +36,4 @@ public class FileInfoService {
         fileInfo.setModifyDate(LocalDateTime.now());
         this.fileInfoRepository.save(fileInfo);
     }
-
-
 }
