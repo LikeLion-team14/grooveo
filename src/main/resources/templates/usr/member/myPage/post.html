@@ -9,6 +9,13 @@
     </div>
     <div th:if="${!#lists.isEmpty(freedomPosts)}">
         <table class="table mt-4 w-full">
+            <colgroup>
+                <col width="60">
+                <col width="100">
+                <col>
+                <col width="50">
+                <col width="100">
+            </colgroup>
             <thead class="table-dark">
             <tr class="text-center">
                 <th>번호</th>
@@ -33,7 +40,10 @@
                 </td>
                 <td th:text="${freedomPost.view}"></td>
                 <td>
-                    <span th:text="${freedomPost.getAfterPost()}"></span>
+                    <span th:unless="${freedomPost.afterPost.endsWith('전')}" th:text="${freedomPost.getAfterPost()}"
+                          class="text-xs"></span>
+                    <span th:if="${freedomPost.afterPost.endsWith('전')}" th:text="${freedomPost.getAfterPost()}"
+                          class="text-sm"></span>
                     <i th:if="${freedomPost.afterPost.endsWith('전')}" class="fa-solid fa-fire text-red-500"></i></td>
             </tr>
             </tbody>

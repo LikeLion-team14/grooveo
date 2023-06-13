@@ -9,6 +9,12 @@
     </div>
     <div th:if="${!#lists.isEmpty(freedomPostComments)}">
         <table class="table w-full mt-4">
+            <colgroup>
+                <col width="60">
+                <col width="150">
+                <col>
+                <col width="120">
+            </colgroup>
             <thead class="table-dark">
             <tr class="text-center">
                 <th>번호</th>
@@ -30,7 +36,10 @@
                     </label>
                 </td>
                 <td>
-                    <span th:text="${freedomPostComment.getAfterPost()}"></span>
+                    <span th:unless="${freedomPostComment.afterPost.endsWith('전')}" th:text="${freedomPostComment.getAfterPost()}"
+                          class="text-xs"></span>
+                    <span th:if="${freedomPostComment.afterPost.endsWith('전')}" th:text="${freedomPostComment.getAfterPost()}"
+                          class="text-sm"></span>
                     <i th:if="${freedomPostComment.afterPost.endsWith('전')}" class="fa-solid fa-fire text-red-500"></i>
                 </td>
             </tr>
