@@ -216,8 +216,8 @@
         <img src="/images/grooveo.jpg" alt="banner" class="w-screen">
     </div>
     <div class="search-box flex justify-center mt-20 mb-10">
-        <form th:method="GET" th:action="@{/library}" class="relative">
-            <input name="keyword" type="text" placeholder="노래 / 아티스트 검색"
+        <form th:method="GET" th:action="@{/library/list}" class="relative">
+            <input name="kw" type="text" placeholder="노래 / 아티스트 검색"
                    class="bg-black bg-opacity-10 h-12 w-custom p-4 pr-12"/>
             <button
                     class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-2xl pr-3">
@@ -225,7 +225,7 @@
             </button>
         </form>
     </div>
-    <span class="text-center text-xl">최신 음원 10곡</span>
+    <div class="text-center">최신 음원</div>
     <!-- 최신 음원 10곡 -->
     <div class="wrap">
         <div class="swiper-wrapper">
@@ -236,7 +236,7 @@
                                 <img th:src="${song.albumCoverUrl}">
                             </div>
                             <h2 th:text="${song.title}">노래 제목</h2>
-                            <p th:text="${song.author}">아티스트 이름</p>
+                            <p th:text="${song.artist.username}">아티스트 이름</p>
                     </div>
                 </div>
             </div>
@@ -250,6 +250,7 @@
         <div class="swiper-pagination"></div>
     </div>
 
+    <div class="text-center mt-5">인기 음원</div>
     <div class="wrap">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
