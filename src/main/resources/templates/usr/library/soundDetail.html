@@ -103,14 +103,6 @@
 </head>
 <body>
 <main layout:fragment="main">
-<!--<h1>음원 상세</h1>-->
-<!--<p>음원명: <span th:text="${fileInfo.title}"></span></p>-->
-<!--<p>설명: <span th:text="${fileInfo.description}"></span></p>-->
-<!--<img th:src="${fileInfo.albumCoverUrl}" alt="Album Cover">-->
-<!--<audio controls>-->
-<!--    <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">-->
-<!--</audio>-->
-
     <div class="flex justify-center mx-auto max-w-7xl w-full my-3">
         <div class="posts-box mt-8 w-full mx-10">
             <div class="flex justify-center" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
@@ -153,7 +145,7 @@
                     <!-- 플레이어 부분 -->
                     <div class="shadow-xl flex flex-col items-center border-2" style="width:384px; height:600px;">
                         <div class="mb-2">
-                            <img src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/IU-album.jpg" class="w-96 h-96" />
+                            <img th:src="${fileInfo.albumCoverUrl}" alt="Album Cover" class="w-96 h-96" />
                         </div>
                         <div class="flex flex-col justify-center items-center w-full">
                             <div class="flex flex-col text-center mt-4">
@@ -167,7 +159,7 @@
                             </div>
                             <div class="mt-1">
                                 <button id="playPauseButton" class="flex items-center justify-center hover:text-gray-300">
-                                    <i class="fas fa-play text-2xl"></i>
+                                    <i class="fas fa-pause text-2xl"></i>
                                 </button>
                             </div>
                         </div>
@@ -175,7 +167,7 @@
 
                     <!-- 오디오 올린 음원-->
                     <audio id="audio" style="display:none;" autoplay>
-                        <source src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/Spring On by jurunde .mp3" type="audio/mpeg">
+                        <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">
                     </audio>
                 </div>
 
@@ -360,6 +352,46 @@
     </div>
 
     <script>
+        const audio = document.getElementById('audio');
+        const playPauseButton = document.getElementById('playPauseButton');
+        const songSlider = document.getElementById('songSlider');
+        const currentTime = document.getElementById('currentTime');
+        const totalTime = document.getElementById('totalTime');
+        // Set initial max value for slider (it can be any value greater than 0)
+        songSlider.max = 1;
+        audio.addEventListener('loadedmetadata', function() {
+            totalTime.textContent = formatTime(audio.duration);
+            songSlider.max = audio.duration;
+        });
+        audio.addEventListener('timeupdate', function() {
+            currentTime.textContent = formatTime(audio.currentTime);
+            songSlider.value = audio.currentTime;
+            const progress = (audio.currentTime / audio.duration) * 100;
+            songSlider.style.background = `linear-gradient(to right, black ${progress}%, #d3d3d3 ${progress}%)`;
+        });
+        songSlider.addEventListener('input', function() {
+            audio.currentTime = songSlider.value;
+        });
+        playPauseButton.addEventListener('click', function() {
+            if (audio.paused) {
+                audio.play();
+                playPauseButton.innerHTML = '<i class="fas fa-pause text-2xl"></i>';
+            } else {
+                audio.pause();
+                playPauseButton.innerHTML = '<i class="fas fa-play text-2xl"></i>';
+            }
+        });
+        audio.addEventListener('ended', function() {
+            playPauseButton.innerHTML = '<i class="fas fa-play text-2xl"></i>';
+        });
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes}:${    seconds < 10 ? '0' : ''
+            }${seconds}`;
+        }
+
         $(document).ready(function () {
             $(".reply-link").on("click", function (e) {
                 e.preventDefault();
