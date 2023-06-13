@@ -4,8 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.base.rq.Rq;
-import com.kl.grooveo.boundedContext.form.CommentForm;
-import com.kl.grooveo.boundedContext.form.FileInfoForm;
+import com.kl.grooveo.boundedContext.form.SoundTrackForm;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 import jakarta.validation.Valid;
@@ -39,20 +38,14 @@ public class FileUploadController {
     private String region;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping
-    public String showLibrary() {
-        return "usr/library/library";
-    }
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/soundupload")
-    public String showSoundUpload() {
+    public String showSoundUpload(Model model, SoundTrackForm soundTrackForm) {
         return "usr/library/soundUpload";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/soundupload")
-    public String uploadFiles(
+    public String uploadFiles(Model model, @Valid SoundTrackForm soundTrackForm, BindingResult bindingResult,
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("albumCover") MultipartFile albumCover,
@@ -94,36 +87,4 @@ public class FileUploadController {
             return "redirect:/library/soundUpload";
         }
     }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/soundDetail/{id}")
-    public String showFileDetail(Model model, @PathVariable Long id, CommentForm commentForm) {
-        FileInfo fileInfo = fileInfoService.findById(id);
-        if (fileInfo == null) {
-            return "redirect:/library/library";
-        }
-        model.addAttribute("fileInfo", fileInfo);
-        return "usr/library/soundDetail";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id) {
-        fileInfoService.delete(id);
-        return "usr/library/library";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/modify/{id}")
-    public String fileInfoModify(@Valid FileInfoForm fileInfoForm, BindingResult bindingResult,
-                                 @PathVariable("id") Long id) {
-
-        FileInfo fileInfo = this.fileInfoService.getFileInfo(id);
-
-
-        this.fileInfoService.modify(fileInfo, fileInfoForm.getDescription());
-        return String.format("redirect:/library/soundDetail/%s", id);
-    }
-
-
 }

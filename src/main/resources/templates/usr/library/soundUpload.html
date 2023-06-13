@@ -50,7 +50,7 @@
 <body>
 <main layout:fragment="main">
     <div class="flex h-full justify-center items-center">
-        <form th:action method="POST" class="flex flex-col gap-6" enctype="multipart/form-data">
+        <form th:action th:object="${soundTrackForm}" method="POST" class="flex flex-col gap-6" enctype="multipart/form-data">
             <div class="flex justify-center">
                 <div class="posts-box mt-20">
                     <div class="flex justify-center">
@@ -85,7 +85,8 @@
                             </div>
                             <!-- 제목 입력 -->
                             <div class="flex mt-2">
-                                <input id="id-input" type="text" name="title" placeholder="제목을 입력하세요" class="border border-black border-opacity-10 h-10 p-4 w-96" />
+                                <input id="id-input" type="text" name="title" th:field="*{title}" placeholder="제목을 입력하세요"
+                                       class="border border-black border-opacity-10 h-10 p-4 w-96" />
                             </div>
 
                             <!-- 설명 -->
@@ -94,7 +95,8 @@
                             </div>
                             <!-- 설명 입력 -->
                             <div class="flex mt-2">
-                                <textarea cols="45" rows="15" name="description" placeholder="설명을 입력하세요" class="border border-black border-opacity-10 resize-none p-4 mr-5 focus:outline-none"></textarea>
+                                <textarea cols="45" rows="15" name="description" th:field="*{description}"
+                                          placeholder="설명을 입력하세요" class="border border-black border-opacity-10 resize-none p-4 mr-5 focus:outline-none"></textarea>
                             </div>
                         </div>
                     </div>
