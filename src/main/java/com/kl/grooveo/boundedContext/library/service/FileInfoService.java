@@ -23,4 +23,9 @@ public class FileInfoService {
         Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(id);
         return optionalFileInfo.orElse(null);
     }
+
+    public FileInfo getFileInfo(Long id) {
+        Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(id);
+        return optionalFileInfo.get();
+    }
 }
