@@ -225,18 +225,18 @@
             </button>
         </form>
     </div>
-
-    <!-- 인기 음원 10곡 -->
+    <span class="text-center text-xl">최신 음원 10곡</span>
+    <!-- 최신 음원 10곡 -->
     <div class="wrap">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
+            <div class="swiper-slide" th:each="song : ${latestSongs}">
                 <div class="inner">
                     <div class="con">
-                        <div class="image-container">
-                            <img src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/ea6345acc53bb8cbac3564f661ae9dd4.png">
-                        </div>
-                        <h2>노래 제목 </h2>
-                        <p>아티스트 이름</p>
+                            <div class="image-container">
+                                <img th:src="${song.albumCoverUrl}">
+                            </div>
+                            <h2 th:text="${song.title}">노래 제목</h2>
+                            <p th:text="${song.author}">아티스트 이름</p>
                     </div>
                 </div>
             </div>

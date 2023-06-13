@@ -7,10 +7,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     Page<FileInfo> findAll(Specification<FileInfo> spec, Pageable pageable);
 
     Page<FileInfo> findAllByAuthorId(Long username, Pageable pageable);
 
+    List<FileInfo> findTop10ByOrderByCreateDateDesc();
 }
