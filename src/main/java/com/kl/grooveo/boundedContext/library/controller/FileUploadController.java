@@ -3,14 +3,18 @@ package com.kl.grooveo.boundedContext.library.controller;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.kl.grooveo.boundedContext.form.FreedomPostForm;
+import com.kl.grooveo.boundedContext.form.SoundTrackForm;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.FileInfoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,13 +38,13 @@ public class FileUploadController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/soundupload")
-    public String showSoundUpload() {
+    public String showSoundUpload(Model model, SoundTrackForm soundTrackForm) {
         return "usr/library/soundUpload";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/soundupload")
-    public String uploadFiles(
+    public String uploadFiles(Model model, @Valid SoundTrackForm soundTrackForm, BindingResult bindingResult,
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("albumCover") MultipartFile albumCover,
