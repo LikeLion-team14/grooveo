@@ -30,15 +30,13 @@
                 <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                 <td th:text="${freedomPost.categoryDisplayName()}"></td>
                 <td class="text-left">
-                    <label for="subject" style="">
-                        <section class="flex gap-1">
-                            <a id="subject" th:href="@{|/community/freedomPost/detail/${freedomPost.id}|}"
-                               th:text="${freedomPost.title}" style="line-height: 40px"
-                               class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"></a>
-                            <span th:if="${freedomPost.commentList.size() != 0}"
-                                  th:text="'[' + ${freedomPost.commentList.size() + ']'}" style="color: red; line-height: 40px"></span>
-                        </section>
-                    </label>
+                    <section class="flex gap-1">
+                        <a id="subject" th:href="@{|/community/freedomPost/detail/${freedomPost.id}|}"
+                           th:text="${freedomPost.title}"
+                           class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"></a>
+                        <span th:if="${freedomPost.commentList.size() != 0}"
+                              th:text="'[' + ${freedomPost.commentList.size() + ']'}" style="color: red;"></span>
+                    </section>
                 </td>
                 <td th:text="${freedomPost.view}"></td>
                 <td>

@@ -28,17 +28,17 @@
                 <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                 <td style="width:380px; max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
                     th:text="${freedomPostComment.content}"></td>
-                <td>
-                    <label for="subject">
-                        <a id="subject"
-                           th:href="@{|/community/freedomPost/detail/${freedomPostComment.freedomPost.id}|}"
-                           th:text="${freedomPostComment.freedomPost.title}"></a>
-                    </label>
+                <td style="width:380px; max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+                    <a id="subject"
+                       th:href="@{|/community/freedomPost/detail/${freedomPostComment.freedomPost.id}|}"
+                       th:text="${freedomPostComment.freedomPost.title}"></a>
                 </td>
                 <td>
-                    <span th:unless="${freedomPostComment.afterPost.endsWith('전')}" th:text="${freedomPostComment.getAfterPost()}"
+                    <span th:unless="${freedomPostComment.afterPost.endsWith('전')}"
+                          th:text="${freedomPostComment.getAfterPost()}"
                           class="text-xs"></span>
-                    <span th:if="${freedomPostComment.afterPost.endsWith('전')}" th:text="${freedomPostComment.getAfterPost()}"
+                    <span th:if="${freedomPostComment.afterPost.endsWith('전')}"
+                          th:text="${freedomPostComment.getAfterPost()}"
                           class="text-sm"></span>
                     <i th:if="${freedomPostComment.afterPost.endsWith('전')}" class="fa-solid fa-fire text-red-500"></i>
                 </td>
