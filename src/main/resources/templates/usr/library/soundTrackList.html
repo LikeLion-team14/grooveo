@@ -24,12 +24,14 @@
 
                     <!-- 카테고리 -->
                     <div class="flex justify-center mt-5">
-                        <input type="radio" name="songlist" id="top" class="peer hidden" checked />
-                        <label for="top" class="cursor-pointer mr-16 mt-2 text-base text-gray-500 hover:text-gray-800 hover:underline">
+                        <input type="radio" id="top" class="peer hidden" checked />
+                        <label for="top" class="cursor-pointer mr-16 mt-2 text-base text-gray-500 hover:text-gray-800 hover:underline"
+                               th:onclick="|location.href='@{/library/list/1}'|">
                             TOP100
                         </label>
-                        <input type="radio" name="songlist" id="latest" class="peer hidden" />
-                        <label for="latest" class="cursor-pointer mt-2 text-base text-gray-500 hover:text-gray-800 hover:underline">
+                        <input type="radio" id="latest" class="peer hidden" />
+                        <label for="latest" class="cursor-pointer mt-2 text-base text-gray-500 hover:text-gray-800 hover:underline"
+                               th:onclick="|location.href='@{/library/list/2}'|">
                             최신 음악
                         </label>
                     </div>
@@ -156,7 +158,7 @@
         </div>
     </div>
 
-    <form th:action="@{|/library/list|}" method="get" id="searchForm">
+    <form th:action="@{|/library/list/${sortCode}|}" method="get" id="searchForm">
         <input type="hidden" id="kw" name="kw" th:value="${kw}">
         <input type="hidden" id="page" name="page" th:value="${paging.number}">
     </form>
