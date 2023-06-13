@@ -1,6 +1,26 @@
 <html xmlns="http://www.w3.org/1999/html">
 
 <head>
+    <!-- 파비콘 -->
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -27,21 +47,21 @@
     <link rel="stylesheet" href="/resource/common/modal.css">
 
     <!-- 데이지 UI 불러오기 -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.0.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.0.4/dist/full.css" rel="stylesheet" type="text/css"/>
 
     <!-- 테일윈드 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <title></title>
 </head>
 
 <body>
-    <header class="top-bar bg-gray-500">
-        <div class="con mx-auto pr-3 h-full flex">
-            <a href="/" class="logo text-lg font-bold flex items-center px-3">
-                GROOVEO
-            </a>
+<header class="top-bar bg-gray-500">
+    <div class="con mx-auto pr-3 h-full flex">
+        <a href="/" class="logo text-lg font-bold flex items-center px-3">
+            GROOVEO
+        </a>
 
-            <div class="flex-grow"></div>
-
+        <div class="flex-grow"></div>
             <div class="flex h-full items-center">
                 <a th:if="${@rq.logout}" class="btn btn-ghost rounded-btn" href="/usr/member/login">로그인</a>
                 <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="javascript:" onclick="$(this).next().submit();">로그아웃</a>
@@ -59,190 +79,191 @@
                 <a id="openModalButton1" class="btn btn-ghost btn-circle" th:if="${@rq.login}">
                     <div class="indicator" style="position: relative;">
                         <i class="fa-regular fa-bell">
-                            <span data-test="hasUnreadNotifications" th:if="${@rq.hasUnreadNotifications()}" class="badge badge-xs badge-secondary indicator-item" style="position: absolute; top: -5px; right: -5px;"></span>
+                            <span data-test="hasUnreadNotifications" th:if="${@rq.hasUnreadNotifications()}"
+                                  class="badge badge-xs badge-secondary indicator-item" style="position: absolute; top: -5px; right: -5px;"></span>
                         </i>
                     </div>
                 </a>
-            </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <div class="mx-auto min-h-xl">
-        <!-- Notification Modal -->
-        <div id="notificationModal" class="modal1 hidden text-black">
-            <div class="flex flex-col modal1-content justify-end">
-                <div id="modalContent1">
-                    <!-- 모달창 안에 내용 -->
-                </div>
+<div class="mx-auto min-h-xl">
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="modal1 hidden text-black">
+        <div class="flex flex-col modal1-content justify-end">
+            <div id="modalContent1">
+                <!-- 모달창 안에 내용 -->
             </div>
         </div>
     </div>
+</div>
 
-    <main layout:fragment="main"></main>
+<main layout:fragment="main"></main>
 
-    <script th:inline="javascript">
-        // 타임리프 문법(파라미터, ? 뒤에 입력된 매개변수들)
-        const params = /*[[ ${param} ]]*/ null;
+<script th:inline="javascript">
+    // 타임리프 문법(파라미터, ? 뒤에 입력된 매개변수들)
+    const params = /*[[ ${param} ]]*/ null;
 
-        if (params.msg) {
-            toastNotice(params.msg[0]);
-        }
+    if (params.msg) {
+        toastNotice(params.msg[0]);
+    }
 
-        if (params.errorMsg) {
-            toastWarning(params.errorMsg[0]);
-        }
+    if (params.errorMsg) {
+        toastWarning(params.errorMsg[0]);
+    }
 
-        // history.back 에 의해서 돌아온 경우에 실행됨
-        // 평소에도 실행됨
-        $(window).bind("pageshow", function (event) {
-            const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___" + location.href;
+    // history.back 에 의해서 돌아온 경우에 실행됨
+    // 평소에도 실행됨
+    $(window).bind("pageshow", function (event) {
+        const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___" + location.href;
+
+        if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
+            toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));
+            localStorage.removeItem(localStorageKeyAboutHistoryBackErrorMsg);
+        } else if (!document.referrer) {
+            const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___null";
 
             if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
                 toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));
                 localStorage.removeItem(localStorageKeyAboutHistoryBackErrorMsg);
-            } else if (!document.referrer) {
-                const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___null";
-
-                if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
-                    toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));
-                    localStorage.removeItem(localStorageKeyAboutHistoryBackErrorMsg);
-                }
             }
-        });
-    </script>
+        }
+    });
+</script>
 
-    <script>
-        // 모달 열기
-        const openModalButton = document.getElementById("openModalButton1");
-        if (openModalButton != null) {
-            openModalButton.onclick = function () {
-                if (!modal.classList.contains("hidden")) {
-                    closeModal();
-                    return false;
-                }
-                // AJAX 요청 보내기
-                $.ajax({
-                    url: "/usr/notification/list", // 컨트롤러의 엔드포인트 주소를 입력하세요.
-                    method: "GET", // GET 또는 POST 방식을 선택하세요.
-                    success: function (data) {
-                        // 요청이 성공하면 반환된 데이터를 사용하여 모달 내용 업데이트
-                        const modalContent = document.getElementById("modalContent1");
-                        modalContent.innerHTML = data;
-
-                        // 모달 열기
-                        const modal = document.getElementById("notificationModal");
-                        modal.classList.remove("hidden");
-                    },
-                    error: function (xhr, status, error) {
-                        // 요청이 실패한 경우 에러 처리
-                        console.error(error);
-                    }
-                });
+<script>
+    // 모달 열기
+    const openModalButton = document.getElementById("openModalButton1");
+    if (openModalButton != null) {
+        openModalButton.onclick = function () {
+            if (!modal.classList.contains("hidden")) {
+                closeModal();
                 return false;
             }
-        }
+            // AJAX 요청 보내기
+            $.ajax({
+                url: "/usr/notification/list", // 컨트롤러의 엔드포인트 주소를 입력하세요.
+                method: "GET", // GET 또는 POST 방식을 선택하세요.
+                success: function (data) {
+                    // 요청이 성공하면 반환된 데이터를 사용하여 모달 내용 업데이트
+                    const modalContent = document.getElementById("modalContent1");
+                    modalContent.innerHTML = data;
 
-        function closeModal() {
-            const modal = document.getElementById("notificationModal");
-            modal.classList.add("hidden");
+                    // 모달 열기
+                    const modal = document.getElementById("notificationModal");
+                    modal.classList.remove("hidden");
+                },
+                error: function (xhr, status, error) {
+                    // 요청이 실패한 경우 에러 처리
+                    console.error(error);
+                }
+            });
+            return false;
         }
+    }
 
-        // 모달 닫기
+    function closeModal() {
         const modal = document.getElementById("notificationModal");
-        modal.onclick = function (event) {
-            if (event.target === modal) {
-                closeModal();
-            }
-        };
+        modal.classList.add("hidden");
+    }
 
-        // 클릭 이벤트 핸들러 함수
-        function EyeIconClick(el) {
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
-
-            const notificationId = $(el).attr("data-id");
-            if (notificationId) {
-                // Ajax 요청 설정
-                $.ajax({
-                    type: "POST",
-                    url: "/usr/notification/readNotification",
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader(header, token);
-                    },
-                    data: {
-                        notificationId: notificationId
-                    },
-                    dataType: "text",
-                    success: function (result) {
-                        if (result === 'success') {
-                            const newHtml = '<i class="fa-regular fa-eye-slash"></i>'
-                            $(el).html(newHtml)
-                        } else {
-                            toastWarning('해당 알림이 없습니다.');
-                        }
-                    }
-                });
-            }
+    // 모달 닫기
+    const modal = document.getElementById("notificationModal");
+    modal.onclick = function (event) {
+        if (event.target === modal) {
+            closeModal();
         }
+    };
 
-        function TrashCanIconClick(el) {
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
+    // 클릭 이벤트 핸들러 함수
+    function EyeIconClick(el) {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
-            const notificationId = $(el).attr("data-id");
-            if (notificationId) {
-                // Ajax 요청 설정
-                $.ajax({
-                    type: "POST",
-                    url: "/usr/notification/deleteNotification",
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader(header, token);
-                    },
-                    data: {
-                        notificationId: notificationId
-                    },
-                    dataType: "text",
-                    success: function (result) {
-                        if (result === 'success') {
-                            openModalButton.click();
-                            openModalButton.click();
-                        } else {
-                            toastWarning('해당 알림이 없습니다.');
-                        }
+        const notificationId = $(el).attr("data-id");
+        if (notificationId) {
+            // Ajax 요청 설정
+            $.ajax({
+                type: "POST",
+                url: "/usr/notification/readNotification",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                data: {
+                    notificationId: notificationId
+                },
+                dataType: "text",
+                success: function (result) {
+                    if (result === 'success') {
+                        const newHtml = '<i class="fa-regular fa-eye-slash"></i>'
+                        $(el).html(newHtml)
+                    } else {
+                        toastWarning('해당 알림이 없습니다.');
                     }
-                });
-            }
+                }
+            });
         }
+    }
 
-        function AllDelete(el) {
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
+    function TrashCanIconClick(el) {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
-            const deleteType = parseInt($(el).attr("data-id"));
-            if (deleteType) {
-                // Ajax 요청 설정
-                $.ajax({
-                    type: "POST",
-                    url: "/usr/notification/allDelete",
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader(header, token);
-                    },
-                    data: {
-                        deleteType: deleteType
-                    },
-                    dataType: "text",
-                    success: function (result) {
-                        if (result === 'success') {
-                            openModalButton.click();
-                            openModalButton.click();
-                        } else {
-                            toastWarning('삭제하지 못 했습니다.');
-                        }
+        const notificationId = $(el).attr("data-id");
+        if (notificationId) {
+            // Ajax 요청 설정
+            $.ajax({
+                type: "POST",
+                url: "/usr/notification/deleteNotification",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                data: {
+                    notificationId: notificationId
+                },
+                dataType: "text",
+                success: function (result) {
+                    if (result === 'success') {
+                        openModalButton.click();
+                        openModalButton.click();
+                    } else {
+                        toastWarning('해당 알림이 없습니다.');
                     }
-                });
-            }
+                }
+            });
         }
-    </script>
+    }
+
+    function AllDelete(el) {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        const deleteType = parseInt($(el).attr("data-id"));
+        if (deleteType) {
+            // Ajax 요청 설정
+            $.ajax({
+                type: "POST",
+                url: "/usr/notification/allDelete",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                data: {
+                    deleteType: deleteType
+                },
+                dataType: "text",
+                success: function (result) {
+                    if (result === 'success') {
+                        openModalButton.click();
+                        openModalButton.click();
+                    } else {
+                        toastWarning('삭제하지 못 했습니다.');
+                    }
+                }
+            });
+        }
+    }
+</script>
 
 </body>
 

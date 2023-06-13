@@ -70,23 +70,23 @@
     <script>
         function ModifyEmailForm__submit(form) {
             // email 이(가) 올바른지 체크
-            form.email.value = form.email.value.trim();
+            form.email_v1.value = form.email_v1.value.trim();
 
-            if (form.email.value.length === 0) {
-                form.email.focus();
+            if (form.email_v1.value.length === 0) {
+                form.email_v1.focus();
                 toastWarning('이메일을 입력해주세요.');
                 return;
             }
 
-            if (isValidEmail(form.email.value) === false) {
+            if (isValidEmail(form.email_v1.value) === false) {
                 toastWarning('이메일 형식으로 입력해주세요.');
-                form.email.focus();
+                form.email_v1.focus();
                 return;
             }
 
-            if (form.email.value.length > 30) {
-                toastWarning('이메일 총길이가 30자 이하로 입력해주세요.');
-                form.email.focus();
+            if (form.email_v1.value.length > 30) {
+                toastWarning('이메일 총길이가 30자 이하<br>입력해주세요.');
+                form.email_v1.focus();
                 return;
             }
 
@@ -109,7 +109,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/usr/member/sendCode",
+                url: "/api/sendCode",
                 data: {"userEmail": userEmail},
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);
@@ -140,7 +140,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/usr/member/certification",
+                url: "/api/certification",
                 data: {"userEmail": userEmail, "inputCode": inputCode.value},
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header, token);

@@ -1,7 +1,9 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{usr/layout/layout.html}">
+
 <head>
-    <title>Sound Detail</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title></title>
     <style>
         img {
             max-width: 10%;
@@ -10,6 +12,7 @@
     </style>
 </head>
 <body>
+<main layout:fragment="main">
 <h1>음원 상세</h1>
 <p>음원명: <span th:text="${fileInfo.title}"></span></p>
 <p>설명: <span th:text="${fileInfo.description}"></span></p>
@@ -17,5 +20,60 @@
 <audio controls>
     <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">
 </audio>
+
+    <div class="flex flex-col align-center mx-auto w-4/6">
+
+        <span class="text-xl font-bold">댓글 쓰기</span>
+        <!-- 댓글 작성 -->
+        <form th:action="@{|/answer/create/${fileInfo.id}|}" th:object="${commentForm}" method="post">
+            <textarea class="textarea textarea-primary w-full max-w-ls form-control" placeholder="content" th:field="*{content}" rows="10"></textarea>
+            <input type="submit" value="댓글 등록">
+        </form>
+
+        <!-- 댓글의 갯수 표시 -->
+        <h5 th:text="|${#lists.size(fileInfo.commentList)}개의 댓글이 있습니다.|"></h5>
+        <div class="card w-full bg-base-100 shadow-xl my-2" th:each="comment : ${fileInfo.commentList}">
+            <div class="card-body">
+                <p th:text="${comment.content}"></p>
+                <div class="card-actions justify-end">
+                    <a class="btn btn-sm btn-outline"
+                       href="javascript:void(0);"
+                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                        삭제</a>
+                    <form hidden th:action="@{|/answer/${comment.id}|}" method="post">
+                        <input type="hidden" name="_method" value="delete">
+                    </form>
+                </div>
+            </div>
+    </div>
+
+        <script layout:fragment="script" type='text/javascript'>
+
+            const comment_answer_elements = document.getElementsByClassName("comment-answer");
+            const block_answer = document.getElementsByClassName("comment-answer-block");
+            Array.from(comment_answer_elements).forEach(function (element) {
+                element.addEventListener('click', function () {
+                    Array.from(block_answer).forEach((x) => {
+                        if (x.id === this.dataset.num) {
+                            if (x.style.display === "none") {
+                                x.style.display = "block";
+                            } else
+                                x.style.display = "none";
+                        }
+                    })
+                });
+            });
+
+            if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
+                const commentId = window.location.hash.replace("#reply-", "");
+                $(function(){
+                    document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
+                });
+            }
+
+        </script>
+
+</main>
+
 </body>
 </html>
