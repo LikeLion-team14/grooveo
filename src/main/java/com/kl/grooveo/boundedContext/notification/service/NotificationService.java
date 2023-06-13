@@ -51,7 +51,6 @@ public class NotificationService {
                 .build();
 
         notificationRepository.save(notification);
-
     }
 
     @Transactional
@@ -60,11 +59,22 @@ public class NotificationService {
                 .builder()
                 .fromMember(fromMember) // 댓글 단 멤버
                 .toMember(toMember) // 게시글 쓴 멤버
-                .typeCode("comment") // "postLike" -> 커뮤니티 게시글 댓글 입력 알림
+                .typeCode("comment")
                 .build();
 
         notificationRepository.save(notification);
+    }
 
+    @Transactional
+    public void whenAfterSoundComment(Member fromMember, Member toMember) {
+        Notification notification = Notification
+                .builder()
+                .fromMember(fromMember) // 댓글 단 멤버
+                .toMember(toMember)
+                .typeCode("soundComment")
+                .build();
+
+        notificationRepository.save(notification);
     }
 
     @Transactional
