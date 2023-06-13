@@ -159,14 +159,14 @@
                             </div>
                             <div class="mt-1">
                                 <button id="playPauseButton" class="flex items-center justify-center hover:text-gray-300">
-                                    <i class="fas fa-pause text-2xl"></i>
+                                    <i class="fas fa-play text-2xl"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
 
                     <!-- 오디오 올린 음원-->
-                    <audio id="audio" style="display:none;" autoplay>
+                    <audio id="audio" style="display:none;">
                         <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">
                     </audio>
                 </div>
@@ -201,155 +201,224 @@
                 </form>
             </div>
 
-<!--            <div class="mt-5">-->
-<!--                &lt;!&ndash; 코멘트 제목 &ndash;&gt;-->
-<!--                <div class="border-b border-gray-400 flex py-2 items-center">-->
-<!--                    <div class="text-gray-600 ml-2">-->
-<!--                        COMMENT-->
-<!--                    </div>-->
-<!--                    <div class="text-gray-600 ml-3"><span th:text="${#lists.size(freedomPost.commentList)}"></span></div>-->
-<!--                    <div class="flex-grow"></div>-->
-<!--                    <div class="flex-shrink-0">-->
-<!--                        <a id="so_btn1" class="so-link hover:underline mr-3 text-xs" style="cursor: pointer"-->
-<!--                           th:data-so="create">등록순-->
-<!--                        </a>-->
-<!--                        <a id="so_btn2" class="so-link hover:underline text-xs" style="cursor: pointer"-->
-<!--                           th:data-so="recent">최신순-->
-<!--                        </a>-->
-<!--                    </div>-->
-<!--                </div>-->
+            <div class="mt-5">
+                <!-- 코멘트 제목 -->
+                <div class="border-b border-gray-400 flex py-2 items-center">
+                    <div class="text-gray-600 ml-2">
+                        COMMENT
+                    </div>
+                    <div class="text-gray-600 ml-3"><span th:text="${#lists.size(fileInfo.commentList)}"></span></div>
+                    <div class="flex-grow"></div>
+                    <div class="flex-shrink-0">
+                        <a id="so_btn1" class="so-link hover:underline mr-3 text-xs" style="cursor: pointer"
+                           th:data-so="create">등록순
+                        </a>
+                        <a id="so_btn2" class="so-link hover:underline text-xs" style="cursor: pointer"
+                           th:data-so="recent">최신순
+                        </a>
+                    </div>
+                </div>
 
-<!--                &lt;!&ndash; 댓글 카드 1개 (1) &ndash;&gt;-->
-<!--                <div class="m-3 border-b border-gray-300" th:each="comment : ${commentPaging}">-->
-<!--                    <a th:id="|comment-${comment.id}|"></a>-->
-<!--                    &lt;!&ndash; 댓글 리스트 &ndash;&gt;-->
-<!--                    <div class="flex my-3 w-full">-->
-<!--                        <div class="w-11 h-full mr-1">-->
-<!--                            <img th:src="${comment.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">-->
-<!--                        </div>-->
-<!--                        <div class="w-full">-->
-<!--                            <div class="flex items-center mb-1">-->
-<!--                                <span class="font-bold" th:text="${comment.getAuthor().username}"></span>-->
-<!--                            </div>-->
+                <!-- 댓글 카드 1개 (1) -->
+                <div class="m-3 border-b border-gray-300" th:each="comment : ${commentPaging}">
+                    <a th:id="|comment-${comment.id}|"></a>
+                    <!-- 댓글 리스트 -->
+                    <div class="flex my-3 w-full">
+                        <div class="w-11 h-full mr-1">
+                            <img th:src="${comment.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">
+                        </div>
+                        <div class="w-full">
+                            <div class="flex items-center mb-1">
+                                <span class="font-bold" th:text="${comment.getAuthor().username}"></span>
+                            </div>
 
-<!--                            &lt;!&ndash; 댓글 내용 &ndash;&gt;-->
-<!--                            <div class="flex mb-2">-->
-<!--                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">-->
-<!--                                    <p class="text-gray-800" th:text="${comment.content}"></p>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="flex">-->
-<!--                                <div class="text-gray-500 text-xs mr-2"><p th:text="${#temporals.format(comment.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>-->
-<!--                                <a href="javascript:void(0);" class="comment-answer reply-link text-xs mr-1 hover:underline" th:data-num="${comment.id}">-->
-<!--                                    답글 쓰기-->
-<!--                                </a>-->
-<!--                                <p class="text-red-500 text-xs mr-2" th:text="|[${comment.replyList.size()}]|"></p>-->
-<!--                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"-->
-<!--                                   th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"-->
-<!--                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">-->
-<!--                                    삭제-->
-<!--                                </a>-->
-<!--                                <form hidden th:action="@{|/comment/${comment.id}|}" method="POST">-->
-<!--                                    <input type="hidden" name="_method" value="delete">-->
-<!--                                </form>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                            <!-- 댓글 내용 -->
+                            <div class="flex mb-2">
+                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
+                                    <p class="text-gray-800" th:text="${comment.content}"></p>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="text-gray-500 text-xs mr-2"><p th:text="${#temporals.format(comment.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>
+                                <a href="javascript:void(0);" class="comment-answer reply-link text-xs mr-1 hover:underline" th:data-num="${comment.id}">
+                                    답글 쓰기
+                                </a>
+                                <p class="text-red-500 text-xs mr-2" th:text="|[${comment.replyList.size()}]|"></p>
+                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
+                                   th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
+                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                                    삭제
+                                </a>
+                                <form hidden th:action="@{|/library/comment/${comment.id}|}" method="POST">
+                                    <input type="hidden" name="_method" value="delete">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
-<!--                    <div class="comment-reply flex ml-11 justify-center hidden" th:id="${comment.id}"-->
-<!--                         th:classappend="|cm_${comment.getId()}|">-->
-<!--                        <a th:id="|comment-${comment.id}|"></a>-->
+                    <div class="comment-reply flex ml-11 justify-center hidden" th:id="${comment.id}"
+                         th:classappend="|cm_${comment.getId()}|">
+                        <a th:id="|comment-${comment.id}|"></a>
 
-<!--                        &lt;!&ndash; 답글 창&ndash;&gt;-->
-<!--                        <div class="list-group">-->
-<!--                            <div th:each="i: ${#numbers.sequence(0, comment.getReplyList().size()-1, 1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">-->
-<!--                                <a th:id="|reply-${comment.id}|"></a>-->
-<!--                                <div>-->
-<!--                                    &lt;!&ndash; 답글 리스트 &ndash;&gt;-->
-<!--                                    <div class="flex my-3 w-full">-->
-<!--                                        <div class="w-11 h-full mr-1">-->
-<!--                                            <img th:src="${reply.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">-->
-<!--                                        </div>-->
-<!--                                        <div class="w-full">-->
-<!--                                            <div class="flex items-center mb-1">-->
-<!--                                                <span class="font-bold" th:text="${reply.getAuthor().username}"></span>-->
-<!--                                            </div>-->
+                        <!-- 답글 창-->
+                        <div class="list-group">
+                            <div th:each="i: ${#numbers.sequence(0, comment.getReplyList().size()-1, 1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">
+                                <a th:id="|reply-${comment.id}|"></a>
+                                <div>
+                                    <!-- 답글 리스트 -->
+                                    <div class="flex my-3 w-full">
+                                        <div class="w-11 h-full mr-1">
+                                            <img th:src="${reply.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">
+                                        </div>
+                                        <div class="w-full">
+                                            <div class="flex items-center mb-1">
+                                                <span class="font-bold" th:text="${reply.getAuthor().username}"></span>
+                                            </div>
 
-<!--                                            &lt;!&ndash; 답글 내용 &ndash;&gt;-->
-<!--                                            <div class="flex mb-2">-->
-<!--                                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">-->
-<!--                                                    <p class="text-gray-800" th:text="${reply.content}"></p>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="flex">-->
-<!--                                                <div class="text-gray-500 text-xs mr-2"><p th:text="${#temporals.format(reply.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>-->
-<!--                                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"-->
-<!--                                                   th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"-->
-<!--                                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">-->
-<!--                                                    삭제-->
-<!--                                                </a>-->
-<!--                                                <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">-->
-<!--                                                    <input type="hidden" name="_method" value="delete">-->
-<!--                                                </form>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        &lt;!&ndash; 답글 등록 창&ndash;&gt;-->
-<!--                        <div class="form-floating comment_box">-->
-<!--                            <form th:action="@{|/reply/create/${comment.id}?commentPage=${commentPaging.number}&so=${so}|}"-->
-<!--                                  th:object="${replyForm}" method="post" onsubmit="replyForm__submit(this); return false;"-->
-<!--                                  class="my-3">-->
-<!--                                <div class="flex items-center justify-center">-->
-<!--                                    <textarea class="border border-gray-300 resize-none p-4 mr-5" placeholder="답글을 남겨보세요"-->
-<!--                                              th:field="*{content}" cols="90" rows="2"></textarea>-->
-<!--                                    <input type="hidden" name="commentPage" th:value="${commentPaging.number}">-->
-<!--                                    <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>-->
-<!--                                </div>-->
-<!--                            </form>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                                            <!-- 답글 내용 -->
+                                            <div class="flex mb-2">
+                                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
+                                                    <p class="text-gray-800" th:text="${reply.content}"></p>
+                                                </div>
+                                            </div>
+                                            <div class="flex">
+                                                <div class="text-gray-500 text-xs mr-2"><p th:text="${#temporals.format(reply.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>
+                                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"
+                                                   th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"
+                                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                                                    삭제
+                                                </a>
+                                                <form hidden th:action="@{|/library/reply/${reply.id}|}" method="POST">
+                                                    <input type="hidden" name="_method" value="delete">
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 답글 등록 창-->
+                        <div class="form-floating comment_box">
+                            <form th:action="@{|/library/reply/create/${comment.id}?commentPage=${commentPaging.number}&so=${so}|}"
+                                  th:object="${replyForm}" method="post" onsubmit="replyForm__submit(this); return false;"
+                                  class="my-3">
+                                <div class="flex items-center justify-center">
+                                    <textarea class="border border-gray-300 resize-none p-4 mr-5" placeholder="답글을 남겨보세요"
+                                              th:field="*{content}" cols="90" rows="2"></textarea>
+                                    <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
+                                    <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
-<!--                &lt;!&ndash; 페이징처리 시작 &ndash;&gt;-->
-<!--                <div th:if="${!commentPaging.isEmpty()}" class="flex justify-center mt-2">-->
-<!--                    <div class="btn-group pagination">-->
-<!--                        <a class="page-link btn btn-sm btn-outline" th:disabled="${!commentPaging.hasPrevious} ? 'disabled'"-->
-<!--                           href="javascript:void(0)" th:data-page="${(commentPaging.number)-1}">-->
-<!--                            <span>이전</span>-->
-<!--                        </a>-->
-<!--                        <a th:text="${page}" class="page-link btn btn-sm btn-outline"-->
-<!--                           th:each="page: ${#numbers.sequence(0, (commentPaging.totalPages)-1)}"-->
-<!--                           th:if="${page >= (commentPaging.number)-5 and page <= commentPaging.number+5}"-->
-<!--                           href="javascript:void(0)"-->
-<!--                           th:data-page="${page}"></a>-->
-<!--                        <a class="page-link btn btn-sm btn-outline" th:disabled="${!commentPaging.hasNext} ? 'disabled'"-->
-<!--                           href="javascript:void(0)" th:data-page="${commentPaging.number+1}">-->
-<!--                            <span>다음</span>-->
-<!--                        </a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                &lt;!&ndash; 페이징처리 끝 &ndash;&gt;-->
+                <!-- 페이징처리 시작 -->
+                <div th:if="${!commentPaging.isEmpty()}" class="flex justify-center mt-2">
+                    <div class="btn-group pagination">
+                        <a class="page-link btn btn-sm btn-outline" th:disabled="${!commentPaging.hasPrevious} ? 'disabled'"
+                           href="javascript:void(0)" th:data-page="${(commentPaging.number)-1}">
+                            <span>이전</span>
+                        </a>
+                        <a th:text="${page}" class="page-link btn btn-sm btn-outline"
+                           th:each="page: ${#numbers.sequence(0, (commentPaging.totalPages)-1)}"
+                           th:if="${page >= (commentPaging.number)-5 and page <= commentPaging.number+5}"
+                           href="javascript:void(0)"
+                           th:data-page="${page}"></a>
+                        <a class="page-link btn btn-sm btn-outline" th:disabled="${!commentPaging.hasNext} ? 'disabled'"
+                           href="javascript:void(0)" th:data-page="${commentPaging.number+1}">
+                            <span>다음</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- 페이징처리 끝 -->
 
-<!--                &lt;!&ndash; 댓글 페이징처리 끝 &ndash;&gt;-->
-<!--                <form th:action="@{|/community/freedomPost/detail/${freedomPost.id}}" method="get" id="commentForm">-->
-<!--                    <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">-->
-<!--                    <input type="hidden" id="so" name="so" th:value="${so}">-->
-<!--                </form>-->
+                <!-- 댓글 페이징처리 끝 -->
+                <form th:action="@{|/library/soundDetail/${fileInfo.id}}" method="get" id="commentForm">
+                    <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">
+                    <input type="hidden" id="so" name="so" th:value="${so}">
+                </form>
 
-<!--                &lt;!&ndash; 댓글 입력칸 &ndash;&gt;-->
-<!--                <form th:action="@{|/comment/create/${freedomPost.id}?commentPage=${commentPaging.number}&so=${so}|}" th:object="${commentForm}" method="post" onsubmit="commentForm__submit(this); return false;">-->
-<!--                    <div class="flex items-center justify-center">-->
-<!--                        <textarea cols="95" rows="2" placeholder="댓글을 남겨보세요" class="border border-gray-300 resize-none p-4 mr-5" th:field="*{content}"></textarea>-->
-<!--                        <input type="hidden" name="commentPage" th:value="${commentPaging.number}">-->
-<!--                        <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>-->
-<!--                    </div>-->
-<!--                </form>-->
-<!--            </div>-->
+                <!-- 댓글 입력칸 -->
+                <form th:action="@{|/library/comment/create/${fileInfo.id}?commentPage=${commentPaging.number}&so=${so}|}" th:object="${commentForm}" method="post"
+                      onsubmit="commentForm__submit(this); return false;">
+                    <div class="flex items-center justify-center">
+                        <textarea cols="95" rows="2" placeholder="댓글을 남겨보세요" class="border border-gray-300 resize-none p-4 mr-5" th:field="*{content}"></textarea>
+                        <input type="hidden" name="commentPage" th:value="${commentPaging.number}">
+                        <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+
+    <script th:inline="javascript">
+        const so_elements = document.getElementsByClassName("so-link");
+        Array.from(so_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                document.getElementById('so').value = this.getAttribute('data-so');
+                document.getElementById('commentForm').submit();
+            });
+        });
+
+        const page_elements = document.getElementsByClassName("page-link");
+        Array.from(page_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                document.getElementById('commentPage').value = this.dataset.page;
+                document.getElementById('commentForm').submit();
+            });
+        });
+
+        if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
+            const commentId = window.location.hash.replace("#reply-", "");
+            $(function(){
+                document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
+            });
+        }
+
+
+        $(document).ready(function () {
+            $(".reply-link").on("click", function (e) {
+                e.preventDefault();
+                $(this).closest(".border-b").find(".comment-reply").slideToggle();
+            });
+
+            const urlParams = new URL(location.href).searchParams;
+            let currentPage = parseInt(urlParams.get('commentPage'));
+            let currentSort = urlParams.get('so');
+            const pageButtons = document.getElementsByClassName("page-link");
+
+            // 페이지 로드 시 현재 정렬 기준에 font-bold 적용
+            if (currentSort === "recent") {
+                document.getElementById('so_btn1').classList.remove('font-bold');
+                document.getElementById('so_btn2').classList.add('font-bold');
+            } else {
+                document.getElementById('so_btn1').classList.add('font-bold');
+                document.getElementById('so_btn2').classList.remove('font-bold');
+            }
+
+            for (let i = 0; i < pageButtons.length; i++) {
+                const pageButton = pageButtons[i];
+                const pageNumber = parseInt(pageButton.dataset.page);
+                if (isNaN(currentPage)) {
+                    currentPage = 0;
+                }
+                if (pageNumber === currentPage) {           // 지금 현재 페이지
+                    pageButton.classList.remove("btn-outline")
+                    pageButton.classList.add("btn-neutral");
+                } else {
+                    pageButton.classList.add("btn-outline")
+                    pageButton.classList.remove("btn-neutral");
+                }
+            }
+
+            // 버튼 클릭 이벤트 핸들러 등록
+            $(document).on('click', '#likeBtn', function () {
+                console.log("click")
+                likeBtnClick();
+            });
+        });
+    </script>
 
     <script>
         const audio = document.getElementById('audio');
@@ -391,13 +460,6 @@
             return `${minutes}:${    seconds < 10 ? '0' : ''
             }${seconds}`;
         }
-
-        $(document).ready(function () {
-            $(".reply-link").on("click", function (e) {
-                e.preventDefault();
-                $(this).closest(".border-b").find(".comment-reply").slideToggle();
-            });
-        });
 
         window.onload = function () {
             var textContent = document.getElementById("text-content");

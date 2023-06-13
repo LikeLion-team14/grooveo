@@ -1,6 +1,5 @@
 package com.kl.grooveo.boundedContext.library.service;
 
-import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;

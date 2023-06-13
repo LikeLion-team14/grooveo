@@ -1,11 +1,17 @@
 package com.kl.grooveo.boundedContext.library.controller;
 
 import com.kl.grooveo.base.rq.Rq;
-import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
-import com.kl.grooveo.boundedContext.form.FreedomPostForm;
+import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
+import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
+import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
+import com.kl.grooveo.boundedContext.form.CommentForm;
+import com.kl.grooveo.boundedContext.form.ReplyForm;
 import com.kl.grooveo.boundedContext.form.SoundTrackForm;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class SoundTrackController {
     private final SoundTrackService soundTrackService;
+    private final SoundPostCommentService soundPostCommentService;
     private final Rq rq;
 
     @PreAuthorize("isAuthenticated()")
@@ -34,6 +41,23 @@ public class SoundTrackController {
         model.addAttribute("kw", kw);
 
         return "usr/library/soundTrackList";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(value = "/soundDetail/{id}")
+    public String showMoreDetail(Model model, @PathVariable("id") Long id,
+                                 @RequestParam(value = "so", defaultValue = "create") String so,
+                                 @RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm, ReplyForm replyForm,
+                                 HttpServletRequest request, HttpServletResponse response) {
+        FileInfo fileInfo = this.soundTrackService.getSoundTrack(id);
+
+        Page<SoundPostComment> commentPaging = this.soundPostCommentService.getList(fileInfo, commentPage, so);
+
+        model.addAttribute("commentPaging", commentPaging);
+        model.addAttribute("fileInfo", fileInfo);
+        model.addAttribute("so", so);
+
+        return "usr/library/soundDetail";
     }
 
     @PreAuthorize("isAuthenticated()")

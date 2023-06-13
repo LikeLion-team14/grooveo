@@ -1,5 +1,6 @@
 package com.kl.grooveo.boundedContext.library.entity;
 
+import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,6 +30,9 @@ public class FileInfo {
 
     @Column(columnDefinition = "LONGTEXT")
     private String description;
+
+    @OneToMany(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
+    private List<SoundPostComment> commentList = new ArrayList<>();
 
     private String albumCoverUrl;
     private String soundUrl;

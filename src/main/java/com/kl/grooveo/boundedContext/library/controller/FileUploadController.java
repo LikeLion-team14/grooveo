@@ -82,15 +82,4 @@ public class FileUploadController {
             return "redirect:/library/soundUpload";
         }
     }
-
-    @GetMapping("/soundDetail/{id}")
-    public String showFileDetail(@PathVariable Long id, Model model) {
-        FileInfo fileInfo = fileInfoService.findById(id);
-        if (fileInfo == null) {
-            return "redirect:/library/list";
-        }
-        model.addAttribute("fileInfo", fileInfo);
-        return "usr/library/soundDetail";
-    }
-
 }
