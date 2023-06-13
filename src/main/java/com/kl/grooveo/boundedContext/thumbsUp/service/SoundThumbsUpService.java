@@ -1,5 +1,7 @@
 package com.kl.grooveo.boundedContext.thumbsUp.service;
 
+import com.kl.grooveo.base.event.EventAfterPostLike;
+import com.kl.grooveo.base.event.EventAfterSoundLike;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -34,7 +36,7 @@ public class SoundThumbsUpService {
         soundThumbsUp.setMember(member.get());
         soundThumbsUpRepository.save(soundThumbsUp);
 
-        // publisher.publishEvent(new EventAfterPostLike(this, soundThumbsUp));
+        publisher.publishEvent(new EventAfterSoundLike(this, soundThumbsUp));
 
         if (!soundThumbsUpSummaryRepository.existsByFileInfo(fileInfo)) {
             SoundThumbsUp_summary soundThumbsUpSummary= new SoundThumbsUp_summary();
