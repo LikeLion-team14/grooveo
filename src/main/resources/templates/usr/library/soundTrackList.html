@@ -238,6 +238,21 @@
     </script>
 
     <script>
+        // 페이지 로드 시 실행되는 함수
+        window.addEventListener('load', function() {
+            var currentUrl = window.location.href;
+            var topRadio = document.getElementById('top');
+            var latestRadio = document.getElementById('latest');
+
+            if (currentUrl.includes('/library/list/1')) {
+                topRadio.checked = true;
+                latestRadio.checked = false;
+            } else {
+                topRadio.checked = false;
+                latestRadio.checked = true;
+            }
+        });
+
         let currentButton = null; // 전역 변수로 버튼을 저장할 변수를 선언합니다.
 
         // 타임바 업데이트 함수
