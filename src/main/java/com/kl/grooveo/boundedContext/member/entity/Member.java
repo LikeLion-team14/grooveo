@@ -85,4 +85,8 @@ public class Member extends BaseEntity {
     public void updateProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
+
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
+    @Builder.Default
+    private List<FileInfo> fileInfos = new ArrayList<>();
 }

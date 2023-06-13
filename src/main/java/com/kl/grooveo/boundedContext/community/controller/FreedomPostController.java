@@ -33,6 +33,7 @@ public class FreedomPostController {
     static int boardTypeCode;
 
     @GetMapping("/{boardType}/list")
+    @PreAuthorize("isAuthenticated()")
     public String showList(Model model, @PathVariable("boardType") Integer boardType, @RequestParam(value = "page", defaultValue = "0") int page,
                            @RequestParam(value = "kw", defaultValue = "") String kw, CategoryForm categoryForm) {
         Page<FreedomPost> paging = this.freedomPostService.getList(boardType, categoryForm.options, kw, page);

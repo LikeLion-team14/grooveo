@@ -68,7 +68,7 @@ public class FreedomPost {
 
     public String getAfterPost() {
         long diff = ChronoUnit.SECONDS.between(getCreateDate(), LocalDateTime.now());
-        if (diff < 60) return getCreateDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        if (diff < 60) return "방금 전";
         else if (diff < 3600) {
             return (diff / 60) + "분 전";
         } else if (diff < 86400) {

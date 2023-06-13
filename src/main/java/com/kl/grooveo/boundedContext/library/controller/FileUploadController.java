@@ -3,7 +3,6 @@ package com.kl.grooveo.boundedContext.library.controller;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.kl.grooveo.boundedContext.form.FreedomPostForm;
 import com.kl.grooveo.boundedContext.form.SoundTrackForm;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.FileInfoService;
@@ -29,6 +28,7 @@ public class FileUploadController {
 
     private final AmazonS3 amazonS3Client;
     private final FileInfoService fileInfoService;
+    private final Rq rq;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
