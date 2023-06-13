@@ -3,14 +3,19 @@ package com.kl.grooveo.boundedContext.library.controller;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.form.CommentForm;
+import com.kl.grooveo.boundedContext.form.FileInfoForm;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.FileInfoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +30,7 @@ public class FileUploadController {
 
     private final AmazonS3 amazonS3Client;
     private final FileInfoService fileInfoService;
+    private final Rq rq;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -89,8 +95,9 @@ public class FileUploadController {
         }
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/soundDetail/{id}")
-    public String showFileDetail(@PathVariable Long id, Model model) {
+    public String showFileDetail(Model model, @PathVariable Long id, CommentForm commentForm) {
         FileInfo fileInfo = fileInfoService.findById(id);
         if (fileInfo == null) {
             return "redirect:/library/library";
@@ -98,5 +105,25 @@ public class FileUploadController {
         model.addAttribute("fileInfo", fileInfo);
         return "usr/library/soundDetail";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") Long id) {
+        fileInfoService.delete(id);
+        return "usr/library/library";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify/{id}")
+    public String fileInfoModify(@Valid FileInfoForm fileInfoForm, BindingResult bindingResult,
+                                 @PathVariable("id") Long id) {
+
+        FileInfo fileInfo = this.fileInfoService.getFileInfo(id);
+
+
+        this.fileInfoService.modify(fileInfo, fileInfoForm.getDescription());
+        return String.format("redirect:/library/soundDetail/%s", id);
+    }
+
 
 }
