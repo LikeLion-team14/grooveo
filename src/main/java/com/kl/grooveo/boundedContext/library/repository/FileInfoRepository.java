@@ -19,7 +19,7 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     @Modifying
     @Query("update FileInfo fi set fi.view = fi.view + 1 where fi.id = :id")
     int updateView(@Param("id") Long id);
-  
+
     Page<FileInfo> findAllByArtistId(Long username, Pageable pageable);
 
     List<FileInfo> findTop10ByOrderByCreateDateDesc();

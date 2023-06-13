@@ -30,7 +30,7 @@ public class FileInfoService {
         Member actor = fileInfo.getArtist();
         List<Follow> followerList = actor.getFollowingPeople();
 
-        for(Follow follower : followerList) {
+        for (Follow follower : followerList) {
             publisher.publishEvent(new EventAfterUpload(this, follower));
             System.out.println(follower.getFollower().getUsername());
         }

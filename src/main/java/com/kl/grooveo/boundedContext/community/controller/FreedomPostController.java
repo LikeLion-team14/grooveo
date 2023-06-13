@@ -136,7 +136,7 @@ public class FreedomPostController {
     public String freedomPostModify(FreedomPostForm freedomPostForm, @PathVariable("id") Long id) {
         FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
 
-        if(!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
+        if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
 

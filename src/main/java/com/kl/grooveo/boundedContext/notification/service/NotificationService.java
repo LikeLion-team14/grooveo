@@ -1,9 +1,6 @@
 package com.kl.grooveo.boundedContext.notification.service;
 
-import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.base.rq.Rq;
-import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
-import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.notification.entity.Notification;
@@ -11,7 +8,6 @@ import com.kl.grooveo.boundedContext.notification.repository.NotificationReposit
 import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -139,8 +135,7 @@ public class NotificationService {
             notificationList.stream()
                     .filter(notification -> notification.getReadDate() != null)
                     .forEach(notificationRepository::delete);
-        }
-        else if (deleteType == 2) {   // 알림 전체 삭제
+        } else if (deleteType == 2) {   // 알림 전체 삭제
             notificationRepository.deleteAll(notificationList);
         }
 
