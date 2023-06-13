@@ -1,8 +1,12 @@
 package com.kl.grooveo.boundedContext.library.service;
 
-import com.kl.grooveo.base.exception.DataNotFoundException;
+import com.kl.grooveo.base.event.EventAfterUpload;
+import com.kl.grooveo.boundedContext.follow.entity.Follow;
+import com.kl.grooveo.boundedContext.follow.service.FollowService;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
+import com.kl.grooveo.boundedContext.member.entity.Member;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,12 +17,24 @@ import java.util.Optional;
 public class FileInfoService {
 
     private final FileInfoRepository fileInfoRepository;
+    private final ApplicationEventPublisher publisher;
+    private final FollowService followService;
 
-    public FileInfoService(FileInfoRepository fileInfoRepository) {
+    public FileInfoService(FileInfoRepository fileInfoRepository, ApplicationEventPublisher publisher, FollowService followService) {
         this.fileInfoRepository = fileInfoRepository;
+        this.publisher = publisher;
+        this.followService = followService;
     }
 
     public FileInfo saveFileInfo(FileInfo fileInfo) {
+        Member actor = fileInfo.getArtist();
+        List<Follow> followerList = actor.getFollowingPeople();
+
+        for(Follow follower : followerList) {
+            publisher.publishEvent(new EventAfterUpload(this, follower));
+            System.out.println(follower.getFollower().getUsername());
+        }
+
         return fileInfoRepository.save(fileInfo);
     }
 

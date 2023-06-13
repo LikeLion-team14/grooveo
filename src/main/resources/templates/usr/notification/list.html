@@ -70,6 +70,10 @@
                                     <span class="badge badge-primary"
                                           th:text="${notification.fromMember.username}"></span> 님이 당신을 언팔로우 했습니다.
                                 </div>
+                                <div th:if="${notification.typeCode.equals('upload')}">
+                                    <span class="badge badge-primary"
+                                          th:text="${notification.fromMember.username}"></span> 님이 새로운 음원을 업로드 했습니다.
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -41,4 +41,10 @@ public class NotificationEventListener {
     public void listen(EventAfterSoundLike event) {
         notificationService.whenAfterSoundLike(event.getSoundThumbsUp());
     }
+
+    @EventListener
+    @Transactional
+    public void listen(EventAfterUpload event) {
+        notificationService.whenAfterUpload(event.getFollow());
+    }
 }

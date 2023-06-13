@@ -81,11 +81,25 @@ public class NotificationService {
 
     @Transactional
     public void whenAfterUnFollow(Follow follow) {
+
         Notification notification = Notification
                 .builder()
                 .fromMember(follow.getFollower())
                 .toMember(follow.getFollowing())
                 .typeCode("unFollow")
+                .build();
+
+        notificationRepository.save(notification);
+    }
+
+    @Transactional
+    public void whenAfterUpload(Follow follow) {
+
+        Notification notification = Notification
+                .builder()
+                .fromMember(follow.getFollowing())
+                .toMember(follow.getFollower())
+                .typeCode("upload")
                 .build();
 
         notificationRepository.save(notification);
@@ -132,4 +146,5 @@ public class NotificationService {
 
         return true;
     }
+
 }
