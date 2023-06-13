@@ -13,7 +13,7 @@
 
 <body>
 <main layout:fragment="main">
-    <div class="flex flex-col align-center mx-auto w-4/6 mt-3 mb-28">
+    <div class="flex flex-col align-center mx-auto max-w-7xl w-full mt-3 mb-28">
         <form th:action method="POST" class="flex flex-col gap-6" enctype="multipart/form-data">
             <div class="flex justify-center">
                 <div class="posts-box">
@@ -78,8 +78,9 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a id="subject"
-                                           th:text="${fileInfo.title}"></a>
+                                        <a id="subject" th:href="@{|/library/soundDetail/${fileInfo.id}|}"
+                                           th:text="${fileInfo.title}"
+                                           class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"></a>
                                     </td>
                                     <td>
                                         <button id="author" th:text="${fileInfo.artist.username}"></button>

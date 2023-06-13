@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Configuration
 @Profile({"dev"})
 public class NotProd {
@@ -60,6 +62,7 @@ public class NotProd {
                             .title("제목" + i)
                             .artist(memberUser1)
                             .albumCoverUrl("https://grooveobucket.s3.ap-northeast-2.amazonaws.com/albumCover/free-icon-user-5264565.png")
+                            .createDate(LocalDateTime.now())
                             .description("설명" + i)
                             .soundUrl("https://grooveobucket.s3.ap-northeast-2.amazonaws.com/sound/testSound.m4a")
                             .build();
@@ -71,6 +74,7 @@ public class NotProd {
                         .artist(memberUser3)
                         .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
                         .description("Marcel Pequel")
+                        .createDate(LocalDateTime.now())
                         .soundUrl("http://cdn.atrera.com/audio/Marcel_Pequel_-_05_-_Five.mp3")
                         .build();
                 fileInfoService.saveFileInfo(fileInfo);
@@ -79,6 +83,7 @@ public class NotProd {
                         .artist(memberUser3)
                         .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
                         .description("Marcel Pequel")
+                        .createDate(LocalDateTime.now())
                         .soundUrl("http://cdn.atrera.com/audio/Marcel_Pequel_-_06_-_Six.mp3")
                         .build();
                 fileInfoService.saveFileInfo(fileInfo2);
@@ -87,6 +92,7 @@ public class NotProd {
                         .artist(memberUser3)
                         .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
                         .description("Marcel Pequel")
+                        .createDate(LocalDateTime.now())
                         .soundUrl("http://cdn.atrera.com/audio/Marcel_Pequel_-_07_-_Seven.mp3")
                         .build();
                 fileInfoService.saveFileInfo(fileInfo3);

@@ -4,74 +4,412 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title></title>
+
     <style>
-        img {
-            max-width: 10%;
-            height: auto;
+        /* 커스텀 */
+        html {
+            background-color: white;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        input[type="submit"] {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="submit"]:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 200px; /* 슬라이더 길이를 250px로 수정 */
+            height: 7px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 1;
+            transition: opacity 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: none;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: none;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .slider::-moz-range-progress {
+            background-color: black;
+        }
+
+        .text-content {
+            max-height: 600px;
+            overflow: hidden;
+        }
+
+        .fade-out {
+            height: 20px;
+            background-image: linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 1)
+            );
+            position: relative;
+            bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .button-container {
+            display: none;
+        }
+
+        .button-container.show {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .button-container.show .read-more {
+            display: inline-block;
+        }
+
+        .button-container.show .read-less {
+            display: none;
+        }
+
+        .fade-out.show {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 <main layout:fragment="main">
-<h1>음원 상세</h1>
-<p>음원명: <span th:text="${fileInfo.title}"></span></p>
-<p>설명: <span th:text="${fileInfo.description}"></span></p>
-<img th:src="${fileInfo.albumCoverUrl}" alt="Album Cover">
-<audio controls>
-    <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">
-</audio>
+<!--<h1>음원 상세</h1>-->
+<!--<p>음원명: <span th:text="${fileInfo.title}"></span></p>-->
+<!--<p>설명: <span th:text="${fileInfo.description}"></span></p>-->
+<!--<img th:src="${fileInfo.albumCoverUrl}" alt="Album Cover">-->
+<!--<audio controls>-->
+<!--    <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">-->
+<!--</audio>-->
 
-    <div class="flex flex-col align-center mx-auto w-4/6">
+    <div class="flex justify-center mx-auto max-w-7xl w-full my-3">
+        <div class="posts-box mt-8 w-full mx-10">
+            <div class="flex justify-center" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
+                <span class="text-3xl font-bold" th:text="${fileInfo.title}"></span>
+            </div>
 
-        <span class="text-xl font-bold">댓글 쓰기</span>
-        <!-- 댓글 작성 -->
-        <form th:action="@{|/answer/create/${fileInfo.id}|}" th:object="${commentForm}" method="post">
-            <textarea class="textarea textarea-primary w-full max-w-ls form-control" placeholder="content" th:field="*{content}" rows="10"></textarea>
-            <input type="submit" value="댓글 등록">
-        </form>
+            <!-- 작성자 부분 -->
+            <div class="flex mt-7 justify-between border-b border-gray-400">
+                <div class="flex justify-start items-center">
+                    <img th:src="${fileInfo.artist.getProfileImageUrl()}" alt="" class="w-11 h-11 object-cover m-3 rounded-full border-2 border-gray-100">
+                    <div>
+                        <div class="flex items-center mb-1">
+                            <span class="font-bold" th:text="${fileInfo.getArtist().username}"></span>
+                            <button class="bg-black bg-opacity-10 h-7 ml-2 p-1 w-16 text-xs flex items-center justify-center hover:bg-opacity-30">
+                                Follow
+                            </button>
+                        </div>
 
-        <!-- 댓글의 갯수 표시 -->
-        <h5 th:text="|${#lists.size(fileInfo.commentList)}개의 댓글이 있습니다.|"></h5>
-        <div class="card w-full bg-base-100 shadow-xl my-2" th:each="comment : ${fileInfo.commentList}">
-            <div class="card-body">
-                <p th:text="${comment.content}"></p>
-                <div class="card-actions justify-end">
-                    <a class="btn btn-sm btn-outline"
-                       href="javascript:void(0);"
-                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
-                        삭제</a>
-                    <form hidden th:action="@{|/answer/${comment.id}|}" method="post">
-                        <input type="hidden" name="_method" value="delete">
-                    </form>
+                        <div class="flex">
+                            <div class="text-gray-500 text-xs mr-2"><span th:text="${#temporals.format(fileInfo.createDate, 'yyyy.MM.dd HH:mm')}"></span></div>
+                            <div class="text-xs mr-1">조회수</div>
+                            <div class="text-xs"><span id="viewCnt"></span></div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="flex items-center">
+                    <a id="likeBtn" style="cursor: pointer" class="flex items-center mr-2">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>
+                    <span id="likeCnt" class="text-sm"></span>
                 </div>
             </div>
+
+            <!-- 뮤직 플레이어 및 게시글 -->
+            <div class="flex">
+
+                <!-- 플레이어 -->
+                <div class="mt-4 mr-5">
+                    <!-- 플레이어 부분 -->
+                    <div class="shadow-xl flex flex-col items-center border-2" style="width:384px; height:600px;">
+                        <div class="mb-2">
+                            <img src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/IU-album.jpg" class="w-96 h-96" />
+                        </div>
+                        <div class="flex flex-col justify-center items-center w-full">
+                            <div class="flex flex-col text-center mt-4">
+                                <span class="text-2xl font-bold" th:text="${fileInfo.title}"></span>
+                                <span class="text-lg mt-2 font-bold" th:text="${fileInfo.getArtist().username}"></span>
+                            </div>
+                            <div class="flex items-center mt-4 mx-2 justify-center">
+                                <span id="currentTime" class="text-sm mr-2">0:00</span>
+                                <input id="songSlider" type="range" value="0" class="mx-3 slider" style="flex-grow: 1;">
+                                <span id="totalTime" class="text-sm ml-2">0:00</span>
+                            </div>
+                            <div class="mt-1">
+                                <button id="playPauseButton" class="flex items-center justify-center hover:text-gray-300">
+                                    <i class="fas fa-play text-2xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 오디오 올린 음원-->
+                    <audio id="audio" style="display:none;" autoplay>
+                        <source src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/Spring On by jurunde .mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <!-- 게시글 내용 -->
+                <div class="content mt-4">
+                    <div class="text-content" id="text-content">
+                        <p th:text="${fileInfo.description}"></p>
+                    </div>
+                    <div class="fade-out" id="fade-out"></div>
+                    <div class="button-container">
+                        <button class="read-more text-xs text-gray-500 hover:underline" onclick="readMore()">더보기</button>
+                        <button class="read-less text-xs text-gray-500 hover:underline" onclick="readLess()">줄이기</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 수정/삭제 버튼 -->
+            <div class="flex justify-end mt-6">
+                <button class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30"
+                        th:onclick="|location.href='@{/library/soundTrack/modify/} + ${fileInfo.id}'|"
+                        th:if="${fileInfo.artist != null and #authentication.getPrincipal().getUsername() == fileInfo.artist.username}">
+                    <span class="text-center">수정</span>
+                </button>
+                <button class="bg-black bg-opacity-10 h-7 p-4 w-20 ml-4 mr-2 text-sm flex items-center justify-center hover:bg-opacity-30"
+                        th:if="${fileInfo.artist != null and #authentication.getPrincipal().getUsername() == fileInfo.artist.username}"
+                        onclick="if(confirm('정말로 삭제하시겠습니까?')) $(this).next().submit();">
+                    <span class="text-center">삭제</span>
+                </button>
+                <form hidden th:action="@{|/library/soundTrack/${fileInfo.id}|}" method="POST">
+                    <input type="hidden" name="_method" value="delete">
+                </form>
+            </div>
+
+<!--            <div class="mt-5">-->
+<!--                &lt;!&ndash; 코멘트 제목 &ndash;&gt;-->
+<!--                <div class="border-b border-gray-400 flex py-2 items-center">-->
+<!--                    <div class="text-gray-600 ml-2">-->
+<!--                        COMMENT-->
+<!--                    </div>-->
+<!--                    <div class="text-gray-600 ml-3"><span th:text="${#lists.size(freedomPost.commentList)}"></span></div>-->
+<!--                    <div class="flex-grow"></div>-->
+<!--                    <div class="flex-shrink-0">-->
+<!--                        <a id="so_btn1" class="so-link hover:underline mr-3 text-xs" style="cursor: pointer"-->
+<!--                           th:data-so="create">등록순-->
+<!--                        </a>-->
+<!--                        <a id="so_btn2" class="so-link hover:underline text-xs" style="cursor: pointer"-->
+<!--                           th:data-so="recent">최신순-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; 댓글 카드 1개 (1) &ndash;&gt;-->
+<!--                <div class="m-3 border-b border-gray-300" th:each="comment : ${commentPaging}">-->
+<!--                    <a th:id="|comment-${comment.id}|"></a>-->
+<!--                    &lt;!&ndash; 댓글 리스트 &ndash;&gt;-->
+<!--                    <div class="flex my-3 w-full">-->
+<!--                        <div class="w-11 h-full mr-1">-->
+<!--                            <img th:src="${comment.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">-->
+<!--                        </div>-->
+<!--                        <div class="w-full">-->
+<!--                            <div class="flex items-center mb-1">-->
+<!--                                <span class="font-bold" th:text="${comment.getAuthor().username}"></span>-->
+<!--                            </div>-->
+
+<!--                            &lt;!&ndash; 댓글 내용 &ndash;&gt;-->
+<!--                            <div class="flex mb-2">-->
+<!--                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">-->
+<!--                                    <p class="text-gray-800" th:text="${comment.content}"></p>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="flex">-->
+<!--                                <div class="text-gray-500 text-xs mr-2"><p th:text="${#temporals.format(comment.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>-->
+<!--                                <a href="javascript:void(0);" class="comment-answer reply-link text-xs mr-1 hover:underline" th:data-num="${comment.id}">-->
+<!--                                    답글 쓰기-->
+<!--                                </a>-->
+<!--                                <p class="text-red-500 text-xs mr-2" th:text="|[${comment.replyList.size()}]|"></p>-->
+<!--                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"-->
+<!--                                   th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"-->
+<!--                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">-->
+<!--                                    삭제-->
+<!--                                </a>-->
+<!--                                <form hidden th:action="@{|/comment/${comment.id}|}" method="POST">-->
+<!--                                    <input type="hidden" name="_method" value="delete">-->
+<!--                                </form>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <div class="comment-reply flex ml-11 justify-center hidden" th:id="${comment.id}"-->
+<!--                         th:classappend="|cm_${comment.getId()}|">-->
+<!--                        <a th:id="|comment-${comment.id}|"></a>-->
+
+<!--                        &lt;!&ndash; 답글 창&ndash;&gt;-->
+<!--                        <div class="list-group">-->
+<!--                            <div th:each="i: ${#numbers.sequence(0, comment.getReplyList().size()-1, 1)}" class="comment-item list-group-item" th:with="reply=${comment.getReplyList().get(i)}">-->
+<!--                                <a th:id="|reply-${comment.id}|"></a>-->
+<!--                                <div>-->
+<!--                                    &lt;!&ndash; 답글 리스트 &ndash;&gt;-->
+<!--                                    <div class="flex my-3 w-full">-->
+<!--                                        <div class="w-11 h-full mr-1">-->
+<!--                                            <img th:src="${reply.getAuthor().getProfileImageUrl()}" alt="" class="w-9 h-9 object-cover rounded-full border-2">-->
+<!--                                        </div>-->
+<!--                                        <div class="w-full">-->
+<!--                                            <div class="flex items-center mb-1">-->
+<!--                                                <span class="font-bold" th:text="${reply.getAuthor().username}"></span>-->
+<!--                                            </div>-->
+
+<!--                                            &lt;!&ndash; 답글 내용 &ndash;&gt;-->
+<!--                                            <div class="flex mb-2">-->
+<!--                                                <div style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">-->
+<!--                                                    <p class="text-gray-800" th:text="${reply.content}"></p>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="flex">-->
+<!--                                                <div class="text-gray-500 text-xs mr-2"><p th:text="${#temporals.format(reply.createDate, 'yyyy.MM.dd HH:mm')}"></p></div>-->
+<!--                                                <a href="javascript:void(0);" class="text-xs mr-1 hover:underline"-->
+<!--                                                   th:if="${reply.author != null and #authentication.getPrincipal().getUsername() == reply.author.username}"-->
+<!--                                                   onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">-->
+<!--                                                    삭제-->
+<!--                                                </a>-->
+<!--                                                <form hidden th:action="@{|/reply/${reply.id}|}" method="POST">-->
+<!--                                                    <input type="hidden" name="_method" value="delete">-->
+<!--                                                </form>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 답글 등록 창&ndash;&gt;-->
+<!--                        <div class="form-floating comment_box">-->
+<!--                            <form th:action="@{|/reply/create/${comment.id}?commentPage=${commentPaging.number}&so=${so}|}"-->
+<!--                                  th:object="${replyForm}" method="post" onsubmit="replyForm__submit(this); return false;"-->
+<!--                                  class="my-3">-->
+<!--                                <div class="flex items-center justify-center">-->
+<!--                                    <textarea class="border border-gray-300 resize-none p-4 mr-5" placeholder="답글을 남겨보세요"-->
+<!--                                              th:field="*{content}" cols="90" rows="2"></textarea>-->
+<!--                                    <input type="hidden" name="commentPage" th:value="${commentPaging.number}">-->
+<!--                                    <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; 페이징처리 시작 &ndash;&gt;-->
+<!--                <div th:if="${!commentPaging.isEmpty()}" class="flex justify-center mt-2">-->
+<!--                    <div class="btn-group pagination">-->
+<!--                        <a class="page-link btn btn-sm btn-outline" th:disabled="${!commentPaging.hasPrevious} ? 'disabled'"-->
+<!--                           href="javascript:void(0)" th:data-page="${(commentPaging.number)-1}">-->
+<!--                            <span>이전</span>-->
+<!--                        </a>-->
+<!--                        <a th:text="${page}" class="page-link btn btn-sm btn-outline"-->
+<!--                           th:each="page: ${#numbers.sequence(0, (commentPaging.totalPages)-1)}"-->
+<!--                           th:if="${page >= (commentPaging.number)-5 and page <= commentPaging.number+5}"-->
+<!--                           href="javascript:void(0)"-->
+<!--                           th:data-page="${page}"></a>-->
+<!--                        <a class="page-link btn btn-sm btn-outline" th:disabled="${!commentPaging.hasNext} ? 'disabled'"-->
+<!--                           href="javascript:void(0)" th:data-page="${commentPaging.number+1}">-->
+<!--                            <span>다음</span>-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; 페이징처리 끝 &ndash;&gt;-->
+
+<!--                &lt;!&ndash; 댓글 페이징처리 끝 &ndash;&gt;-->
+<!--                <form th:action="@{|/community/freedomPost/detail/${freedomPost.id}}" method="get" id="commentForm">-->
+<!--                    <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">-->
+<!--                    <input type="hidden" id="so" name="so" th:value="${so}">-->
+<!--                </form>-->
+
+<!--                &lt;!&ndash; 댓글 입력칸 &ndash;&gt;-->
+<!--                <form th:action="@{|/comment/create/${freedomPost.id}?commentPage=${commentPaging.number}&so=${so}|}" th:object="${commentForm}" method="post" onsubmit="commentForm__submit(this); return false;">-->
+<!--                    <div class="flex items-center justify-center">-->
+<!--                        <textarea cols="95" rows="2" placeholder="댓글을 남겨보세요" class="border border-gray-300 resize-none p-4 mr-5" th:field="*{content}"></textarea>-->
+<!--                        <input type="hidden" name="commentPage" th:value="${commentPaging.number}">-->
+<!--                        <button type="submit" value="등록" class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30">등록</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+        </div>
     </div>
 
-        <script layout:fragment="script" type='text/javascript'>
-
-            const comment_answer_elements = document.getElementsByClassName("comment-answer");
-            const block_answer = document.getElementsByClassName("comment-answer-block");
-            Array.from(comment_answer_elements).forEach(function (element) {
-                element.addEventListener('click', function () {
-                    Array.from(block_answer).forEach((x) => {
-                        if (x.id === this.dataset.num) {
-                            if (x.style.display === "none") {
-                                x.style.display = "block";
-                            } else
-                                x.style.display = "none";
-                        }
-                    })
-                });
+    <script>
+        $(document).ready(function () {
+            $(".reply-link").on("click", function (e) {
+                e.preventDefault();
+                $(this).closest(".border-b").find(".comment-reply").slideToggle();
             });
+        });
 
-            if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
-                const commentId = window.location.hash.replace("#reply-", "");
-                $(function(){
-                    document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
-                });
+        window.onload = function () {
+            var textContent = document.getElementById("text-content");
+            var fadeOut = document.getElementById("fade-out");
+            var buttonContainer = document.querySelector(".button-container");
+            var readMoreButton = document.querySelector(".read-more");
+            var readLessButton = document.querySelector(".read-less");
+
+            if (textContent.scrollHeight > 600) {
+                buttonContainer.classList.add("show");
+                readMoreButton.style.display = "inline-block";
+                readLessButton.style.display = "none";
+                fadeOut.classList.add("show");
             }
+        };
 
-        </script>
+        function readMore() {
+            var textContent = document.getElementById("text-content");
+            var fadeOut = document.getElementById("fade-out");
+            var buttonContainer = document.querySelector(".button-container");
+            var readMoreButton = document.querySelector(".read-more");
+            var readLessButton = document.querySelector(".read-less");
+
+            textContent.style.maxHeight = "none";
+            buttonContainer.classList.add("show");
+            readMoreButton.style.display = "none";
+            readLessButton.style.display = "inline-block";
+            fadeOut.classList.remove("show");
+        }
+
+        function readLess() {
+            var textContent = document.getElementById("text-content");
+            var fadeOut = document.getElementById("fade-out");
+            var buttonContainer = document.querySelector(".button-container");
+            var readMoreButton = document.querySelector(".read-more");
+            var readLessButton = document.querySelector(".read-less");
+
+            textContent.style.maxHeight = "600px";
+            buttonContainer.classList.add("show");
+            readMoreButton.style.display = "inline-block";
+            readLessButton.style.display = "none";
+            fadeOut.classList.add("show");
+        }
+    </script>
 
 </main>
 

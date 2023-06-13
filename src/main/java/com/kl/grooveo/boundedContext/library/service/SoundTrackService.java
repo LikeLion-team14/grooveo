@@ -1,5 +1,6 @@
 package com.kl.grooveo.boundedContext.library.service;
 
+import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -12,8 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -34,11 +37,28 @@ public class SoundTrackService {
             }
         };
     }
+
     public Page<FileInfo> getList(String kw, int page) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.asc("createDate"));
+        sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         Specification<FileInfo> spec = search(kw);
         return this.fileInfoRepository.findAll(spec, pageable);
+    }
+
+    public FileInfo getSoundTrack(Long id) {
+        Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(id);
+        return optionalFileInfo.orElse(null);
+    }
+
+    public void delete(FileInfo fileInfo) {
+        fileInfoRepository.delete(fileInfo);
+    }
+
+    public void modify(FileInfo fileInfo, String title, String description) {
+        fileInfo.setTitle(title);
+        fileInfo.setModifyDate(LocalDateTime.now());
+        fileInfo.setDescription(description);
+        this.fileInfoRepository.save(fileInfo);
     }
 }

@@ -87,7 +87,7 @@ public class FileUploadController {
     public String showFileDetail(@PathVariable Long id, Model model) {
         FileInfo fileInfo = fileInfoService.findById(id);
         if (fileInfo == null) {
-            return "redirect:/library/library";
+            return "redirect:/library/list";
         }
         model.addAttribute("fileInfo", fileInfo);
         return "usr/library/soundDetail";

@@ -30,4 +30,5 @@ public class FileInfo {
     private String soundUrl;
 
     private LocalDateTime createDate;
+    private LocalDateTime modifyDate;
 }
