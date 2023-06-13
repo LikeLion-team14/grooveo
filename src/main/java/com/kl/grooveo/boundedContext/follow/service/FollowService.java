@@ -1,9 +1,7 @@
 package com.kl.grooveo.boundedContext.follow.service;
 
-import com.kl.grooveo.base.event.EventAfterComment;
 import com.kl.grooveo.base.event.EventAfterFollow;
 import com.kl.grooveo.base.event.EventAfterUnFollow;
-import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.base.rsData.RsData;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.follow.repository.FollowRepository;

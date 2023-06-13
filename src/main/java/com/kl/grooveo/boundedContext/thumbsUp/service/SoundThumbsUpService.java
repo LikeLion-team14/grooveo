@@ -1,6 +1,5 @@
 package com.kl.grooveo.boundedContext.thumbsUp.service;
 
-import com.kl.grooveo.base.event.EventAfterPostLike;
 import com.kl.grooveo.base.event.EventAfterSoundLike;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
@@ -27,7 +26,7 @@ public class SoundThumbsUpService {
 
     public void likePost(Long postId, Long memberId) {
         FileInfo fileInfo = soundTrackService.getSoundTrack(postId);
-        Optional<Member> member =  memberService.findById(memberId);
+        Optional<Member> member = memberService.findById(memberId);
 
         if (member.isEmpty() || fileInfo == null) return;
 
@@ -39,7 +38,7 @@ public class SoundThumbsUpService {
         publisher.publishEvent(new EventAfterSoundLike(this, soundThumbsUp));
 
         if (!soundThumbsUpSummaryRepository.existsByFileInfo(fileInfo)) {
-            SoundThumbsUp_summary soundThumbsUpSummary= new SoundThumbsUp_summary();
+            SoundThumbsUp_summary soundThumbsUpSummary = new SoundThumbsUp_summary();
             soundThumbsUpSummary.setFileInfo(fileInfo);
             soundThumbsUpSummary.setLikeCount(0);
             soundThumbsUpSummaryRepository.save(soundThumbsUpSummary);
@@ -48,7 +47,7 @@ public class SoundThumbsUpService {
 
     public void unlikePost(Long postId, Long memberId) {
         FileInfo fileInfo = soundTrackService.getSoundTrack(postId);
-        Optional<Member> member =  memberService.findById(memberId);
+        Optional<Member> member = memberService.findById(memberId);
 
         if (member.isEmpty() || fileInfo == null) return;
 
@@ -56,7 +55,7 @@ public class SoundThumbsUpService {
         soundThumbsUpOptional.ifPresent(soundThumbsUpRepository::delete);
 
         if (!soundThumbsUpSummaryRepository.existsByFileInfo(fileInfo)) {
-            SoundThumbsUp_summary soundThumbsUpSummary= new SoundThumbsUp_summary();
+            SoundThumbsUp_summary soundThumbsUpSummary = new SoundThumbsUp_summary();
             soundThumbsUpSummary.setFileInfo(fileInfo);
             soundThumbsUpSummary.setLikeCount(0);
             soundThumbsUpSummaryRepository.save(soundThumbsUpSummary);

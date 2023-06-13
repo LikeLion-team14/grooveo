@@ -49,9 +49,9 @@ public class FreedomPostCommentService {
 
     public Page<FreedomPostComment> getList(FreedomPost freedomPost, int commentPage, String so) {
         List<Sort.Order> sorts = new ArrayList<>();
-        if (so.equals("create")){
+        if (so.equals("create")) {
             sorts.add(Sort.Order.asc("createDate"));
-        } else{
+        } else {
             sorts.add(Sort.Order.desc("createDate"));
         }
 

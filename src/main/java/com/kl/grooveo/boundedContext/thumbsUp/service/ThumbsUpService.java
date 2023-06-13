@@ -26,7 +26,7 @@ public class ThumbsUpService {
 
     public void likePost(Long postId, Long memberId) {
         FreedomPost freedomPost = freedomPostService.getFreedomPost(postId);
-        Optional<Member> member =  memberService.findById(memberId);
+        Optional<Member> member = memberService.findById(memberId);
 
         if (member.isEmpty() || freedomPost == null) return;
 
@@ -38,7 +38,7 @@ public class ThumbsUpService {
         publisher.publishEvent(new EventAfterPostLike(this, thumbsUp));
 
         if (!thumbsUpSummaryRepository.existsByFreedomPost(freedomPost)) {
-            ThumbsUp_summary thumbsUpSummary= new ThumbsUp_summary();
+            ThumbsUp_summary thumbsUpSummary = new ThumbsUp_summary();
             thumbsUpSummary.setFreedomPost(freedomPost);
             thumbsUpSummary.setLikeCount(0);
             thumbsUpSummaryRepository.save(thumbsUpSummary);
@@ -47,7 +47,7 @@ public class ThumbsUpService {
 
     public void unlikePost(Long postId, Long memberId) {
         FreedomPost freedomPost = freedomPostService.getFreedomPost(postId);
-        Optional<Member> member =  memberService.findById(memberId);
+        Optional<Member> member = memberService.findById(memberId);
 
         if (member.isEmpty() || freedomPost == null) return;
 
@@ -55,7 +55,7 @@ public class ThumbsUpService {
         thumbsUpOptional.ifPresent(thumbsUpRepository::delete);
 
         if (!thumbsUpSummaryRepository.existsByFreedomPost(freedomPost)) {
-            ThumbsUp_summary thumbsUpSummary= new ThumbsUp_summary();
+            ThumbsUp_summary thumbsUpSummary = new ThumbsUp_summary();
             thumbsUpSummary.setFreedomPost(freedomPost);
             thumbsUpSummary.setLikeCount(0);
             thumbsUpSummaryRepository.save(thumbsUpSummary);

@@ -46,11 +46,9 @@ public class Notification {
         if (diff < 60) return diff + "초";
         else if (diff < 3600) {
             return (diff / 60) + "분";
-        }
-        else if (diff < 86400) {
+        } else if (diff < 86400) {
             return (diff / 60 / 60) + "시간";
-        }
-        else return (diff / 60/ 60/ 24) + "일";
+        } else return (diff / 60 / 60 / 24) + "일";
     }
 
     public void setAfterReadNotification(LocalDateTime localDateTime) {
