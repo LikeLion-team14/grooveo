@@ -24,4 +24,5 @@ public class SoundThumbsUp {
 
     private LocalDateTime createDate;
     private LocalDateTime deleteDate;
+
 }
