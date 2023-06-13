@@ -4,6 +4,7 @@ import com.kl.grooveo.base.baseEntity.BaseEntity;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
+import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -80,4 +81,8 @@ public class Member extends BaseEntity {
     public void updateProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
+
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.ALL})
+    @Builder.Default
+    private List<FileInfo> fileInfos = new ArrayList<>();
 }
