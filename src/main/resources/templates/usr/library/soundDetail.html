@@ -3,76 +3,379 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title></title>
+    <title th:text="${fileInfo.title}"></title>
     <style>
-        img {
-            max-width: 10%;
-            height: auto;
+        /* 노말라이즈 */
+        body,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* 라이브러리 */
+        .top-logo-bar {
+            width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 커스텀 */
+        html {
+            background-color: white;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        .posts-box {
+            width: 900px;
+        }
+
+        input[type="submit"] {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="submit"]:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 200px; /* 슬라이더 길이를 250px로 수정 */
+            height: 7px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 1;
+            transition: opacity 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: none;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: none;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .slider::-moz-range-progress {
+            background-color: black;
+        }
+
+        .text-content {
+            max-height: 600px;
+            overflow: hidden;
+        }
+
+        .fade-out {
+            height: 20px;
+            background-image: linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 1)
+            );
+            position: relative;
+            bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .button-container {
+            display: none;
+        }
+
+        .button-container.show {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .button-container.show .read-more {
+            display: inline-block;
+        }
+
+        .button-container.show .read-less {
+            display: none;
+        }
+
+        .fade-out.show {
+            opacity: 1;
         }
     </style>
+
+    <script>
+        $(document).ready(function () {
+            $(".reply-link").on("click", function (e) {
+                e.preventDefault();
+                $(this).closest(".border-b").find(".comment-reply").slideToggle();
+            });
+        });
+
+        window.onload = function () {
+            var textContent = document.getElementById("text-content");
+            var fadeOut = document.getElementById("fade-out");
+            var buttonContainer = document.querySelector(".button-container");
+            var readMoreButton = document.querySelector(".read-more");
+            var readLessButton = document.querySelector(".read-less");
+
+            if (textContent.scrollHeight > 600) {
+                buttonContainer.classList.add("show");
+                readMoreButton.style.display = "inline-block";
+                readLessButton.style.display = "none";
+                fadeOut.classList.add("show");
+            }
+        };
+
+        function readMore() {
+            var textContent = document.getElementById("text-content");
+            var fadeOut = document.getElementById("fade-out");
+            var buttonContainer = document.querySelector(".button-container");
+            var readMoreButton = document.querySelector(".read-more");
+            var readLessButton = document.querySelector(".read-less");
+
+            textContent.style.maxHeight = "none";
+            buttonContainer.classList.add("show");
+            readMoreButton.style.display = "none";
+            readLessButton.style.display = "inline-block";
+            fadeOut.classList.remove("show");
+        }
+
+        function readLess() {
+            var textContent = document.getElementById("text-content");
+            var fadeOut = document.getElementById("fade-out");
+            var buttonContainer = document.querySelector(".button-container");
+            var readMoreButton = document.querySelector(".read-more");
+            var readLessButton = document.querySelector(".read-less");
+
+            textContent.style.maxHeight = "600px";
+            buttonContainer.classList.add("show");
+            readMoreButton.style.display = "inline-block";
+            readLessButton.style.display = "none";
+            fadeOut.classList.add("show");
+        }
+
+        const audio = document.getElementById('audio');
+        const playPauseButton = document.getElementById('playPauseButton');
+        const songSlider = document.getElementById('songSlider');
+        const currentTime = document.getElementById('currentTime');
+        const totalTime = document.getElementById('totalTime');
+        // Set initial max value for slider (it can be any value greater than 0)
+        songSlider.max = 1;
+        audio.addEventListener('loadedmetadata', function() {
+            totalTime.textContent = formatTime(audio.duration);
+            songSlider.max = audio.duration;
+        });
+        audio.addEventListener('timeupdate', function() {
+            currentTime.textContent = formatTime(audio.currentTime);
+            songSlider.value = audio.currentTime;
+            const progress = (audio.currentTime / audio.duration) * 100;
+            songSlider.style.background = `linear-gradient(to right, black ${progress}%, #d3d3d3 ${progress}%)`;
+        });
+        songSlider.addEventListener('input', function() {
+            audio.currentTime = songSlider.value;
+        });
+        playPauseButton.addEventListener('click', function() {
+            if (audio.paused) {
+                audio.play();
+                playPauseButton.innerHTML = '<i class="fas fa-pause text-2xl"></i>';
+            } else {
+                audio.pause();
+                playPauseButton.innerHTML = '<i class="fas fa-play text-2xl"></i>';
+            }
+        });
+        audio.addEventListener('ended', function() {
+            playPauseButton.innerHTML = '<i class="fas fa-play text-2xl"></i>';
+        });
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes}:${    seconds < 10 ? '0' : ''
+            }${seconds}`;
+        }
+    </script>
 </head>
 <body>
 <main layout:fragment="main">
-<h1>음원 상세</h1>
-<p>음원명: <span th:text="${fileInfo.title}"></span></p>
-<p>설명: <span th:text="${fileInfo.description}"></span></p>
-<img th:src="${fileInfo.albumCoverUrl}" alt="Album Cover">
-<audio controls>
-    <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">
-</audio>
+    <div class="flex justify-center">
+        <div class="posts-box mt-20">
+
+            <!-- 작성자 부분 -->
+            <div class="flex mt-7 justify-between border-b border-gray-400">
+                <div class="flex justify-start items-center">
+                    <img src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/IU-album.jpg" alt="" class="w-10 h-10 object-cover m-3 rounded-full">
+                    <div>
+                        <div class="flex items-center mb-1">
+                            <div class="">작성자</div>
+                            <button class="bg-black bg-opacity-10 h-7 ml-2 p-1 w-16 text-xs flex items-center justify-center hover:bg-opacity-30">
+                                Follow
+                            </button>
+                        </div>
+
+                        <div class="flex">
+                            <div class="text-xs mr-2">2023-06-08 16:50</div>
+                            <div class="text-xs mr-1">조회수</div>
+                            <div class="text-xs">535</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="flex items-center">
+                    <a href="#" class="flex items-center">
+                        <i class="far fa-heart fa-xs mr-1"></i>
+                        <div class="text-sm">535</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 뮤직 플레이어 및 게시글 -->
+            <div class="flex">
+
+                <!-- 플레이어 -->
+                <div class="m-1 mr-3">
+                    <!-- 플레이어 부분 -->
+                    <div class="shadow-xl flex flex-col items-center" style="width:320px; height:600px;">
+                        <div class="p-0 my-4">
+                            <img th:src="${fileInfo.albumCoverUrl}" class="w-80 h-80" />
+                        </div>
+                        <div class="flex flex-col justify-center items-center p-5">
+                            <div class="text-center">
+                                <h1 class="text-2xl font-bold mt-4">
+                                    <span th:text="${fileInfo.title}"></span>
+                                </h1>
+                                <h2 class="text-lg mt-4 mb-8">
+                                    아티스트
+                                </h2>
+                            </div>
+                            <div class="flex items-center w-full justify-center">
+                                <span id="currentTime" class="text-sm mr-2">0:00</span>
+                                <input id="songSlider" type="range" value="0" class="mx-3 slider" style="flex-grow: 1;">
+                                <span id="totalTime" class="text-sm ml-2">0:00</span>
+                            </div>
+                            <div class="mt-1">
+                                <button id="playPauseButton" class="flex items-center justify-center p-3 hover:text-gray-300">
+                                    <i class="fas fa-play text-2xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 오디오 올린 음원-->
+                    <audio id="audio" style="display:none;">
+                        <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">
+                    </audio>
+                </div>
+
+                <!-- 게시글 내용 -->
+                <div class="content mt-4">
+                    <div class="text-content" id="text-content">
+                        <span th:text="${fileInfo.description}"></span>
+                    </div>
+                    <div class="fade-out" id="fade-out"></div>
+                    <div class="button-container">
+                        <button class="read-more text-xs text-gray-500 hover:underline" onclick="readMore()">더보기</button>
+                        <button class="read-less text-xs text-gray-500 hover:underline" onclick="readLess()">줄이기</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 수정/삭제 버튼 -->
+            <div class="flex justify-end mt-6">
+                <button class="bg-black bg-opacity-10 h-10 p-4 w-24 text-sm flex items-center justify-center hover:bg-opacity-30" onclick="window.open('https://www.naver.com');">
+                    <span class="text-center">수정</span>
+                </button>
+                <button class="bg-black bg-opacity-10 h-10 p-4 w-24 ml-4 mr-2 text-sm flex items-center justify-center hover:bg-opacity-30" onclick="window.open('https://www.naver.com');">
+                    <span class="text-center">삭제</span>
+                </button>
+            </div>
+
+            <div class="">
+                <!-- 코멘트 제목 -->
+                <div class="border-b border-gray-400 pb-2 flex">
+                    <div class="text-gray-600 ml-2">
+                        COMMENT
+                    </div>
+                    <div class="text-gray-600 ml-3"><p th:text="|${#lists.size(fileInfo.commentList)}></div>
+                </div>
+
 
     <div class="flex flex-col align-center mx-auto w-4/6">
 
-        <span class="text-xl font-bold">댓글 쓰기</span>
-        <!-- 댓글 작성 -->
-        <form th:action="@{|/answer/create/${fileInfo.id}|}" th:object="${commentForm}" method="post">
-            <textarea class="textarea textarea-primary w-full max-w-ls form-control" placeholder="content" th:field="*{content}" rows="10"></textarea>
-            <input type="submit" value="댓글 등록">
-        </form>
+                        <!-- 댓글 입력칸 -->
+                        <div class="flex m-4 justify-center">
+                            <form th:action="@{|/answer/create/${fileInfo.id}|}" th:object="${commentForm}" method="post">
+                                <div class="flex items-center">
+                                    <textarea th:field="*{content}" cols="95" rows="2" placeholder="댓글을 남겨보세요" class="border border-gray-300 resize-none p-4 mr-5"></textarea>
+                                    <input type="submit" value="등록" class="h-20 w-20 text-sm">
+                                </div>
+                            </form>
+                        </div>
 
-        <!-- 댓글의 갯수 표시 -->
-        <h5 th:text="|${#lists.size(fileInfo.commentList)}개의 댓글이 있습니다.|"></h5>
-        <div class="card w-full bg-base-100 shadow-xl my-2" th:each="comment : ${fileInfo.commentList}">
-            <div class="card-body">
-                <p th:text="${comment.content}"></p>
-                <div class="card-actions justify-end">
-                    <a class="btn btn-sm btn-outline"
-                       href="javascript:void(0);"
-                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
-                        삭제</a>
-                    <form hidden th:action="@{|/answer/${comment.id}|}" method="post">
-                        <input type="hidden" name="_method" value="delete">
-                    </form>
-                </div>
-            </div>
-    </div>
+                        <!-- 댓글의 갯수 표시 -->
+                        <h5 th:text="|${#lists.size(fileInfo.commentList)}개의 댓글이 있습니다.|"></h5>
+                        <div class="card w-full bg-base-100 shadow-xl my-2" th:each="comment : ${fileInfo.commentList}">
+                            <div class="card-body">
+                                <p th:text="${comment.content}"></p>
+                                <div class="card-actions justify-end">
+                                    <a class="btn btn-sm btn-outline"
+                                       href="javascript:void(0);"
+                                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();">
+                                        삭제</a>
+                                    <form hidden th:action="@{|/answer/${comment.id}|}" method="post">
+                                        <input type="hidden" name="_method" value="delete">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-        <script layout:fragment="script" type='text/javascript'>
+                        <script layout:fragment="script" type='text/javascript'>
 
-            const comment_answer_elements = document.getElementsByClassName("comment-answer");
-            const block_answer = document.getElementsByClassName("comment-answer-block");
-            Array.from(comment_answer_elements).forEach(function (element) {
-                element.addEventListener('click', function () {
-                    Array.from(block_answer).forEach((x) => {
-                        if (x.id === this.dataset.num) {
-                            if (x.style.display === "none") {
-                                x.style.display = "block";
-                            } else
-                                x.style.display = "none";
-                        }
-                    })
-                });
-            });
+                            const comment_answer_elements = document.getElementsByClassName("comment-answer");
+                            const block_answer = document.getElementsByClassName("comment-answer-block");
+                            Array.from(comment_answer_elements).forEach(function (element) {
+                                element.addEventListener('click', function () {
+                                    Array.from(block_answer).forEach((x) => {
+                                        if (x.id === this.dataset.num) {
+                                            if (x.style.display === "none") {
+                                                x.style.display = "block";
+                                            } else
+                                                x.style.display = "none";
+                                        }
+                                    })
+                                });
+                            });
 
-            if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
-                const commentId = window.location.hash.replace("#reply-", "");
-                $(function(){
-                    document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
-                });
-            }
+                            if (window.location.hash && window.location.hash.indexOf("#reply-") !== -1) {
+                                const commentId = window.location.hash.replace("#reply-", "");
+                                $(function(){
+                                    document.getElementsByClassName("cm_" + commentId)[0].style.display = "block";
+                                });
+                            }
 
-        </script>
-
+                        </script>
+                    </div>
 </main>
 
 </body>
