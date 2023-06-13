@@ -39,9 +39,12 @@ public class SoundTrackService {
         };
     }
 
-    public Page<FileInfo> getList(String kw, int page) {
+    public Page<FileInfo> getList(String kw, int page, int sortCode) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+
+        if (sortCode == 1) sorts.add(Sort.Order.desc("soundThumbsUpSummary.likeCount"));
+        else sorts.add(Sort.Order.desc("createDate"));
+
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         Specification<FileInfo> spec = search(kw);
         return this.fileInfoRepository.findAll(spec, pageable);

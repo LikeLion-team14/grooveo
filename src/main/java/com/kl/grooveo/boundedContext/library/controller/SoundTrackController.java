@@ -31,11 +31,13 @@ public class SoundTrackController {
     private final Rq rq;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/list")
-    public String showLibrary(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+    @GetMapping("/list/{sortCode}")
+    public String showLibrary(Model model, @PathVariable("sortCode") int sortCode,
+                              @RequestParam(value = "page", defaultValue = "0") int page,
                               @RequestParam(value = "kw", defaultValue = "") String kw) {
 
-        Page<FileInfo> paging = this.soundTrackService.getList(kw, page);
+        Page<FileInfo> paging = this.soundTrackService.getList(kw, page, sortCode);
+        model.addAttribute("sortCode", sortCode);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
 
