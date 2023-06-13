@@ -378,6 +378,35 @@
 
 
         $(document).ready(function () {
+            console.log('jQuery is loaded!');
+            const header = $("meta[name='_csrf_header']").attr("content");
+            const token = $("meta[name='_csrf']").attr("content");
+            $(document).ajaxSend(function (e, xhr, options) {
+                xhr.setRequestHeader(header, token);
+            });
+            // 페이지가 로드될 때 실행되는 코드
+            // Ajax 를 사용하여 데이터를 가져오는 등의 작업을 수행
+
+            const postId = /*[[${fileInfo.id}]]*/ null;
+            if (postId) {
+                const viewText = $('#viewCnt');
+                $.ajax({
+                    type: "GET",
+                    url: "/library/getView", // 조회수 요청을 보낼 URL
+                    data: {
+                        postId: postId
+                    },
+                    dataType: "text",
+                    success: function (data) {
+                        console.log(data)
+                        $(viewText).text(data)
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+
             $(".reply-link").on("click", function (e) {
                 e.preventDefault();
                 $(this).closest(".border-b").find(".comment-reply").slideToggle();

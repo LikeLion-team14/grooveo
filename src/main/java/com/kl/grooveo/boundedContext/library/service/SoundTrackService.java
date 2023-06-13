@@ -1,5 +1,6 @@
 package com.kl.grooveo.boundedContext.library.service;
 
+import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,5 +61,16 @@ public class SoundTrackService {
         fileInfo.setModifyDate(LocalDateTime.now());
         fileInfo.setDescription(description);
         this.fileInfoRepository.save(fileInfo);
+    }
+
+    // 조회수 카운트
+    @Transactional
+    public int updateView(Long id) {
+        return this.fileInfoRepository.updateView(id);
+    }
+
+    public int getViewCnt(Long postId) {
+        Optional<FileInfo> fileInfo = fileInfoRepository.findById(postId);
+        return fileInfo.map(FileInfo::getView).orElse(-1);
     }
 }

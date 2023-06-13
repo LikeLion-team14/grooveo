@@ -31,6 +31,9 @@ public class FileInfo {
     @Column(columnDefinition = "LONGTEXT")
     private String description;
 
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int view; // 조회수
+
     @OneToMany(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
     private List<SoundPostComment> commentList = new ArrayList<>();
 
