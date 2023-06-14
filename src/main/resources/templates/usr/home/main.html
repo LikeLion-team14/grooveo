@@ -196,6 +196,17 @@
         .my-bullet:hover {
             cursor: pointer;
         }
+
+        .custom-placeholder::placeholder {
+            color: black; /* Change the color of placeholder text to black */
+        }
+
+        @media screen and (min-width: 640px) {
+            .search-box {
+                bottom: 5%; /* Adjust this value to position search-box appropriately */
+            }
+        }
+
     </style>
 </head>
 
@@ -203,20 +214,21 @@
 
 <main layout:fragment="main">
     <!-- 배너 -->
-    <div class="top-image-bar">
+    <div class="top-image-bar w-screen relative">
         <img src="/images/grooveo.jpg" alt="banner" class="w-screen">
+        <div class="search-box flex justify-center absolute bottom-0 w-full text-center" style="bottom: 10%;">
+            <div class="relative max-w-2xl w-full px-4">
+                <form th:method="GET" th:action="@{/library/list}" class="relative">
+                    <input name="kw" type="text" placeholder="노래 / 아티스트 검색" class="bg-white bg-opacity-60 h-12 w-full p-4 pr-12 custom-placeholder" />
+                    <button
+                            class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-2xl pr-3">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="search-box flex justify-center mt-20 mb-10">
-        <form th:method="GET" th:action="@{/library/list}" class="relative">
-            <input name="kw" type="text" placeholder="노래 / 아티스트 검색"
-                   class="bg-black bg-opacity-10 h-12 w-custom p-4 pr-12"/>
-            <button
-                    class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-2xl pr-3">
-                <i class="fas fa-search"></i>
-            </button>
-        </form>
-    </div>
-    <div class="text-center">최신 음원</div>
+    <div class="text-center mt-10">최신 음원</div>
     <!-- 최신 음원 10곡 -->
     <div class="wrap">
         <div class="swiper-wrapper">
