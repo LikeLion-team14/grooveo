@@ -9,6 +9,7 @@ import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Controller
@@ -54,9 +56,12 @@ public class FileUploadController {
                               @RequestParam("albumCover") MultipartFile albumCover,
                               @RequestParam("sound") MultipartFile sound) {
         try {
-            String albumCoverName = albumCover.getOriginalFilename();
+            String albumCoverExtension = FilenameUtils.getExtension(albumCover.getOriginalFilename());
+            String albumCoverName = UUID.randomUUID().toString() + "." + albumCoverExtension;
             String albumCoverUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/albumCover/" + albumCoverName;
-            String soundName = sound.getOriginalFilename();
+
+            String soundExtension = FilenameUtils.getExtension(sound.getOriginalFilename());
+            String soundName = UUID.randomUUID().toString() + "." + soundExtension;
             String soundUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/sound/" + soundName;
 
             ObjectMetadata albumCoverMetadata = new ObjectMetadata();
