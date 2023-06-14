@@ -1,5 +1,6 @@
 package com.kl.grooveo.boundedContext.comment.service;
 
+import com.kl.grooveo.base.event.EventAfterSoundComment;
 import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.repository.SoundPostCommentRepository;
@@ -31,6 +32,9 @@ public class SoundPostCommentService {
         soundPostComment.setAuthor(author);
         this.soundPostCommentRepository.save(soundPostComment);
 
+        // 음원 게시글에 댓글 작성 이벤트 발행
+        publisher.publishEvent(new EventAfterSoundComment(this, author, fileInfo.getArtist()));
+
         return soundPostComment;
     }
 
@@ -47,9 +51,9 @@ public class SoundPostCommentService {
 
     public Page<SoundPostComment> getList(FileInfo fileInfo, int commentPage, String so) {
         List<Sort.Order> sorts = new ArrayList<>();
-        if (so.equals("create")){
+        if (so.equals("create")) {
             sorts.add(Sort.Order.asc("createDate"));
-        } else{
+        } else {
             sorts.add(Sort.Order.desc("createDate"));
         }
 

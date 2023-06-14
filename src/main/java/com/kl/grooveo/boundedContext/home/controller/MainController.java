@@ -19,7 +19,7 @@ public class MainController {
     public String main(Model model) {
         List<FileInfo> latestSongs = fileInfoService.getLatestSongs();
 
-        model.addAttribute("latestSongs",latestSongs);
+        model.addAttribute("latestSongs", latestSongs);
 
         return "usr/home/main";
     }

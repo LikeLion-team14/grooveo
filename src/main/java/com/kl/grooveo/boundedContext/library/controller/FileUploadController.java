@@ -15,7 +15,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -46,15 +49,15 @@ public class FileUploadController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/soundupload")
     public String uploadFiles(Model model, @Valid SoundTrackForm soundTrackForm, BindingResult bindingResult,
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("albumCover") MultipartFile albumCover,
-            @RequestParam("sound") MultipartFile sound) {
+                              @RequestParam("title") String title,
+                              @RequestParam("description") String description,
+                              @RequestParam("albumCover") MultipartFile albumCover,
+                              @RequestParam("sound") MultipartFile sound) {
         try {
             String albumCoverName = albumCover.getOriginalFilename();
-            String albumCoverUrl = "https://s3." + region + ".amazonaws.com/"  + bucket + "/albumCover/" + albumCoverName;
+            String albumCoverUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/albumCover/" + albumCoverName;
             String soundName = sound.getOriginalFilename();
-            String soundUrl = "https://s3." + region + ".amazonaws.com/"  + bucket + "/sound/" + soundName;
+            String soundUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/sound/" + soundName;
 
             ObjectMetadata albumCoverMetadata = new ObjectMetadata();
             albumCoverMetadata.setContentType(albumCover.getContentType());

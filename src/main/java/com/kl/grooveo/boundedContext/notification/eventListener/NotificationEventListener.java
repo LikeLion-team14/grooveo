@@ -12,10 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class NotificationEventListener {
     private final NotificationService notificationService;
 
+
     @EventListener
     @Transactional
     public void listen(EventAfterPostLike event) {
         notificationService.whenAfterPostLike(event.getThumbsUp());
+    }
+
+    @EventListener
+    @Transactional
+    public void listen(EventAfterSoundComment event) {
+        notificationService.whenAfterSoundComment(event.getCommentAuthor(), event.getArtist());
     }
 
     @EventListener
@@ -40,5 +47,11 @@ public class NotificationEventListener {
     @Transactional
     public void listen(EventAfterSoundLike event) {
         notificationService.whenAfterSoundLike(event.getSoundThumbsUp());
+    }
+
+    @EventListener
+    @Transactional
+    public void listen(EventAfterUpload event) {
+        notificationService.whenAfterUpload(event.getFollow());
     }
 }

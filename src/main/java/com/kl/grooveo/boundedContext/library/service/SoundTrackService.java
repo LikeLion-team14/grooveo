@@ -1,6 +1,5 @@
 package com.kl.grooveo.boundedContext.library.service;
 
-import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -43,9 +42,12 @@ public class SoundTrackService {
         };
     }
 
-    public Page<FileInfo> getList(String kw, int page) {
+    public Page<FileInfo> getList(String kw, int page, int sortCode) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+
+        if (sortCode == 1) sorts.add(Sort.Order.desc("soundThumbsUpSummary.likeCount"));
+        else sorts.add(Sort.Order.desc("createDate"));
+
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         Specification<FileInfo> spec = search(kw);
         return this.fileInfoRepository.findAll(spec, pageable);
