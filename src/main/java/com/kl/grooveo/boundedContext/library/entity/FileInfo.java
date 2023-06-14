@@ -11,6 +11,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,4 +52,14 @@ public class FileInfo {
 
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
+
+    public String getAfterPost() {
+        long diff = ChronoUnit.SECONDS.between(getCreateDate(), LocalDateTime.now());
+        if (diff < 60) return "방금 전";
+        else if (diff < 3600) {
+            return (diff / 60) + "분 전";
+        } else if (diff < 86400) {
+            return (diff / 60 / 60) + "시간 전";
+        } else return getCreateDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    }
 }

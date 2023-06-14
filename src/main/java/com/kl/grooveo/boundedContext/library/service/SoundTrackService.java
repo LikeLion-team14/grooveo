@@ -3,6 +3,7 @@ package com.kl.grooveo.boundedContext.library.service;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
+import com.kl.grooveo.boundedContext.member.repository.MemberRepository;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,8 @@ import java.util.Optional;
 @Service
 public class SoundTrackService {
     private final FileInfoRepository fileInfoRepository;
+    private final MemberRepository memberRepository;
+
 
     private Specification<FileInfo> search(String kw) {
         return new Specification<>() {
@@ -74,5 +78,13 @@ public class SoundTrackService {
     public int getViewCnt(Long postId) {
         Optional<FileInfo> fileInfo = fileInfoRepository.findById(postId);
         return fileInfo.map(FileInfo::getView).orElse(-1);
+    }
+
+    public Page<FileInfo> getMemberUploads(String username, int page) {
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다."));
+
+        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createDate"));
+        return fileInfoRepository.findAllByArtist(member, pageRequest);
     }
 }
