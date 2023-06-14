@@ -62,14 +62,14 @@
         <div class="flex">
             <div class="flex flex-col mx-5">
                 <button onclick="follower_modal.showModal()" class="flex my-10"><span class="mr-3 w-32 font-bold">Follower</span><span
-                        id="followerCount" th:text="${@rq.member.getFollowingPeople().size()}"
+                        id="followerCount" th:text="${@rq.member.followingPeople.size()}"
                         class="badge badge-lg rounded-pill badge-neutral">0</span></button>
                 <button onclick="follow_modal.showModal()" class="flex my-10"><span
                         class="mr-3 w-32 font-bold">Follow</span><span
-                        id="followingCount" th:text="${@rq.member.getFollowerPeople().size()}"
+                        id="followingCount" th:text="${@rq.member.followerPeople.size()}"
                         class="badge badge-lg rounded-pill badge-neutral">0</span></button>
                 <button class="flex my-10"><span class="mr-3 w-32 font-bold">Tracks</span><span
-                        id="soundCount" th:text="${@rq.member.getFilesInfo().size()}"
+                        id="soundCount" th:text="${@rq.member.fileInfos.size()}"
                         class="badge badge-lg rounded-pill badge-neutral">0</span></button>
             </div>
             <div class="flex">

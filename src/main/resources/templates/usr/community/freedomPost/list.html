@@ -257,13 +257,13 @@
                     const followingCount = response.followingPeopleCount;
                     const followerCount = response.followerPeopleCount;
                     const postCount = response.postCount;
-                    //const trackCount = response.trackCount; // TODO:음원업로드시 수정예정
+                    const trackCount = response.trackCount;
                     const isFollowing = response.following;
 
                     // 가져온 프로필 정보를 원하는 대로 처리합니다. (콜백방식)
                     $('#profile-image').attr('src', profileImageUrl);
                     $('#modal-username').text(username);
-                    //$('#track-count').text(trackCount); // TODO:음원업로드시 수정예정
+                    $('#track-count').text(trackCount);
                     $('#post-count').text(postCount);
                     $('#following-count').text(followingCount);
                     $('#follower-count').text(followerCount);
