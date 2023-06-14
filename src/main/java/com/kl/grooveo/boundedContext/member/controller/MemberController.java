@@ -147,15 +147,7 @@ public class MemberController {
 
         Page<FileInfo> paging = this.soundTrackService.getMemberUploads(username, page);
         model.addAttribute("paging", paging);
-        /*
-        Member member = rq.getMember();
-        List<FileInfo> memberUploads = member.getFilesInfo();
-        Page<FileInfo> paging = soundTrackService.getMemberUploads(member.getUsername(), page);
-        model.addAttribute("paging", paging);
-        model.addAttribute("memberUploads", memberUploads);
 
-
-         */
         return "usr/member/myPage/library";
     }
 
