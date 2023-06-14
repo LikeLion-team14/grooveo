@@ -89,7 +89,7 @@
                                     </td>
                                     <td>
                                         <section class="flex justify-center">
-                                            <button id="artist" onclick="profile_modal.showModal();showProfile()"
+                                            <button id="artist" onclick="profile_modal.showModal();getProfile(this.textContent)"
                                                     type="button"
                                                     class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"
                                                     th:text="${fileInfo.artist.username}"></button>
@@ -432,13 +432,6 @@
                     console.error('Error retrieving profile:', error);
                 }
             });
-        }
-
-        function showProfile() {
-            const modalUsername = document.getElementById("modal-username");
-            modalUsername.textContent = document.getElementById("artist").textContent;
-
-            getProfile(modalUsername.textContent);
         }
 
         $('.followBtn').on('click', function () {
