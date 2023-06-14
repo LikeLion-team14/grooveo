@@ -38,7 +38,7 @@
         /* 전체 풀 스크린 레이아웃 */
         .wrap {
             width: 100%;
-            height: 100vh;
+            height: 65vh;
             overflow: hidden;
             position: relative;
             box-sizing: border-box;
@@ -55,7 +55,7 @@
             height: 500px; /* 기존의 500px에서 250px로 줄입니다. */
             position: relative;
             top: 50%;
-            margin-top: -130px; /* 기존의 -230px에서 -130px로 줄입니다. */
+            margin-top: -290px; /* 기존의 -230px에서 -130px로 줄입니다. */
         }
 
         .wrap .swiper-wrapper .swiper-slide .inner {
@@ -249,16 +249,25 @@
     </div>
 
     <div class="text-center mt-5">인기 음원</div>
+    <!-- 최신 음원 10곡 -->
     <div class="wrap">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
+            <div class="swiper-slide" th:each="song : ${popularSongs}">
                 <div class="inner">
-                    <div class="con">
+                    <div class="con pt-10">
                         <div class="image-container">
-                            <img src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/album/ea6345acc53bb8cbac3564f661ae9dd4.png">
+                            <img class="border-2" th:src="${song.albumCoverUrl}">
                         </div>
-                        <h2>노래 제목 </h2>
-                        <p>아티스트 이름</p>
+                        <div class="flex items-center flex-col mt-3">
+                            <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>
+                            <span class="text-lg font-bold" th:text="${song.artist.username}">아티스트 이름</span>
+                        </div>
+                        <div class="flex justify-end items-center mr-5">
+                            <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
+                            <span th:if="${song.soundThumbsUpSummary == null}">0</span>
+                            <span th:unless="${song.soundThumbsUpSummary == null}"
+                                  th:text="${song.soundThumbsUpSummary.likeCount}"></span>
+                        </div>
                     </div>
                 </div>
             </div>

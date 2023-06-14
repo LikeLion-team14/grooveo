@@ -7,6 +7,7 @@ import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -61,5 +62,9 @@ public class FileInfoService {
 
     public List<FileInfo> getLatestSongs() {
         return fileInfoRepository.findTop10ByOrderByCreateDateDesc();
+    }
+
+    public List<FileInfo> getPopularSongs() {
+        return fileInfoRepository.findTop10ByThumbsUpCount(PageRequest.of(0, 10));
     }
 }
