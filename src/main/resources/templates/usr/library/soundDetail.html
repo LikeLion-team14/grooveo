@@ -102,6 +102,42 @@
             opacity: 1;
         }
     </style>
+
+    <script>
+        function commentForm__submit(form) {
+            form.content.value = form.content.value.trim(); // 댓글 좌우 공백 제거
+            if (form.content.value.length === 0) {
+                toastWarning('댓글의 내용을 입력해주세요.');
+                form.content.focus();
+                return;
+            }
+
+            if (form.content.value.length > 600) {
+                toastWarning('댓글의 내용은 600자 이하로 입력해주세요.');
+                form.content.focus();
+                return;
+            }
+
+            form.submit();
+        }
+
+        function replyForm__submit(form) {
+            form.content.value = form.content.value.trim(); // 답글 좌우 공백 제거
+            if (form.content.value.length === 0) {
+                toastWarning('답글의 내용을 입력해주세요.');
+                form.content.focus();
+                return;
+            }
+
+            if (form.content.value.length > 400) {
+                toastWarning('답글의 내용은 400자 이하로 입력해주세요.');
+                form.content.focus();
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
 </head>
 <body>
 <main layout:fragment="main">
