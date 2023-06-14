@@ -27,4 +27,7 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     List<FileInfo> findTop10ByOrderByCreateDateDesc();
 
     Page<FileInfo> findAllByArtist(Member member, PageRequest pageRequest);
+
+    @Query("SELECT fi FROM FileInfo fi ORDER BY SIZE(fi.soundThumbsUpList) DESC")
+    List<FileInfo> findTop10ByThumbsUpCount(Pageable pageable);
 }

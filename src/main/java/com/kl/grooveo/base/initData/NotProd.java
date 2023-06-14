@@ -9,6 +9,11 @@ import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import com.kl.grooveo.boundedContext.notification.service.NotificationService;
+import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp;
+import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp_summary;
+import com.kl.grooveo.boundedContext.thumbsUp.repository.SoundThumbsUp_summaryRepository;
+import com.kl.grooveo.boundedContext.thumbsUp.service.SoundThumbsUpService;
+import com.kl.grooveo.boundedContext.thumbsUp.service.SoundThumbsUp_summaryService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +33,9 @@ public class NotProd {
             FreedomPostCommentService freedomPostCommentService,
             NotificationService notificationService,
             FollowService followService,
-            FileInfoService fileInfoService
+            FileInfoService fileInfoService,
+            SoundThumbsUpService soundThumbsUpService,
+            SoundThumbsUp_summaryService soundThumbsUpSummaryService
     ) {
         return new CommandLineRunner() {
             @Override
@@ -97,7 +104,27 @@ public class NotProd {
                         .build();
                 fileInfoService.saveFileInfo(fileInfo3);
 
+                soundThumbsUpService.likePost(1L, memberUser2.getId());
+                soundThumbsUpService.likePost(2L, memberUser2.getId());
+                soundThumbsUpService.likePost(3L, memberUser2.getId());
+                soundThumbsUpService.likePost(4L, memberUser2.getId());
+                soundThumbsUpService.likePost(5L, memberUser2.getId());
+                soundThumbsUpService.likePost(6L, memberUser2.getId());
+                soundThumbsUpService.likePost(7L, memberUser2.getId());
+                soundThumbsUpService.likePost(12L, memberUser2.getId());
+                soundThumbsUpService.likePost(13L, memberUser3.getId());
+                soundThumbsUpService.likePost(14L, memberUser3.getId());
 
+                soundThumbsUpSummaryService.updateLikeCount(1L, 17);
+                soundThumbsUpSummaryService.updateLikeCount(2L, 16);
+                soundThumbsUpSummaryService.updateLikeCount(3L, 15);
+                soundThumbsUpSummaryService.updateLikeCount(4L, 13);
+                soundThumbsUpSummaryService.updateLikeCount(5L, 12);
+                soundThumbsUpSummaryService.updateLikeCount(6L, 1);
+                soundThumbsUpSummaryService.updateLikeCount(7L, 50);
+                soundThumbsUpSummaryService.updateLikeCount(12L, 20);
+                soundThumbsUpSummaryService.updateLikeCount(13L, 100);
+                soundThumbsUpSummaryService.updateLikeCount(14L, 10);
             }
         };
     }

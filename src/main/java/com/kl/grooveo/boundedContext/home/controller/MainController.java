@@ -18,8 +18,10 @@ public class MainController {
     @GetMapping("/")
     public String main(Model model) {
         List<FileInfo> latestSongs = fileInfoService.getLatestSongs();
+        List<FileInfo> popularSongs = fileInfoService.getPopularSongs();
 
         model.addAttribute("latestSongs", latestSongs);
+        model.addAttribute("popularSongs", popularSongs);
 
         return "usr/home/main";
     }
