@@ -129,9 +129,9 @@
                 </td>
                 <td>
                     <section class="flex justify-center">
-                        <button id="author" onclick="profile_modal.showModal();showProfile()"
+                        <button id="author" onclick="profile_modal.showModal();getProfile(this.textContent)"
                                 class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"
-                                th:text="${freedomPost.author.username}"></button>
+                        th:text="${freedomPost.author.username}"></button>
                     </section>
                 </td>
                 <td th:text="${freedomPost.view}"></td>
@@ -168,45 +168,46 @@
     <!-- Profile_modal -->
     <dialog id="profile_modal" class="modal">
         <form method="dialog" class="modal-box" style="width: 400px; overflow-y: auto;">
-                <div class="modal-action">
-                    <button class="btn btn-xs btn-outline">X</button>
-                </div>
-                <div class="flex flex-wrap gap-4">
-                    <img id="profile-image" src="" class="border-2 border-gray-100" style="width: 70px; height: 70px; border-radius: 50%;">
-                    <section class="flex flex-col justify-center">
-                        <span class="text-lg" id="modal-username"></span>
-                        <span class="text-sm text-gray-600">Kim Jun Tae</span>
-                    </section>
-                </div>
+            <div class="modal-action">
+                <button class="btn btn-xs btn-outline">X</button>
+            </div>
+            <div class="flex flex-wrap gap-4">
+                <img id="profile-image" src="" class="border-2 border-gray-100"
+                     style="width: 70px; height: 70px; border-radius: 50%;">
+                <section class="flex flex-col justify-center">
+                    <span class="text-lg" id="modal-username"></span>
+                    <span class="text-sm text-gray-600" id="modal-userNickname"></span>
+                </section>
+            </div>
 
-                <div class="flex flex-wrap justify-between mt-4">
-                    <section class="flex flex-col">
-                        <span class="flex justify-center font-bold" id="track-count">0</span>
-                        <span class="text-sm">음원수</span>
-                    </section>
+            <div class="flex flex-wrap justify-between mt-4">
+                <section class="flex flex-col">
+                    <span class="flex justify-center font-bold" id="track-count">0</span>
+                    <span class="text-sm">음원수</span>
+                </section>
 
-                    <section class="flex flex-col">
-                        <span class="flex justify-center font-bold" id="post-count">0</span>
-                        <span class="text-sm">게시글</span>
-                    </section>
+                <section class="flex flex-col">
+                    <span class="flex justify-center font-bold" id="post-count">0</span>
+                    <span class="text-sm">게시글</span>
+                </section>
 
-                    <section class="flex flex-col">
-                        <span class="flex justify-center font-bold" id="follower-count">0</span>
-                        <span class="text-sm">팔로우</span>
-                    </section>
+                <section class="flex flex-col">
+                    <span class="flex justify-center font-bold" id="follower-count">0</span>
+                    <span class="text-sm">팔로우</span>
+                </section>
 
-                    <section class="flex flex-col">
-                        <span class="flex justify-center font-bold" id="following-count">0</span>
-                        <span class="text-sm">팔로잉</span>
-                    </section>
-                </div>
+                <section class="flex flex-col">
+                    <span class="flex justify-center font-bold" id="following-count">0</span>
+                    <span class="text-sm">팔로잉</span>
+                </section>
+            </div>
 
-                <div class="flex justify-center">
-                    <button th:if="${@rq.login}" id="follow-button" type="button"
-                            class="followBtn btn btn-sm mt-4 rounded-none">
-                        Follow
-                    </button>
-                </div>
+            <div class="flex justify-center">
+                <button th:if="${@rq.login}" id="follow-button" type="button"
+                        class="followBtn btn btn-sm mt-4 rounded-none">
+                    Follow
+                </button>
+            </div>
         </form>
     </dialog>
 
@@ -270,10 +271,12 @@
                     const postCount = response.postCount;
                     const trackCount = response.trackCount;
                     const isFollowing = response.following;
+                    const nickName = response.nickName;
 
                     // 가져온 프로필 정보를 원하는 대로 처리합니다. (콜백방식)
                     $('#profile-image').attr('src', profileImageUrl);
                     $('#modal-username').text(username);
+                    $('#modal-userNickname').text(nickName);
                     $('#track-count').text(trackCount);
                     $('#post-count').text(postCount);
                     $('#following-count').text(followingCount);
@@ -290,13 +293,6 @@
                     console.error('Error retrieving profile:', error);
                 }
             });
-        }
-
-        function showProfile() {
-            const modalUsername = document.getElementById("modal-username");
-            modalUsername.textContent = document.getElementById("author").textContent;
-
-            getProfile(modalUsername.textContent);
         }
 
         $('.followBtn').on('click', function () {
