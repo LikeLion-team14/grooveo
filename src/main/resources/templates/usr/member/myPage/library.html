@@ -2,48 +2,48 @@
 <div layout:fragment="content">
     <h2 class="card-title">
         <i class="fa-regular fa-comment"></i>
-        작성 댓글
+        업로드한 음원
     </h2>
-    <div th:unless="${!#lists.isEmpty(freedomPostComments)}" class="text-center">
-        <div>작성한 댓글이 없습니다.</div>
+    <!--
+    <div th:unless="${!#lists.isEmpty(fileInfos)}" class="text-center">
+        <div>업로드한 음원이 없습니다.</div>
     </div>
-    <div th:if="${!#lists.isEmpty(freedomPostComments)}">
+
+    <div th:if="${!#lists.isEmpty(fileInfos)}">
+    -->
+    <div>
         <table class="table w-full mt-4">
             <colgroup>
                 <col width="60">
-                <col width="150">
+                <col width="200">
                 <col>
                 <col width="120">
             </colgroup>
             <thead class="table-dark">
             <tr class="text-center">
                 <th>번호</th>
-                <th>내용</th>
-                <th>댓글 작성 게시물</th>
+                <th>음원명</th>
+                <th>조회수</th>
                 <th>날짜</th>
             </tr>
             </thead>
-            <tbody>
-            <tr class="text-center hover" th:each="freedomPostComment, loop : ${paging}">
-                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
-                <td style="width:380px; max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
-                    th:text="${freedomPostComment.content}"></td>
-                <td style="width:380px; max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
-                    <a id="subject"
-                       th:href="@{|/community/freedomPost/detail/${freedomPostComment.freedomPost.id}|}"
-                       th:text="${freedomPostComment.freedomPost.title}"></a>
+            <tr th:each="fileInfo, stat : ${paging.content}">
+                <td th:text="${stat.count + 1}"></td>
+                <td>
+                    <a id="subject" th:href="@{|/library/soundDetail/${fileInfo.id}|}" th:text="${fileInfo.title}" class="whitespace-nowrap overflow-x-hidden overflow-ellipsis">
+                    </a>
                 </td>
                 <td>
-                    <span th:unless="${freedomPostComment.afterPost.endsWith('전')}"
-                          th:text="${freedomPostComment.getAfterPost()}"
+                    <span th:text="${fileInfo.view}" class="truncate"></span>
+                </td>
+                <td>
+                    <span th:unless="${fileInfo.afterPost.endsWith('전')}" th:text="${fileInfo.getAfterPost()}"
                           class="text-xs"></span>
-                    <span th:if="${freedomPostComment.afterPost.endsWith('전')}"
-                          th:text="${freedomPostComment.getAfterPost()}"
+                    <span th:if="${fileInfo.afterPost.endsWith('전')}" th:text="${fileInfo.getAfterPost()}"
                           class="text-sm"></span>
-                    <i th:if="${freedomPostComment.afterPost.endsWith('전')}" class="fa-solid fa-fire text-red-500"></i>
+                    <i th:if="${fileInfo.afterPost.endsWith('전')}" class="fa-solid fa-fire text-red-500"></i>
                 </td>
             </tr>
-            </tbody>
         </table>
         <!-- 페이징처리 시작 -->
         <div th:if="${!paging.isEmpty()}" class="flex justify-center mt-2">
