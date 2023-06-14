@@ -50,44 +50,40 @@ public class FileUploadController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/soundupload")
-    public String uploadFiles(Model model, @Valid SoundTrackForm soundTrackForm, BindingResult bindingResult,
-                              @RequestParam("title") String title,
-                              @RequestParam("description") String description,
-                              @RequestParam("albumCover") MultipartFile albumCover,
-                              @RequestParam("sound") MultipartFile sound) {
+    public String uploadFiles(Model model, @Valid SoundTrackForm soundTrackForm, BindingResult bindingResult) {
         try {
-            if (albumCover.isEmpty() || sound.isEmpty()) {
+            if (soundTrackForm.getAlbumCover().isEmpty() || soundTrackForm.getSoundFile().isEmpty()) {
                 bindingResult.rejectValue("file", "required", "음원과 앨범 등록은 필수입니다.");
                 return "redirect:/library/soundUpload";
             }
 
-            String albumCoverExtension = FilenameUtils.getExtension(albumCover.getOriginalFilename());
+            String albumCoverExtension = FilenameUtils.getExtension(soundTrackForm.getAlbumCover().getOriginalFilename());
             String albumCoverName = UUID.randomUUID().toString() + "." + albumCoverExtension;
             String albumCoverUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/albumCover/" + albumCoverName;
 
-            String soundExtension = FilenameUtils.getExtension(sound.getOriginalFilename());
+            String soundExtension = FilenameUtils.getExtension(soundTrackForm.getSoundFile().getOriginalFilename());
             String soundName = UUID.randomUUID().toString() + "." + soundExtension;
             String soundUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/sound/" + soundName;
 
             ObjectMetadata albumCoverMetadata = new ObjectMetadata();
-            albumCoverMetadata.setContentType(albumCover.getContentType());
-            albumCoverMetadata.setContentLength(albumCover.getSize());
-            albumCoverMetadata.addUserMetadata("title", title);
-            albumCoverMetadata.addUserMetadata("description", description);
+            albumCoverMetadata.setContentType(soundTrackForm.getAlbumCover().getContentType());
+            albumCoverMetadata.setContentLength(soundTrackForm.getAlbumCover().getSize());
+            albumCoverMetadata.addUserMetadata("title", soundTrackForm.getTitle());
+            albumCoverMetadata.addUserMetadata("description", soundTrackForm.getDescription());
 
             ObjectMetadata soundMetadata = new ObjectMetadata();
-            soundMetadata.setContentType(sound.getContentType());
-            soundMetadata.setContentLength(sound.getSize());
-            soundMetadata.addUserMetadata("title", title);
-            soundMetadata.addUserMetadata("description", description);
+            soundMetadata.setContentType(soundTrackForm.getSoundFile().getContentType());
+            soundMetadata.setContentLength(soundTrackForm.getSoundFile().getSize());
+            soundMetadata.addUserMetadata("title", soundTrackForm.getTitle());
+            soundMetadata.addUserMetadata("description", soundTrackForm.getDescription());
 
-            amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName, albumCover.getInputStream(), albumCoverMetadata));
-            amazonS3Client.putObject(new PutObjectRequest(bucket, "sound/" + soundName, sound.getInputStream(), soundMetadata));
+            amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName, soundTrackForm.getAlbumCover().getInputStream(), albumCoverMetadata));
+            amazonS3Client.putObject(new PutObjectRequest(bucket, "sound/" + soundName, soundTrackForm.getSoundFile().getInputStream(), soundMetadata));
 
             FileInfo fileInfo = new FileInfo();
-            fileInfo.setTitle(title);
+            fileInfo.setTitle(soundTrackForm.getTitle());
             fileInfo.setArtist(rq.getMember());
-            fileInfo.setDescription(description);
+            fileInfo.setDescription(soundTrackForm.getDescription());
             fileInfo.setAlbumCoverUrl(albumCoverUrl);
             fileInfo.setSoundUrl(soundUrl);
             fileInfo.setCreateDate(LocalDateTime.now());
