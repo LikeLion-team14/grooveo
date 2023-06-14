@@ -65,6 +65,16 @@
                 return;
             }
 
+            if (!form.albumCover.value) {
+                toastWarning('앨범 커버를 업로드해주세요.');
+                return;
+            }
+
+            if (!form.sound.value) {
+                toastWarning('음원 파일을 업로드해주세요.');
+                return;
+            }
+
             form.submit();
         }
 
