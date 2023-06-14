@@ -9,6 +9,8 @@ import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
+import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.form.*;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
@@ -37,6 +39,7 @@ public class MemberController {
     private final MemberService memberService;
     private final FreedomPostService freedomPostService;
     private final FreedomPostCommentService freedomPostCommentService;
+    private final SoundTrackService soundTrackService;
     private final Rq rq;
     private final AmazonS3 amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")
@@ -139,7 +142,20 @@ public class MemberController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myPage/library")
-    public String showMyLibrary() {
+    public String showMyLibrary(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
+        String username = rq.getMember().getUsername();
+
+        Page<FileInfo> paging = this.soundTrackService.getMemberUploads(username, page);
+        model.addAttribute("paging", paging);
+        /*
+        Member member = rq.getMember();
+        List<FileInfo> memberUploads = member.getFilesInfo();
+        Page<FileInfo> paging = soundTrackService.getMemberUploads(member.getUsername(), page);
+        model.addAttribute("paging", paging);
+        model.addAttribute("memberUploads", memberUploads);
+
+
+         */
         return "usr/member/myPage/library";
     }
 

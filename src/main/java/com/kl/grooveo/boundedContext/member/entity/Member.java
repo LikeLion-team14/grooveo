@@ -89,4 +89,8 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "artist", cascade = {CascadeType.ALL})
     @Builder.Default
     private List<FileInfo> fileInfos = new ArrayList<>();
+
+    public List<FileInfo> getFileInfos() {
+        return this.fileInfos;
+    }
 }
