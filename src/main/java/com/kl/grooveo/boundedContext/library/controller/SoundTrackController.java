@@ -1,5 +1,8 @@
 package com.kl.grooveo.boundedContext.library.controller;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
@@ -13,6 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +27,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.util.UUID;
+
 @Controller
 @RequestMapping("/library")
 @RequiredArgsConstructor
@@ -29,6 +37,13 @@ public class SoundTrackController {
     private final SoundTrackService soundTrackService;
     private final SoundPostCommentService soundPostCommentService;
     private final Rq rq;
+    private final AmazonS3 amazonS3Client;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/list/{sortCode}")
@@ -105,7 +120,7 @@ public class SoundTrackController {
         }
 
         this.soundTrackService.delete(fileInfo);
-        return "redirect:/library/list";
+        return "redirect:/library/list/1";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -119,6 +134,7 @@ public class SoundTrackController {
 
         soundTrackForm.setTitle(fileInfo.getTitle());
         soundTrackForm.setDescription(fileInfo.getDescription());
+
         return "usr/library/soundUpload";
     }
 
@@ -136,8 +152,36 @@ public class SoundTrackController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
 
-        this.soundTrackService.modify(fileInfo, soundTrackForm.getTitle(), soundTrackForm.getDescription());
-        return String.format("redirect:/library/soundDetail/%s", id);
+        try {
+            String albumCoverExtension = FilenameUtils.getExtension(soundTrackForm.getAlbumCover().getOriginalFilename());
+            String albumCoverName = UUID.randomUUID().toString() + "." + albumCoverExtension;
+            String albumCoverUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/albumCover/" + albumCoverName;
+
+            String soundExtension = FilenameUtils.getExtension(soundTrackForm.getSoundFile().getOriginalFilename());
+            String soundName = UUID.randomUUID().toString() + "." + soundExtension;
+            String soundUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/sound/" + soundName;
+
+            ObjectMetadata albumCoverMetadata = new ObjectMetadata();
+            albumCoverMetadata.setContentType(soundTrackForm.getAlbumCover().getContentType());
+            albumCoverMetadata.setContentLength(soundTrackForm.getAlbumCover().getSize());
+            albumCoverMetadata.addUserMetadata("title", soundTrackForm.getTitle());
+            albumCoverMetadata.addUserMetadata("description", soundTrackForm.getDescription());
+
+            ObjectMetadata soundMetadata = new ObjectMetadata();
+            soundMetadata.setContentType(soundTrackForm.getSoundFile().getContentType());
+            soundMetadata.setContentLength(soundTrackForm.getSoundFile().getSize());
+            soundMetadata.addUserMetadata("title", soundTrackForm.getTitle());
+            soundMetadata.addUserMetadata("description", soundTrackForm.getDescription());
+
+            amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName, soundTrackForm.getAlbumCover().getInputStream(), albumCoverMetadata));
+            amazonS3Client.putObject(new PutObjectRequest(bucket, "sound/" + soundName, soundTrackForm.getSoundFile().getInputStream(), soundMetadata));
+
+            this.soundTrackService.modify(fileInfo, soundTrackForm.getTitle(), soundTrackForm.getDescription(), albumCoverUrl, soundUrl);
+            return String.format("redirect:/library/soundDetail/%s", id);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "redirect:/library/soundUpload";
+        }
     }
 
     @GetMapping("/getView")

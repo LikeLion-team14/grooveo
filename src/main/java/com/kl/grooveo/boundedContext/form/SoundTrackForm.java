@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -14,4 +15,8 @@ public class SoundTrackForm {
 
     @NotEmpty(message = "설명은 필수항목입니다.")
     private String description;
+
+    private MultipartFile soundFile;
+
+    private MultipartFile albumCover;
 }
