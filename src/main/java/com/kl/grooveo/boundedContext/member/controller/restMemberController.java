@@ -40,6 +40,7 @@ public class restMemberController {
         return MemberProfileDto.builder()
                 .profileImageUrl(followingUser.getProfileImageUrl())
                 .username(followingUser.getUsername())
+                .trackCount(followingUser.getFileInfos().size())
                 .postCount(followingUser.getFreedomPosts().size())
                 .followerPeopleCount(followingUser.getFollowerPeople().size())
                 .followingPeopleCount(followingUser.getFollowingPeople().size())
