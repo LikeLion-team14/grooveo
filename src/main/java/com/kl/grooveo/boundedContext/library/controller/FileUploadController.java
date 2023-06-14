@@ -56,6 +56,11 @@ public class FileUploadController {
                               @RequestParam("albumCover") MultipartFile albumCover,
                               @RequestParam("sound") MultipartFile sound) {
         try {
+            if (albumCover.isEmpty() || sound.isEmpty()) {
+                bindingResult.rejectValue("file", "required", "음원과 앨범 등록은 필수입니다.");
+                return "redirect:/library/soundUpload";
+            }
+
             String albumCoverExtension = FilenameUtils.getExtension(albumCover.getOriginalFilename());
             String albumCoverName = UUID.randomUUID().toString() + "." + albumCoverExtension;
             String albumCoverUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/albumCover/" + albumCoverName;
