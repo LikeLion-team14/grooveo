@@ -27,7 +27,7 @@
             </tr>
             </thead>
             <tr th:each="fileInfo, stat : ${paging.content}" class="text-center">
-                <td th:text="${stat.count + 1}"></td>
+                <td th:text="${stat.count}"></td>
                 <td>
                     <a id="subject" th:href="@{|/library/soundDetail/${fileInfo.id}|}" th:text="${fileInfo.title}" class="whitespace-nowrap overflow-x-hidden overflow-ellipsis">
                     </a>
