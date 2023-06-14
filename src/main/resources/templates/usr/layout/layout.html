@@ -73,7 +73,7 @@
                         <li><a href="/community/freedomPost/2/list" style="color: black;">국내 게시판</a></li>
                     </ul>
                 </div>
-                <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="/usr/member/myPage">내 정보</a>
+                <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="/usr/member/myPage/library">내 정보</a>
                 <a th:if="${@rq.login}" class="btn btn-ghost rounded-btn" href="javascript:" onclick="$(this).next().submit();">로그아웃</a>
                 <form class="!hidden" hidden th:action="|/usr/member/logout|" method="POST"></form>
                 <a id="openModalButton1" class="btn btn-ghost btn-circle" th:if="${@rq.login}">
