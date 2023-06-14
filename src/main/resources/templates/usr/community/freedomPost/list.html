@@ -50,23 +50,24 @@
                 </div>
             </form>
         </div>
-
-        <div class="search-box flex justify-end items-center">
-            <div class="relative">
-                <input type="text" placeholder="제목 / 글쓴이 검색" id="search_kw"
-                       class="bg-black bg-opacity-10 h-6 w-60 p-4 pr-12" th:value="${kw}"/>
-                <a id="btn_search"
-                   class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-lg pr-3">
-                    <i class="search-Button fas fa-search text-gray-700"></i>
+        <div>
+            <!-- 검색 박스 및 음악 등록 버튼 -->
+            <form th:action="@{|/community/freedomPost/${boardType}/list|}" method="get" id="searchForm" class="flex justify-end items-center mt-5">
+                <div class="relative">
+                    <input type="text" placeholder="제목 / 글쓴이 검색" id="search_kw" class="bg-black bg-opacity-10 h-6 w-60 p-4 pr-12"/>
+                    <a id="btn_search"
+                       class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-lg pr-3">
+                        <i class="search-Button fas fa-search text-gray-700"></i>
+                    </a>
+                    <input type="hidden" id="kw" name="kw" th:value="${kw}">
+                    <input type="hidden" id="page" name="page" th:value="${paging.number}">
+                </div>
+                <a th:href="@{|/community/freedomPost/create|}"
+                   class="bg-black bg-opacity-10 h-6 p-4 w-26 ml-4 text-sm flex items-center justify-center hover:bg-opacity-30">
+                    <span class="text-center">게시글 작성</span>
                 </a>
-            </div>
-            <a th:href="@{|/community/freedomPost/create|}" class="btn btn-sm btn-outline ml-5">게시글 작성</a>
+            </form>
         </div>
-
-        <form th:action="@{|/community/freedomPost/${boardType}/list|}" method="get" id="searchForm">
-            <input type="hidden" id="kw" name="kw" th:value="${kw}">
-            <input type="hidden" id="page" name="page" th:value="${paging.number}">
-        </form>
 
         <script>
             window.onload = function () {
@@ -217,11 +218,21 @@
                 document.getElementById('searchForm').submit();
             });
         });
+
         const btn_search = document.getElementById("btn_search");
         btn_search.addEventListener('click', function () {
             document.getElementById('kw').value = document.getElementById('search_kw').value;
             document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
             document.getElementById('searchForm').submit();
+        });
+
+        // 검색 폼에서 엔터 입력 시 submit 처리
+        document.getElementById("search_kw").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                // 기본 동작 방지하지 않음
+                document.getElementById("kw").value = event.target.value; // 검색어 전달
+                document.getElementById("searchForm").submit(); // 검색 폼 제출
+            }
         });
 
         document.addEventListener('DOMContentLoaded', function () {
