@@ -68,7 +68,8 @@
                         class="mr-3 w-32 font-bold">Follow</span><span
                         id="followingCount" th:text="${@rq.member.followerPeople.size()}"
                         class="badge badge-lg rounded-pill badge-neutral">0</span></button>
-                <button class="flex my-10"><span class="mr-3 w-32 font-bold">Tracks</span><span
+                <button onclick="tracks_modal.showModal()" class="flex my-10"><span
+                        class="mr-3 w-32 font-bold">Tracks</span><span
                         id="soundCount" th:text="${@rq.member.fileInfos.size()}"
                         class="badge badge-lg rounded-pill badge-neutral">0</span></button>
             </div>
@@ -126,7 +127,8 @@
                 <div th:if="${!#lists.isEmpty(@rq.member.getFollowingPeople())}" class="w-full max-w-xs"
                      th:each="follower : ${@rq.member.getFollowingPeople()}">
                     <div class="flex items-center space-x-4 mb-4">
-                        <img th:src="${follower.follower.profileImageUrl}" alt="프로필 사진" class="w-11 h-11 rounded-full border border-gray-100">
+                        <img th:src="${follower.follower.profileImageUrl}" alt="프로필 사진"
+                             class="w-11 h-11 rounded-full border border-gray-100">
                         <span class="text-base font-medium flex flex-grow"
                               th:text="${follower.follower.username}"></span>
                         <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
@@ -163,6 +165,40 @@
                                 type="button" onclick="delete_following(this)">
                             <span id="delete-follow-text" class="text-center">삭제</span>
                         </button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Tracks Modal -->
+    <dialog id="tracks_modal" class="modal" onclose="refreshPage()">
+        <form method="dialog" class="modal-box w-80" style="width: 450px">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-lg text-center flex-grow">Tracks</h3>
+                <button class="btn btn-xs">X</button>
+            </div>
+            <div class="flex flex-col items-center mt-4" style="max-height: 400px; overflow-y: auto;">
+                <!-- 트랙 리스트 시작 -->
+                <div th:unless="${!#lists.isEmpty(@rq.member.getFileInfos())}" class="text-center">
+                    <div class="mt-5"><i class="fa-regular fa-face-sad-tear"></i>아직 업로드 한 음원이 없습니다.</div>
+                </div>
+
+                <div th:if="${!#lists.isEmpty(@rq.member.fileInfos)}" class="w-full"
+                     th:each="track : ${@rq.member.fileInfos}">
+                    <div class="flex items-center mb-4">
+                        <img th:src="${track.albumCoverUrl}" alt="커버 사진"
+                             class="w-11 h-11 rounded-full mr-2">
+                        <section class="flex flex-wrap whitespace-nowrap">
+                            <span th:text="${track.title}"></span>
+                            <section>
+                                <span class="text-xs mr-2"
+                                      th:text="${#temporals.format(track.createDate, 'yyyy.MM.dd')}"></span>
+                                <i class="fa-solid fa-heart text-xs" style="color: #e60f2f;"></i>
+                                <span class="text-xs" th:text="${track.getSoundThumbsUpList().size()}">0</span>
+                            </section>
+                        </section>
 
                     </div>
                 </div>
