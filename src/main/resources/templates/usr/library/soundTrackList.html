@@ -9,12 +9,15 @@
 
     <title>라이브러리</title>
     <meta th:if="${error}" name="errorMsg" th:content="${exception}"/>
+
+    <meta th:if="${@rq.isLogin()}" name="currentUsername" th:content="${@rq.getMember().getUsername()}"/>
+    <meta th:if="${@rq.isLogout()}" name="currentUsername" th:content="no"/>
 </head>
 
 <body>
 <main layout:fragment="main">
     <div class="flex flex-col align-center mx-auto max-w-7xl w-full mt-3 mb-28">
-        <form th:action method="POST" class="flex flex-col gap-6" enctype="multipart/form-data">
+        <form th:action class="flex flex-col gap-6" enctype="multipart/form-data">
             <div class="flex justify-center">
                 <div class="posts-box">
                     <!-- 라이브러리 제목 -->
@@ -85,7 +88,12 @@
                                            class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"></a>
                                     </td>
                                     <td>
-                                        <button id="author" th:text="${fileInfo.artist.username}"></button>
+                                        <section class="flex justify-center">
+                                            <button id="artist" onclick="profile_modal.showModal();showProfile()"
+                                                    type="button"
+                                                    class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"
+                                                    th:text="${fileInfo.artist.username}"></button>
+                                        </section>
                                     </td>
                                     <td>
                                         <div class="flex justify-center items-center">
@@ -127,6 +135,51 @@
             </div>
         </form>
     </div>
+
+    <!-- Profile_modal -->
+    <dialog id="profile_modal" class="modal">
+        <form method="dialog" class="modal-box" style="width: 400px; overflow-y: auto;">
+            <div class="modal-action">
+                <button class="btn btn-xs btn-outline">X</button>
+            </div>
+            <div class="flex flex-wrap gap-4">
+                <img id="profile-image" src="" class="border-2 border-gray-100" style="width: 70px; height: 70px; border-radius: 50%;">
+                <section class="flex flex-col justify-center">
+                    <span class="text-lg" id="modal-username"></span>
+                    <span class="text-sm text-gray-600">Kim Jun Tae</span>
+                </section>
+            </div>
+
+            <div class="flex flex-wrap justify-between mt-4">
+                <section class="flex flex-col">
+                    <span class="flex justify-center font-bold" id="track-count">0</span>
+                    <span class="text-sm">음원수</span>
+                </section>
+
+                <section class="flex flex-col">
+                    <span class="flex justify-center font-bold" id="post-count">0</span>
+                    <span class="text-sm">게시글</span>
+                </section>
+
+                <section class="flex flex-col">
+                    <span class="flex justify-center font-bold" id="follower-count">0</span>
+                    <span class="text-sm">팔로우</span>
+                </section>
+
+                <section class="flex flex-col">
+                    <span class="flex justify-center font-bold" id="following-count">0</span>
+                    <span class="text-sm">팔로잉</span>
+                </section>
+            </div>
+
+            <div class="flex justify-center">
+                <button th:if="${@rq.login}" id="follow-button" type="button"
+                        class="followBtn btn btn-sm mt-4 rounded-none">
+                    Follow
+                </button>
+            </div>
+        </form>
+    </dialog>
 
     <div class="player-bar flex items-center w-full border-2 bg-gray-300 h-16">
         <div class="flex mx-auto gap-14 items-center">
@@ -340,6 +393,114 @@
 
             currentButton = button; // 현재 버튼을 전역 변수에 저장합니다.
         }
+    </script>
+    <script>
+
+        function getProfile(username) {
+            $.ajax({
+                type: "GET",
+                url: "/api/member/getProfile",
+                data: {username: username},
+                success: function (response) {
+
+                    // 프로필 정보를 성공적으로 가져왔을 때 처리할 로직
+                    const profileImageUrl = response.profileImageUrl;
+                    const followingCount = response.followingPeopleCount;
+                    const followerCount = response.followerPeopleCount;
+                    const postCount = response.postCount;
+                    //const trackCount = response.trackCount; // TODO:음원업로드시 수정예정
+                    const isFollowing = response.following;
+
+                    // 가져온 프로필 정보를 원하는 대로 처리합니다. (콜백방식)
+                    $('#profile-image').attr('src', profileImageUrl);
+                    $('#modal-username').text(username);
+                    //$('#track-count').text(trackCount); // TODO:음원업로드시 수정예정
+                    $('#post-count').text(postCount);
+                    $('#following-count').text(followingCount);
+                    $('#follower-count').text(followerCount);
+
+                    // 버튼의 텍스트 변경
+                    if (isFollowing) {
+                        $('.followBtn').addClass('following').text("UnFollow");
+                    } else {
+                        $('.followBtn').removeClass('following').text("Follow");
+                    }
+                },
+                error: function (error) {
+                    console.error('Error retrieving profile:', error);
+                }
+            });
+        }
+
+        function showProfile() {
+            const modalUsername = document.getElementById("modal-username");
+            modalUsername.textContent = document.getElementById("artist").textContent;
+
+            getProfile(modalUsername.textContent);
+        }
+
+        $('.followBtn').on('click', function () {
+            var isFollowing = $(this).hasClass('following');
+            var currentUsername = $("meta[name='currentUsername']").attr("content");
+            if (currentUsername === "no") {
+                toastWarning('login 후 이용 가능합니다.');
+                return;
+            }
+            follow(isFollowing, currentUsername);
+        });
+
+        function follow(isFollowing, currentUsername) {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            const username = document.getElementById("modal-username").textContent;
+
+            if (currentUsername === username) {
+                toastWarning('자신을 팔로우 할 수 없습니다.');
+                return;
+            }
+
+            if (isFollowing) {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/unFollow?username=" + username,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function (result) {
+                        if (result === "unFollow") {
+                            $('.followBtn').removeClass('following').text("Follow");
+
+                            // 팔로잉 숫자 업데이트
+                            var followingCount = parseInt($('#following-count').text());
+                            $('#following-count').text(followingCount - 1);
+                        }
+                    },
+                    error: function (error) {
+                        toastWarning('자신을 언팔로우 할 수 없습니다.');
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/follow?username=" + username,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function (result) {
+                        if (result === "follow") {
+                            $('.followBtn').addClass('following').text("UnFollow");
+
+                            // 팔로잉 숫자 업데이트
+                            var followingCount = parseInt($('#following-count').text());
+                            $('#following-count').text(followingCount + 1);
+                        }
+                    }, error: function (error) {
+                        toastWarning('자신을 팔로우 할 수 없습니다.');
+                    }
+                })
+            }
+        }
+
     </script>
 </main>
 </body>
