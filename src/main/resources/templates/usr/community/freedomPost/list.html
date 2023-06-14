@@ -174,7 +174,7 @@
                     <img id="profile-image" src="" class="border-2 border-gray-100" style="width: 70px; height: 70px; border-radius: 50%;">
                     <section class="flex flex-col justify-center">
                         <span class="text-lg" id="modal-username"></span>
-                        <span class="text-sm text-gray-600">Kim Jun Tae</span>
+                        <span class="text-sm text-gray-600" id="modal-userNickname"></span>
                     </section>
                 </div>
 
@@ -259,10 +259,12 @@
                     const postCount = response.postCount;
                     const trackCount = response.trackCount;
                     const isFollowing = response.following;
+                    const nickName = response.nickName;
 
                     // 가져온 프로필 정보를 원하는 대로 처리합니다. (콜백방식)
                     $('#profile-image').attr('src', profileImageUrl);
                     $('#modal-username').text(username);
+                    $('#modal-userNickname').text(nickName);
                     $('#track-count').text(trackCount);
                     $('#post-count').text(postCount);
                     $('#following-count').text(followingCount);
