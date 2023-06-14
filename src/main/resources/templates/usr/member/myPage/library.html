@@ -4,19 +4,18 @@
         <i class="fa-regular fa-comment"></i>
         업로드한 음원
     </h2>
-    <!--
-    <div th:unless="${!#lists.isEmpty(fileInfos)}" class="text-center">
+
+    <div th:unless="${!#lists.isEmpty(paging.content)}" class="text-center">
         <div>업로드한 음원이 없습니다.</div>
     </div>
 
-    <div th:if="${!#lists.isEmpty(fileInfos)}">
-    -->
-    <div>
+    <div th:if="${!#lists.isEmpty(paging.content)}">
+
         <table class="table w-full mt-4">
             <colgroup>
                 <col width="60">
-                <col width="200">
                 <col>
+                <col width="200">
                 <col width="120">
             </colgroup>
             <thead class="table-dark">
@@ -27,7 +26,7 @@
                 <th>날짜</th>
             </tr>
             </thead>
-            <tr th:each="fileInfo, stat : ${paging.content}">
+            <tr th:each="fileInfo, stat : ${paging.content}" class="text-center">
                 <td th:text="${stat.count + 1}"></td>
                 <td>
                     <a id="subject" th:href="@{|/library/soundDetail/${fileInfo.id}|}" th:text="${fileInfo.title}" class="whitespace-nowrap overflow-x-hidden overflow-ellipsis">
@@ -66,5 +65,28 @@
         </div>
         <!-- 페이징처리 끝 -->
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URL(location.href).searchParams;
+            let currentPage = parseInt(urlParams.get('page'));
+            const pageButtons = document.getElementsByClassName("page-link");
+
+            for (let i = 0; i < pageButtons.length; i++) {
+                const pageButton = pageButtons[i];
+                const pageNumber = parseInt(pageButton.dataset.page);
+                if (isNaN(currentPage)) {
+                    currentPage = 0;
+                }
+                if (pageNumber === currentPage) {           // 지금 현재 페이지
+                    pageButton.classList.remove("btn-outline")
+                    pageButton.classList.add("btn-neutral");
+                } else {
+                    pageButton.classList.add("btn-outline")
+                    pageButton.classList.remove("btn-neutral");
+                }
+            }
+        });
+    </script>
 </div>
 </html>
