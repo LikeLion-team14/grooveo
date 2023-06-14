@@ -6,102 +6,43 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title></title>
+    <link rel="stylesheet" href="/resource/library/soundDetail.css">
 
-    <style>
-        /* 커스텀 */
-        html {
-            background-color: white;
+    <script>
+        function commentForm__submit(form) {
+            form.content.value = form.content.value.trim(); // 댓글 좌우 공백 제거
+            if (form.content.value.length === 0) {
+                toastWarning('댓글의 내용을 입력해주세요.');
+                form.content.focus();
+                return;
+            }
+
+            if (form.content.value.length > 600) {
+                toastWarning('댓글의 내용은 600자 이하로 입력해주세요.');
+                form.content.focus();
+                return;
+            }
+
+            form.submit();
         }
 
-        input:focus {
-            outline: none;
-        }
+        function replyForm__submit(form) {
+            form.content.value = form.content.value.trim(); // 답글 좌우 공백 제거
+            if (form.content.value.length === 0) {
+                toastWarning('답글의 내용을 입력해주세요.');
+                form.content.focus();
+                return;
+            }
 
-        textarea:focus {
-            outline: none;
-        }
+            if (form.content.value.length > 400) {
+                toastWarning('답글의 내용은 400자 이하로 입력해주세요.');
+                form.content.focus();
+                return;
+            }
 
-        input[type="submit"] {
-            background-color: rgba(0, 0, 0, 0.1);
+            form.submit();
         }
-
-        input[type="submit"]:hover {
-            background-color: rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-        }
-
-        .slider {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 200px; /* 슬라이더 길이를 250px로 수정 */
-            height: 7px;
-            background: #d3d3d3;
-            outline: none;
-            opacity: 1;
-            transition: opacity 0.2s;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 15px;
-            height: 15px;
-            background: none;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-
-        .slider::-moz-range-thumb {
-            width: 15px;
-            height: 15px;
-            background: none;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-
-        .slider::-moz-range-progress {
-            background-color: black;
-        }
-
-        .text-content {
-            max-height: 600px;
-            overflow: hidden;
-        }
-
-        .fade-out {
-            height: 20px;
-            background-image: linear-gradient(
-                    to bottom,
-                    rgba(255, 255, 255, 0),
-                    rgba(255, 255, 255, 1)
-            );
-            position: relative;
-            bottom: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .button-container {
-            display: none;
-        }
-
-        .button-container.show {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .button-container.show .read-more {
-            display: inline-block;
-        }
-
-        .button-container.show .read-less {
-            display: none;
-        }
-
-        .fade-out.show {
-            opacity: 1;
-        }
-    </style>
+    </script>
 </head>
 <body>
 <main layout:fragment="main">

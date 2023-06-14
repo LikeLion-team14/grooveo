@@ -43,6 +43,43 @@
             cursor: pointer;
         }
     </style>
+    <script>
+
+        function PostForm__submit(form) {
+            form.title.value = form.title.value.trim(); // 제목 좌우 공백 제거
+            if (form.title.value.length === 0) {
+                toastWarning('음원명을 입력해주세요.');
+                form.title.focus();
+                return;
+            }
+
+            if (form.title.value.length > 30) {
+                toastWarning('음원명을 30자 이하로 입력해주세요.');
+                form.title.focus();
+                return;
+            }
+
+            if (form.description.value.length === 0) {
+                toastWarning('음원의 설명을 입력해주세요.');
+                form.description.focus();
+                return;
+            }
+
+            if (!form.albumCover.value) {
+                toastWarning('앨범 커버를 업로드해주세요.');
+                return;
+            }
+
+            if (!form.soundFile.value) {
+                toastWarning('음원 파일을 업로드해주세요.');
+                return;
+            }
+
+            form.submit();
+        }
+
+
+    </script>
     <title>음원 등록</title>
     <meta th:if="${error}" name="errorMsg" th:content="${exception}"/>
 </head>
@@ -50,7 +87,7 @@
 <body>
 <main layout:fragment="main">
     <div class="flex h-full justify-center items-center">
-        <form th:action th:object="${soundTrackForm}" method="POST" class="flex flex-col gap-6" enctype="multipart/form-data">
+        <form th:action th:object="${soundTrackForm}" method="POST" class="flex flex-col gap-6" enctype="multipart/form-data" onsubmit="PostForm__submit(this); return false;">
             <div class="flex justify-center">
                 <div class="posts-box mt-20">
                     <div class="flex justify-center">
@@ -63,7 +100,7 @@
 
                         <!-- 앨범 커버 등록 -->
                         <div>
-                            <input type="file" name="albumCover" id="album-file" accept="image/*" style="display:none;">
+                            <input type="file" id="album-file" accept="image/*" style="display:none;" th:field="*{albumCover}">
                             <button id="custom-img-button" class="cursor-pointer bg-black bg-opacity-10 h-10 p-2 w-32 text-sm flex items-center justify-center hover:bg-opacity-30 mb-5">Upload AlbumCover</button>
                             <div class="w-52 h-52 border border-black border-opacity-10 flex items-end justify-center">
                                 <div id="image-preview"></div>
@@ -74,7 +111,7 @@
                         <div class="flex flex-col ml-4">
                             <!-- 음원 등록 버튼-->
                             <div class="file-upload-container flex items-center">
-                                <input type="file" name="sound" id="sound-file" accept="audio/*" style="display:none;">
+                                <input type="file" id="sound-file" accept="audio/*" style="display:none;" th:field="*{soundFile}">
                                 <button id="custom-button" class="cursor-pointer bg-black bg-opacity-10 h-10 p-4 w-32 text-sm flex items-center justify-center hover:bg-opacity-30">Upload Sound</button>
                                 <span id="file-name" class="w-64 h-10 border border-black border-opacity-10 p-4 text-sm block" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 7px; text-align: center;">선택된 파일 없음</span>
                             </div>
@@ -85,7 +122,7 @@
                             </div>
                             <!-- 제목 입력 -->
                             <div class="flex mt-2">
-                                <input id="id-input" type="text" name="title" th:field="*{title}" placeholder="제목을 입력하세요"
+                                <input id="id-input" type="text" th:field="*{title}" placeholder="제목을 입력하세요"
                                        class="border border-black border-opacity-10 h-10 p-4 w-96" />
                             </div>
 
@@ -95,7 +132,7 @@
                             </div>
                             <!-- 설명 입력 -->
                             <div class="flex mt-2">
-                                <textarea cols="45" rows="15" name="description" th:field="*{description}"
+                                <textarea cols="45" rows="15" th:field="*{description}"
                                           placeholder="설명을 입력하세요" class="border border-black border-opacity-10 resize-none p-4 mr-5 focus:outline-none"></textarea>
                             </div>
                         </div>

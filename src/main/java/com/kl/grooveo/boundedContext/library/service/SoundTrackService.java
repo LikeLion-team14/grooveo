@@ -62,9 +62,11 @@ public class SoundTrackService {
         fileInfoRepository.delete(fileInfo);
     }
 
-    public void modify(FileInfo fileInfo, String title, String description) {
+    public void modify(FileInfo fileInfo, String title, String description, String albumCover, String soundFile) {
         fileInfo.setTitle(title);
         fileInfo.setModifyDate(LocalDateTime.now());
+        fileInfo.setSoundUrl(soundFile);
+        fileInfo.setAlbumCoverUrl(albumCover);
         fileInfo.setDescription(description);
         this.fileInfoRepository.save(fileInfo);
     }
