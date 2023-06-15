@@ -7,9 +7,7 @@ import com.kl.grooveo.boundedContext.member.repository.MemberRepository;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp;
 import com.kl.grooveo.boundedContext.thumbsUp.service.SoundThumbsUpService;
 import jakarta.persistence.criteria.*;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,14 +25,17 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toMap;
 
-@RequiredArgsConstructor
 @Service
 public class SoundTrackService {
     private final FileInfoRepository fileInfoRepository;
     private final MemberRepository memberRepository;
-    @Autowired
-    @Setter
-    SoundThumbsUpService soundThumbsUpService;
+    private final SoundThumbsUpService soundThumbsUpService;
+
+    public SoundTrackService(FileInfoRepository fileInfoRepository, MemberRepository memberRepository, @Lazy SoundThumbsUpService soundThumbsUpService) {
+        this.fileInfoRepository = fileInfoRepository;
+        this.memberRepository = memberRepository;
+        this.soundThumbsUpService = soundThumbsUpService;
+    }
 
 
     private Specification<FileInfo> search(String kw) {

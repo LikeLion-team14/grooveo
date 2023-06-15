@@ -23,9 +23,7 @@ import java.util.Optional;
 public class SoundThumbsUpService {
     private final SoundThumbsUp_summaryRepository soundThumbsUpSummaryRepository;
     private final SoundThumbsUpRepository soundThumbsUpRepository;
-    @Autowired
-    @Setter
-    SoundTrackService soundTrackService;
+    private final SoundTrackService soundTrackService;
     private final MemberService memberService;
     private final ApplicationEventPublisher publisher;
 
