@@ -81,57 +81,54 @@
                                         <a class="play-button flex items-center justify-center p-3 hover:text-gray-300 mr-4"
                                            th:onclick="playMusic(/*[[${fileInfo.getSoundUrl()}]]*/ null, /*[[${fileInfo.getAlbumCoverUrl()}]]*/ null,
                                                /*[[${fileInfo.title}]]*/ null, /*[[${fileInfo.artist.username}]]*/ null, this)">
-                                            <i class="fas fa-play text-5xl"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <a id="subject" th:href="@{|/library/soundDetail/${fileInfo.id}|}"
-                                       th:text="${fileInfo.title}"
-                                       class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"></a>
-                                </td>
-                                <td>
-                                    <section class="flex justify-center">
-                                        <button id="artist" onclick="profile_modal.showModal();showProfile()"
-                                                type="button"
-                                                class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"
-                                                th:text="${fileInfo.artist.username}"></button>
-                                    </section>
-                                </td>
-                                <td>
-                                    <div class="flex justify-center items-center">
-                                        <a style="cursor: pointer" class="flex items-center mr-2"
-                                           th:onclick="likeBtnClick(/*[[${fileInfo.id}]]*/ null, this)">
-                                            <i th:if="${fileInfo.soundThumbsUpSummary == null}"
-                                               class="fa-regular fa-heart"></i>
-                                            <i th:unless="${fileInfo.soundThumbsUpSummary == null}"
-                                               class="fa-solid fa-heart" style="color: #e60f2f;"></i>
-                                        </a>
-                                        <span th:if="${fileInfo.soundThumbsUpSummary == null}" class="text-sm">0</span>
-                                        <span th:unless="${fileInfo.soundThumbsUpSummary == null}" class="text-sm"
-                                              th:text="${fileInfo.soundThumbsUpSummary.likeCount}"></span>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                                <i class="fas fa-play text-5xl"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a id="subject" th:href="@{|/library/soundDetail/${fileInfo.id}|}"
+                                           th:text="${fileInfo.title}"
+                                           class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"></a>
+                                    </td>
+                                    <td>
+                                        <section class="flex justify-center">
+                                            <button id="artist" onclick="profile_modal.showModal();getProfile(this.textContent)"
+                                                    type="button"
+                                                    class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"
+                                                    th:text="${fileInfo.artist.username}"></button>
+                                        </section>
+                                    </td>
+                                    <td>
+                                        <div class="flex justify-center items-center">
+                                            <a style="cursor: pointer" class="flex items-center mr-2" th:onclick="likeBtnClick(/*[[${fileInfo.id}]]*/ null, this)">
+                                                <i th:if="${fileInfo.getExtra_actor_hasIn()}" class="fa-regular fa-heart"></i>
+                                                <i th:unless="${fileInfo.getExtra_actor_hasIn()}" class="fa-solid fa-heart" style="color: #e60f2f;"></i>
+                                            </a>
+                                            <span th:if="${fileInfo.soundThumbsUpSummary == null}" class="text-sm">0</span>
+                                            <span th:unless="${fileInfo.soundThumbsUpSummary == null}" class="text-sm" th:text="${fileInfo.soundThumbsUpSummary.likeCount}"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
-                        <!-- 페이징처리 시작 -->
-                        <div th:if="${!paging.isEmpty()}" class="flex justify-center mt-2">
-                            <div class="btn-group pagination">
-                                <a class="page-link btn btn-xs" th:disabled="${!paging.hasPrevious} ? 'disabled'"
-                                   href="javascript:void(0)" th:data-page="${(paging.number)-1}">
-                                    <span>이전</span>
-                                </a>
-                                <a th:text="${page}" class="page-link btn btn-xs"
-                                   th:each="page: ${#numbers.sequence(0, (paging.totalPages)-1)}"
-                                   th:if="${page >= (paging.number)-5 and page <= paging.number+5}"
-                                   href="javascript:void(0)"
-                                   th:data-page="${page}"></a>
-                                <a class="page-link btn btn-xs" th:disabled="${!paging.hasNext} ? 'disabled'"
-                                   href="javascript:void(0)" th:data-page="${paging.number+1}">
-                                    <span>다음</span>
-                                </a>
+                            <!-- 페이징처리 시작 -->
+                            <div th:if="${!paging.isEmpty()}" class="flex justify-center mt-2">
+                                <div class="btn-group pagination">
+                                    <a class="page-link btn btn-xs" th:disabled="${!paging.hasPrevious} ? 'disabled'"
+                                       href="javascript:void(0)" th:data-page="${(paging.number)-1}">
+                                        <span>이전</span>
+                                    </a>
+                                    <a th:text="${page}" class="page-link btn btn-xs"
+                                       th:each="page: ${#numbers.sequence(0, (paging.totalPages)-1)}"
+                                       th:if="${page >= (paging.number)-5 and page <= paging.number+5}"
+                                       href="javascript:void(0)"
+                                       th:data-page="${page}"></a>
+                                    <a class="page-link btn btn-xs" th:disabled="${!paging.hasNext} ? 'disabled'"
+                                       href="javascript:void(0)" th:data-page="${paging.number+1}">
+                                        <span>다음</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         <!-- 페이징처리 끝 -->

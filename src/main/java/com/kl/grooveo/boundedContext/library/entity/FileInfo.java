@@ -5,6 +5,7 @@ import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp_summary;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -61,5 +64,23 @@ public class FileInfo {
         } else if (diff < 86400) {
             return (diff / 60 / 60) + "시간 전";
         } else return getCreateDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    }
+
+    @Transient
+    @Builder.Default
+    private Map<String, Object> extra = new LinkedHashMap<>();
+
+    public SoundThumbsUp getExtra_actor_fileInfo() {
+        Map<String, Object> extra = getExtra();
+
+        if (!extra.containsKey("actor_fileInfo")) {
+            return null;
+        }
+
+        return (SoundThumbsUp) extra.get("actor_fileInfo");
+    }
+
+    public boolean getExtra_actor_hasIn() {
+        return getExtra_actor_fileInfo() == null;
     }
 }
