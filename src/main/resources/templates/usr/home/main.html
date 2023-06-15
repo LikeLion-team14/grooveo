@@ -224,19 +224,21 @@
             <div class="swiper-slide" th:each="song : ${latestSongs}">
                 <div class="inner">
                     <div class="con pt-10">
-                        <div class="image-container">
-                            <img class="border-2" th:src="${song.albumCoverUrl}">
-                        </div>
-                        <div class="flex items-center flex-col mt-3">
-                            <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>
-                            <span class="text-lg font-bold" th:text="${song.artist.username}">아티스트 이름</span>
-                        </div>
-                        <div class="flex justify-end items-center mr-5">
-                            <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
-                            <span th:if="${song.soundThumbsUpSummary == null}">0</span>
-                            <span th:unless="${song.soundThumbsUpSummary == null}"
-                                  th:text="${song.soundThumbsUpSummary.likeCount}"></span>
-                        </div>
+                        <a th:href="@{|/library/soundDetail/${song.id}|}">
+                            <div class="image-container">
+                                <img class="border-2" th:src="${song.albumCoverUrl}">
+                            </div>
+                            <div class="flex items-center flex-col mt-3">
+                                <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>
+                                <span class="text-lg font-bold" th:text="${song.artist.username}">아티스트 이름</span>
+                            </div>
+                            <div class="flex justify-end items-center mr-5">
+                                <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
+                                <span th:if="${song.soundThumbsUpSummary == null}">0</span>
+                                <span th:unless="${song.soundThumbsUpSummary == null}"
+                                      th:text="${song.soundThumbsUpSummary.likeCount}"></span>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
