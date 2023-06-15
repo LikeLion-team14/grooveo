@@ -70,7 +70,7 @@ public class FileInfo {
     @Builder.Default
     private Map<String, Object> extra = new LinkedHashMap<>();
 
-    public SoundThumbsUp getExtra_actor_cartItem() {
+    public SoundThumbsUp getExtra_actor_fileInfo() {
         Map<String, Object> extra = getExtra();
 
         if (!extra.containsKey("actor_fileInfo")) {
@@ -80,7 +80,7 @@ public class FileInfo {
         return (SoundThumbsUp) extra.get("actor_fileInfo");
     }
 
-    public boolean getExtra_actor_hasInCart() {
-        return getExtra_actor_cartItem() != null;
+    public boolean getExtra_actor_hasIn() {
+        return getExtra_actor_fileInfo() == null;
     }
 }
