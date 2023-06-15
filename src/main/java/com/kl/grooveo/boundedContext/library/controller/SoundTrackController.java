@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -51,10 +52,13 @@ public class SoundTrackController {
                               @RequestParam(value = "page", defaultValue = "0") int page,
                               @RequestParam(value = "kw", defaultValue = "") String kw) {
 
+        List<FileInfo> soundTracks = soundTrackService.findAllForPrintByOrderByIdDesc(rq.getMember());
+
         Page<FileInfo> paging = this.soundTrackService.getList(kw, page, sortCode);
         model.addAttribute("sortCode", sortCode);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
+        model.addAttribute("soundTracks",soundTracks);
 
         return "usr/library/soundTrackList";
     }

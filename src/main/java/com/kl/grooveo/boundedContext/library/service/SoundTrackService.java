@@ -4,8 +4,12 @@ import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.repository.MemberRepository;
+import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp;
+import com.kl.grooveo.boundedContext.thumbsUp.service.SoundThumbsUpService;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +22,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
 @Service
 public class SoundTrackService {
     private final FileInfoRepository fileInfoRepository;
     private final MemberRepository memberRepository;
+    @Autowired
+    @Setter
+    SoundThumbsUpService soundThumbsUpService;
 
 
     private Specification<FileInfo> search(String kw) {
@@ -88,5 +98,41 @@ public class SoundTrackService {
 
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createDate"));
         return fileInfoRepository.findAllByArtist(member, pageRequest);
+    }
+
+    public List<FileInfo> findAllByOrderByIdDesc() {
+        return fileInfoRepository.findAllByOrderByIdDesc();
+    }
+
+    public List<FileInfo> findAllForPrintByOrderByIdDesc(Member actor) {
+        List<FileInfo> fileInfos = findAllByOrderByIdDesc();
+
+        loadForPrintData(fileInfos, actor);
+
+        return fileInfos;
+    }
+
+    private void loadForPrintData(List<FileInfo> fileInfos, Member actor) {
+        long[] ids = fileInfos
+                .stream()
+                .mapToLong(FileInfo::getId)
+                .toArray();
+
+        if (actor != null) {
+            List<SoundThumbsUp> soundThumbsUps = soundThumbsUpService.findAllByMemberIdAndFileInfoIdIn(actor.getId(), ids);
+
+            Map<Long, SoundThumbsUp> soundThumbsUpsByProductIdMap = soundThumbsUps
+                    .stream()
+                    .collect(toMap(
+                            soundThumbsUp -> soundThumbsUp.getFileInfo().getId(),
+                            soundThumbsUp -> soundThumbsUp
+                    ));
+
+            fileInfos.stream()
+                    .filter(fileInfo -> soundThumbsUpsByProductIdMap.containsKey(fileInfo.getId()))
+                    .map(fileInfo -> soundThumbsUpsByProductIdMap.get(fileInfo.getId()))
+                    .forEach(soundThumbsUp -> soundThumbsUp.getFileInfo().getExtra().put("actor_fileInfo", soundThumbsUp));
+
+        }
     }
 }
