@@ -65,7 +65,7 @@ public class FreedomPostService {
                         cb.and(cb.equal(postRoot.get("category"), category),
                                 cb.or(cb.like(postRoot.get("title"), "%" + kw + "%"),
                                         cb.like(postRoot.get("content"), "%" + kw + "%"),
-                                        cb.like(u1.get("nickname"), "%" + kw + "%"))));
+                                        cb.like(u1.get("nickName"), "%" + kw + "%"))));
                 /* 검색어를 기반으로 다양한 조건을 or 연산자로 묶어서 반환
                    cb는 CritierBuider 객체로, JPA Critier API를 사용하여 쿼리를 생성할 때 사용
                    cb.like() 메서드로 각 필드에서 검색어를 포함하는 경우를 찾음 -> 각 조건은 or연산자로 묶여 있으므로, 하나 이상의 조건이 true인 경우에 해당하는 엔티티가 검색 결과로 반환 */

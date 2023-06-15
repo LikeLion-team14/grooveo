@@ -49,7 +49,32 @@
                     </label>
                 </div>
             </form>
+
+            <script>
+                window.onload = function () {
+                    const urlParams = new URL(location.href).searchParams;
+                    let options = urlParams.get('options');
+                    switch (options) {
+                        case "c2":
+                            $('#music').prop("checked", true);
+                            break;
+                        case "c3":
+                            $('#review').prop("checked", true);
+                            break;
+                        case "c4":
+                            $('#lyrics').prop("checked", true);
+                            break;
+                        case "c5":
+                            $('#certify').prop("checked", true);
+                            break;
+                        default:
+                            $('#all').prop("checked", true);
+                            break;
+                    }
+                }
+            </script>
         </div>
+
         <div>
             <!-- 검색 박스 및 음악 등록 버튼 -->
             <form th:action="@{|/community/freedomPost/${boardType}/list|}" method="get" id="searchForm"
@@ -70,30 +95,6 @@
                 </a>
             </form>
         </div>
-
-        <script>
-            window.onload = function () {
-                const urlParams = new URL(location.href).searchParams;
-                let options = urlParams.get('options');
-                switch (options) {
-                    case "c2":
-                        $('#music').prop("checked", true);
-                        break;
-                    case "c3":
-                        $('#review').prop("checked", true);
-                        break;
-                    case "c4":
-                        $('#lyrics').prop("checked", true);
-                        break;
-                    case "c5":
-                        $('#certify').prop("checked", true);
-                        break;
-                    default:
-                        $('#all').prop("checked", true);
-                        break;
-                }
-            }
-        </script>
 
         <table class="table w-full table-fixed">
             <colgroup>
