@@ -24,7 +24,7 @@
                     </div>
                     <div class="my-4 ml-10 flex flex-col flex-grow">
                         <div class="flex">
-                            <span class="text-xl font-bold" th:text="${@rq.member.username}"></span>
+                            <span class="text-xl font-bold" th:text="${@rq.member.nickName}"></span>
                             <div class="dropdown dropdown-right ml-5">
                                 <label tabindex="0" class="btn btn-neutral btn-xs gap-1"><i
                                         class="fa-solid fa-lock"></i>Edit</label>
@@ -42,9 +42,12 @@
                                 </ul>
                             </div>
                         </div>
-                        <span class="mt-5 mb-2" th:text="${@rq.member.nickName}"></span>
-                        <span>At home, Democratic People's Republic of Korea</span>
+
                         <div class="flex flex-grow justify-end items-end">
+                            <section>
+                                <span class="badge badge-neutral p-2 mr-3">ID</span>
+                                <span class="mr-3" th:text="${@rq.member.username}"></span>
+                            </section>
                             <span class="badge badge-neutral p-2 mr-3">이메일</span><span
                                 class="mr-3" th:text="${@rq.member.email}"></span>
                             <span class="badge badge-neutral p-2 mr-3">가입날짜</span><span class="mr-3"
@@ -131,8 +134,9 @@
                              class="w-11 h-11 rounded-full border border-gray-100">
                         <div class="flex flex-col flex-grow w-full whitespace-nowrap overflow-x-hidden overflow-ellipsis">
                             <span class="text-base font-medium whitespace-nowrap overflow-x-hidden overflow-ellipsis"
-                                  th:text="${follower.follower.username}"></span>
-                            <span th:text="${follower.follower.nickName}" class="text-xs text-gray-500 whitespace-nowrap overflow-x-hidden overflow-ellipsis"></span>
+                                  th:text="${follower.follower.nickName}"></span>
+                            <span th:text="${follower.follower.username}"
+                                  class="text-xs text-gray-500 whitespace-nowrap overflow-x-hidden overflow-ellipsis"></span>
                         </div>
                         <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
                                 type="button" onclick="delete_follow(this)">
@@ -164,8 +168,9 @@
                              class="w-11 h-11 rounded-full border border-gray-100">
                         <div class="flex flex-col flex-grow w-full whitespace-nowrap overflow-x-hidden overflow-ellipsis">
                             <span class="text-base font-medium whitespace-nowrap overflow-x-hidden overflow-ellipsis"
-                                  th:text="${following.following.username}"></span>
-                            <span th:text="${following.following.nickName}" class="text-xs text-gray-500 whitespace-nowrap overflow-x-hidden overflow-ellipsis"></span>
+                                  th:text="${following.following.nickName}"></span>
+                            <span th:text="${following.following.username}"
+                                  class="text-xs text-gray-500 whitespace-nowrap overflow-x-hidden overflow-ellipsis"></span>
                         </div>
                         <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
                                 type="button" onclick="delete_following(this)">
