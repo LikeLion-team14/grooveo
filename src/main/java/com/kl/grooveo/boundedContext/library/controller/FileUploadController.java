@@ -68,7 +68,6 @@ public class FileUploadController {
             String title = URLEncoder.encode(soundTrackForm.getTitle(), StandardCharsets.UTF_8);
             String description = URLEncoder.encode(soundTrackForm.getDescription(), StandardCharsets.UTF_8);
 
-
             ObjectMetadata albumCoverMetadata = new ObjectMetadata();
             albumCoverMetadata.setContentType(soundTrackForm.getAlbumCover().getContentType());
             albumCoverMetadata.setContentLength(soundTrackForm.getAlbumCover().getSize());
