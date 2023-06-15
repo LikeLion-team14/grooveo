@@ -28,8 +28,12 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
 
     Page<FileInfo> findAllByArtist(Member member, PageRequest pageRequest);
 
-    @Query("SELECT fi FROM FileInfo fi ORDER BY SIZE(fi.soundThumbsUpList) DESC")
-    List<FileInfo> findTop10ByThumbsUpCount(Pageable pageable);
+    @Query("SELECT fi " +
+            "FROM FileInfo fi " +
+            "JOIN fi.soundThumbsUpSummary stu " +
+            "ORDER BY stu.likeCount DESC")
+    List<FileInfo> findTop10ByHighestLikeCount();
 
     List<FileInfo> findAllByOrderByIdDesc();
+
 }

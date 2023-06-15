@@ -65,6 +65,6 @@ public class FileInfoService {
     }
 
     public List<FileInfo> getPopularSongs() {
-        return fileInfoRepository.findTop10ByThumbsUpCount(PageRequest.of(0, 10));
+        return fileInfoRepository.findTop10ByHighestLikeCount();
     }
 }
