@@ -50,33 +50,33 @@
                                 <i class="fa-regular fa-message mr-2"></i>
                                 <div th:if="${notification.typeCode.equals('postLike')}">
                                     <span class="badge badge-primary"
-                                          th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한
+                                          th:text="${notification.fromMember.nickName}"></span> 님이 당신이 작성한
                                     게시글에 좋아요를 눌렀어요!
                                 </div>
                                 <div th:if="${notification.typeCode.equals('soundLike')}">
                                     <span class="badge badge-primary"
-                                          th:text="${notification.fromMember.username}"></span> 님이 당신의 음원에 좋아요를 눌렀어요!
+                                          th:text="${notification.fromMember.nickName}"></span> 님이 당신의 음원에 좋아요를 눌렀어요!
                                 </div>
                                 <div th:if="${notification.typeCode.equals('soundComment')}">
                                     <span class="badge badge-primary"
-                                          th:text="${notification.fromMember.username}"></span> 님이 당신의 음원 게시글에 댓글을 남겼어요!
+                                          th:text="${notification.fromMember.nickName}"></span> 님이 당신의 음원 게시글에 댓글을 남겼어요!
                                 </div>
                                 <div th:if="${notification.typeCode.equals('comment')}">
                                     <span class="badge badge-primary"
-                                          th:text="${notification.fromMember.username}"></span> 님이 당신이 작성한
+                                          th:text="${notification.fromMember.nickName}"></span> 님이 당신이 작성한
                                     게시글에 댓글을 달았어요!
                                 </div>
                                 <div th:if="${notification.typeCode.equals('follow')}">
                                     <span class="badge badge-primary"
-                                          th:text="${notification.fromMember.username}"></span> 님이 당신을 팔로우 했습니다.
+                                          th:text="${notification.fromMember.nickName}"></span> 님이 당신을 팔로우 했습니다.
                                 </div>
                                 <div th:if="${notification.typeCode.equals('unFollow')}">
                                     <span class="badge badge-primary"
-                                          th:text="${notification.fromMember.username}"></span> 님이 당신을 언팔로우 했습니다.
+                                          th:text="${notification.fromMember.nickName}"></span> 님이 당신을 언팔로우 했습니다.
                                 </div>
                                 <div th:if="${notification.typeCode.equals('upload')}">
                                     <span class="badge badge-primary"
-                                          th:text="${notification.fromMember.username}"></span> 님이 새로운 음원을 업로드 했습니다.
+                                          th:text="${notification.fromMember.nickName}"></span> 님이 새로운 음원을 업로드 했습니다.
                                 </div>
                             </div>
                         </div>
