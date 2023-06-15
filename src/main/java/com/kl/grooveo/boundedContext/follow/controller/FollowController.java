@@ -36,6 +36,25 @@ public class FollowController {
         return "follow";
     }
 
+    @PostMapping("/followNickName")
+    @ResponseBody
+    public String followNickName(@RequestParam String nickName) throws Exception {
+        if (rq.isLogout()) {
+            return rq.redirectWithMsg("/usr/member/login", "로그인이 필요합니다.");
+        }
+
+        Member actor = rq.getMember();
+        Member followingUser = memberService.findByUserNickName(nickName).orElseThrow();
+
+        RsData followRsdata = followService.following(actor, followingUser);
+
+        if (followRsdata.isFail()) {
+            return rq.historyBack(followRsdata);
+        }
+
+        return "follow";
+    }
+
     @PostMapping("/unFollow")
     @ResponseBody
     public String unFollow(@RequestParam String username) {
@@ -45,6 +64,24 @@ public class FollowController {
 
         Member actor = rq.getMember();
         Member followingUser = memberService.findByUsername(username).orElseThrow();
+
+        RsData unFollowRsdata = followService.unFollowing(actor, followingUser);
+
+        if (unFollowRsdata.isFail()) {
+            return rq.historyBack(unFollowRsdata);
+        }
+        return "unFollow";
+    }
+
+    @PostMapping("/unFollowNickName")
+    @ResponseBody
+    public String unFollowNickName(@RequestParam String nickName) {
+        if (rq.isLogout()) {
+            return rq.redirectWithMsg("/usr/member/login", "로그인이 필요합니다.");
+        }
+
+        Member actor = rq.getMember();
+        Member followingUser = memberService.findByUserNickName(nickName).orElseThrow();
 
         RsData unFollowRsdata = followService.unFollowing(actor, followingUser);
 
