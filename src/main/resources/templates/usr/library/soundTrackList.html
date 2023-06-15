@@ -144,10 +144,11 @@
                 <button class="btn btn-xs btn-outline">X</button>
             </div>
             <div class="flex flex-wrap gap-4">
-                <img id="profile-image" src="" class="border-2 border-gray-100" style="width: 70px; height: 70px; border-radius: 50%;">
+                <img id="profile-image" src="" class="border-2 border-gray-100"
+                     style="width: 70px; height: 70px; border-radius: 50%;">
                 <section class="flex flex-col justify-center">
-                    <span class="text-lg" id="modal-username"></span>
-                    <span class="text-sm text-gray-600" id="modal-userNickname"></span>
+                    <span class="text-lg" id="modal-userNickname"></span>
+                    <span class="text-sm text-gray-600" id="modal-username"></span>
                 </section>
             </div>
 
@@ -396,14 +397,12 @@
 
             currentButton = button; // 현재 버튼을 전역 변수에 저장합니다.
         }
-    </script>
-    <script>
 
-        function getProfile(username) {
+        function getProfile(userNickName) {
             $.ajax({
                 type: "GET",
                 url: "/api/member/getProfile",
-                data: {username: username},
+                data: {userNickName: userNickName},
                 success: function (response) {
 
                     // 프로필 정보를 성공적으로 가져왔을 때 처리할 로직
@@ -414,12 +413,13 @@
                     const trackCount = response.trackCount;
                     const isFollowing = response.following;
                     const nickName = response.nickName;
+                    const username = response.username;
 
                     // 가져온 프로필 정보를 원하는 대로 처리합니다. (콜백방식)
                     $('#profile-image').attr('src', profileImageUrl);
                     $('#modal-username').text(username);
-                    $('#track-count').text(trackCount);
                     $('#modal-userNickname').text(nickName);
+                    $('#track-count').text(trackCount);
                     $('#post-count').text(postCount);
                     $('#following-count').text(followingCount);
                     $('#follower-count').text(followerCount);
@@ -500,6 +500,7 @@
         }
 
     </script>
+
 </main>
 </body>
 </html>
