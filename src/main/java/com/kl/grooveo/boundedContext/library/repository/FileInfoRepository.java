@@ -30,4 +30,6 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
 
     @Query("SELECT fi FROM FileInfo fi ORDER BY SIZE(fi.soundThumbsUpList) DESC")
     List<FileInfo> findTop10ByThumbsUpCount(Pageable pageable);
+
+    List<FileInfo> findAllByOrderByIdDesc();
 }

@@ -99,8 +99,8 @@
                                     <td>
                                         <div class="flex justify-center items-center">
                                             <a style="cursor: pointer" class="flex items-center mr-2" th:onclick="likeBtnClick(/*[[${fileInfo.id}]]*/ null, this)">
-                                                <i th:if="${fileInfo.soundThumbsUpSummary == null}" class="fa-regular fa-heart"></i>
-                                                <i th:unless="${fileInfo.soundThumbsUpSummary == null}" class="fa-solid fa-heart" style="color: #e60f2f;"></i>
+                                                <i th:if="${fileInfo.getExtra_actor_hasIn()}" class="fa-regular fa-heart"></i>
+                                                <i th:unless="${fileInfo.getExtra_actor_hasIn()}" class="fa-solid fa-heart" style="color: #e60f2f;"></i>
                                             </a>
                                             <span th:if="${fileInfo.soundThumbsUpSummary == null}" class="text-sm">0</span>
                                             <span th:unless="${fileInfo.soundThumbsUpSummary == null}" class="text-sm" th:text="${fileInfo.soundThumbsUpSummary.likeCount}"></span>

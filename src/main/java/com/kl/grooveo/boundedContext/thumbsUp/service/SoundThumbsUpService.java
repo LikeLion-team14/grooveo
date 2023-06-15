@@ -10,9 +10,12 @@ import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp_summary;
 import com.kl.grooveo.boundedContext.thumbsUp.repository.SoundThumbsUpRepository;
 import com.kl.grooveo.boundedContext.thumbsUp.repository.SoundThumbsUp_summaryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -65,5 +68,9 @@ public class SoundThumbsUpService {
     public boolean isLikedByMember(Long postId, Member member) {
         FileInfo fileInfo = soundTrackService.getSoundTrack(postId);
         return soundThumbsUpRepository.existsByFileInfoAndMember(fileInfo, member);
+    }
+
+    public List<SoundThumbsUp> findAllByMemberIdAndFileInfoIdIn(Long id, long[] ids) {
+        return soundThumbsUpRepository.findAllByMemberIdAndFileInfoIdIn(id, ids);
     }
 }
