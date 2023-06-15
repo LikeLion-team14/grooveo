@@ -142,7 +142,7 @@ public class SoundTrackController {
         model.addAttribute("albumCoverUrl", fileInfo.getAlbumCoverUrl());
         model.addAttribute("soundUrl", fileInfo.getSoundUrl());
 
-        return "usr/library/soundModify";
+        return "usr/library/soundUpload";
     }
 
     @PreAuthorize("isAuthenticated()")
