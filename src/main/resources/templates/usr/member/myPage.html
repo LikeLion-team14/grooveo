@@ -6,9 +6,6 @@
     <!-- tab CSS 불러오기 -->
     <link rel="stylesheet" href="/resource/common/tab.css">
 
-
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
 <body>
@@ -135,7 +132,7 @@
                         <div class="flex flex-col flex-grow w-full whitespace-nowrap overflow-x-hidden overflow-ellipsis">
                             <span class="text-base font-medium whitespace-nowrap overflow-x-hidden overflow-ellipsis"
                                   th:text="${follower.follower.nickName}"></span>
-                            <span th:text="${follower.follower.username}"
+                            <span id="follower-username" th:text="${follower.follower.username}"
                                   class="text-xs text-gray-500 whitespace-nowrap overflow-x-hidden overflow-ellipsis"></span>
                         </div>
                         <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
@@ -169,7 +166,7 @@
                         <div class="flex flex-col flex-grow w-full whitespace-nowrap overflow-x-hidden overflow-ellipsis">
                             <span class="text-base font-medium whitespace-nowrap overflow-x-hidden overflow-ellipsis"
                                   th:text="${following.following.nickName}"></span>
-                            <span th:text="${following.following.username}"
+                            <span id="follow-user" th:text="${following.following.username}"
                                   class="text-xs text-gray-500 whitespace-nowrap overflow-x-hidden overflow-ellipsis"></span>
                         </div>
                         <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
@@ -270,13 +267,12 @@
         context2.lineTo(canvas2.width / 2, canvas2.height);
         context2.stroke();
 
-        // Delete Follow
+        // Delete Follower
         function delete_follow(button) {
-            var username = button.previousElementSibling.textContent;
+            var username = document.getElementById('follower-username').textContent;
             var text = document.getElementById('delete-follower-text');
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
-
             // 확인 메시지 표시
             if (confirm("정말로 삭제하시겠습니까?")) {
                 // Ajax 요청 설정
@@ -319,7 +315,7 @@
 
         // Delete Following
         function delete_following(button) {
-            var username = button.previousElementSibling.textContent;
+            var username = document.getElementById('follow-user').textContent;
             var text = document.getElementById('delete-follow-text');
 
             var token = $("meta[name='_csrf']").attr("content");
