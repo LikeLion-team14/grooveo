@@ -71,7 +71,8 @@
                                 </thead>
                                 <tbody class="cursor-pointer">
                                 <tr class="hover" th:each="fileInfo, loop : ${paging}">
-                                    <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+                                    <td th:unless="${sortCode == 2}" th:text="${(paging.number * paging.size) + loop.index + 1}"></td>
+                                    <td th:if="${sortCode == 2}" th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
                                     <td>
                                         <div class="image-container">
                                             <img th:src="${fileInfo.getAlbumCoverUrl()}" alt="" class="w-16 h-16 object-cover">
