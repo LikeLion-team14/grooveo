@@ -19,10 +19,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -65,17 +65,20 @@ public class FileUploadController {
             String soundName = UUID.randomUUID().toString() + "." + soundExtension;
             String soundUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/sound/" + soundName;
 
+            String title = URLEncoder.encode(soundTrackForm.getTitle(), StandardCharsets.UTF_8);
+            String description = URLEncoder.encode(soundTrackForm.getDescription(), StandardCharsets.UTF_8);
+
             ObjectMetadata albumCoverMetadata = new ObjectMetadata();
             albumCoverMetadata.setContentType(soundTrackForm.getAlbumCover().getContentType());
             albumCoverMetadata.setContentLength(soundTrackForm.getAlbumCover().getSize());
-            albumCoverMetadata.addUserMetadata("title", soundTrackForm.getTitle());
-            albumCoverMetadata.addUserMetadata("description", soundTrackForm.getDescription());
+            albumCoverMetadata.addUserMetadata("title", title);
+            albumCoverMetadata.addUserMetadata("description", description);
 
             ObjectMetadata soundMetadata = new ObjectMetadata();
             soundMetadata.setContentType(soundTrackForm.getSoundFile().getContentType());
             soundMetadata.setContentLength(soundTrackForm.getSoundFile().getSize());
-            soundMetadata.addUserMetadata("title", soundTrackForm.getTitle());
-            soundMetadata.addUserMetadata("description", soundTrackForm.getDescription());
+            soundMetadata.addUserMetadata("title", title);
+            soundMetadata.addUserMetadata("description", description);
 
             amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName, soundTrackForm.getAlbumCover().getInputStream(), albumCoverMetadata));
             amazonS3Client.putObject(new PutObjectRequest(bucket, "sound/" + soundName, soundTrackForm.getSoundFile().getInputStream(), soundMetadata));
