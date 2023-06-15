@@ -214,9 +214,9 @@
             top: 0;
             right: 0;
             bottom: 0;
-            left: 70%;
+            left: 68%;
             width: 30%;
-            height: 85%;
+            height: 90%;
             /* div 스타일을 설정하세요 */
         }
 
@@ -231,7 +231,7 @@
 
 <main layout:fragment="main">
     <!-- 배너 -->
-    <div class="w-full border-4 border-red-500">
+    <div class="w-full">
         <div class="relative">
             <img src="/images/grooveo.jpg" alt="banner" class="w-screen">
             <div class="search-box flex justify-center absolute bottom-0 w-full text-center" style="bottom: 10%;">
@@ -248,7 +248,7 @@
             </div>
         </div>
     </div>
-    <div class="border-4 border-gray-700">
+    <div>
         <div class="flex justify-center items-center mt-10 mb-5">
             <span class="text-center text-3xl">최신 음원</span>
         </div>
@@ -286,18 +286,18 @@
             <div class="swiper-pagination"></div>
         </div>
     </div>
-    <div class="border-4 border-red-500 mt-10">
-        <div class="container2 border-4 border-gray-500">
+    <div class="mt-20">
+        <div class="container2">
             <img class="fade-in" style="width: 100%"
                  src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/front/피아노-폰트변경.png" alt="">
-            <div class="overlay border-4 border-red-500 whitespace-nowrap overflow-x-hidden">
-                <div>
+            <div class="overlay whitespace-nowrap overflow-x-hidden">
+                <div class="my-3">
                     <span class="text-center text-3xl">TOP 10</span>
                 </div>
                 <table class="table">
                     <!-- head -->
                     <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th>순위</th>
                         <th>노래</th>
                         <th>아티스트</th>
@@ -306,7 +306,8 @@
                     </thead>
                     <tbody>
                     <!-- row 1 -->
-                    <tr class="hover" th:each="song, loop : ${popularSongs}">
+                    <tr class="hover text-center" th:each="song, loop : ${popularSongs}"
+                        th:onclick="|location.href='@{/library/soundDetail/} + ${song.id}'|">
                         <th>
                             <span th:text="|${loop.index + 1}|"></span>
                         </th>
@@ -333,58 +334,24 @@
                         </td>
                     </tr>
                 </table>
-                <a class="hover:underline text-xs" style="cursor: pointer" href="/library/list/1">
-                    더보기
-                </a>
+                <div class="flex flex-grow justify-end mt-5">
+                    <a class="hover:underline text-xs" style="cursor: pointer" href="/library/list/1">
+                        더보기
+                    </a>
+                </div>
             </div>
         </div>
     </div>
     <div>
-        <div class="relative border-4 border-gray-500">
+        <div class="relative">
             <img class="fade-in" src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/front/헤드폰-폰트변경.png" alt="">
             <div class="absolute bottom-5 right-5 transform-gpu" style="bottom: 15%; right: 15%;">
-                <button class="w-40 md:w-60 lg:w-72">
+                <button onclick="window.location.href = '/library/soundupload'" class="w-40 md:w-60 lg:w-72">
                     <img src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/front/업로드하러가기.png" alt="">
                 </button>
             </div>
         </div>
     </div>
-
-
-    <!--    <div class="flex justify-center items-center mt-10 mb-5">-->
-    <!--        <span class="text-center text-3xl">인기 음원</span>-->
-    <!--    </div>-->
-    <!--    &lt;!&ndash; 인기 음원 10곡 &ndash;&gt;-->
-    <!--    <div class="wrap">-->
-    <!--        <div class="swiper-wrapper">-->
-    <!--            <div class="swiper-slide" th:each="song : ${popularSongs}">-->
-    <!--                <div class="inner">-->
-    <!--                    <div class="con pt-10">-->
-    <!--                        <div class="image-container">-->
-    <!--                            <img class="border-2" th:src="${song.albumCoverUrl}">-->
-    <!--                        </div>-->
-    <!--                        <div class="flex items-center flex-col mt-3">-->
-    <!--                            <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>-->
-    <!--                            <span class="text-lg font-bold" th:text="${song.artist.username}">아티스트 이름</span>-->
-    <!--                        </div>-->
-    <!--                        <div class="flex justify-end items-center mr-5">-->
-    <!--                            <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>-->
-    <!--                            <span th:if="${song.soundThumbsUpSummary == null}">0</span>-->
-    <!--                            <span th:unless="${song.soundThumbsUpSummary == null}"-->
-    <!--                                  th:text="${song.soundThumbsUpSummary.likeCount}"></span>-->
-    <!--                        </div>-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-
-    <!--        &lt;!&ndash; 좌우버튼 &ndash;&gt;-->
-    <!--        <div class="swiper-button-next"></div>-->
-    <!--        <div class="swiper-button-prev"></div>-->
-
-    <!--        &lt;!&ndash; 페이징 버튼 &ndash;&gt;-->
-    <!--        <div class="swiper-pagination"></div>-->
-    <!--    </div>-->
 
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
