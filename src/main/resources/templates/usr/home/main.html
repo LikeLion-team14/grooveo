@@ -13,13 +13,6 @@
             text-decoration: none;
         }
 
-        /* 라이브러리 */
-        .top-logo-bar {
-            width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
         /* 커스텀 */
         html {
             background-color: white;
@@ -29,19 +22,15 @@
             outline: none;
         }
 
-        .w-custom {
-            width: 32rem; /* 원하는 너비로 설정하세요 */
-        }
-
         /* 슬라이드 */
-
         /* 전체 풀 스크린 레이아웃 */
         .wrap {
-            width: 100%;
-            height: 65vh;
+            width: 80%;
+            height: 52vh;
             overflow: hidden;
             position: relative;
             box-sizing: border-box;
+            margin: 0 auto; /* 가운데 정렬을 위해 margin을 auto로 설정 */
         }
 
         /* 기본 슬라이드 프레임 */
@@ -51,11 +40,11 @@
         }
 
         .wrap .swiper-wrapper .swiper-slide {
-            width: 500px; /* 기존의 500px에서 250px로 줄입니다. */
-            height: 500px; /* 기존의 500px에서 250px로 줄입니다. */
+            width: 400px; /* 기존의 500px에서 400px로 줄입니다. */
+            height: 400px; /* 기존의 500px에서 400px로 줄입니다. */
             position: relative;
             top: 50%;
-            margin-top: -290px; /* 기존의 -230px에서 -130px로 줄입니다. */
+            margin-top: -200px; /* 기존의 -230px에서 -200px로 줄입니다. */
         }
 
         .wrap .swiper-wrapper .swiper-slide .inner {
@@ -78,8 +67,8 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            top: 0px;
-            left: 0px;
+            top: 0;
+            left: 0;
             opacity: 0;
             background: #fff;
         }
@@ -98,19 +87,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 300px; /* 이미지의 높이와 동일하게 설정 */
+            height: 200px; /* 기존의 300px에서 200px로 줄입니다. */
         }
 
         .wrap .swiper-wrapper .swiper-slide .inner .con img {
-            width: 300px;
-            height: 300px;
+            width: 200px;
+            height: 200px;
             object-fit: cover;
         }
 
         .wrap .swiper-wrapper .swiper-slide .inner .con h2 {
             font-weight: normal;
             font-size: 20px; /* 기존의 40px에서 20px로 줄입니다. */
-            font-family: "roboto";
             color: #111;
             margin-top: 5px;
             margin-bottom: 5px;
@@ -141,7 +129,7 @@
 
         /* 좌우 버튼  */
         .wrap .swiper-button-prev {
-            left: 50px; /* 좌측으로 위치 조정 */
+            left: 0; /* 좌측으로 위치 조정 */
             right: auto;
             top: 50%; /* 상하 중간에 위치하도록 변경 */
             bottom: auto;
@@ -152,7 +140,7 @@
 
         .wrap .swiper-button-next {
             left: auto;
-            right: 50px; /* 우측으로 위치 조정 */
+            right: 0; /* 우측으로 위치 조정 */
             top: 50%; /* 상하 중간에 위치하도록 변경 */
             bottom: auto;
             filter: grayscale(100%) brightness(3);
@@ -163,12 +151,11 @@
         /* 페이지네이션 */
         .swiper-pagination-fraction {
             bottom: auto;
-            top: 50px;
+            top: 40px; /* 상단으로 위치 조정 */
             left: auto;
-            right: 50px;
+            right: 40px; /* 우측으로 위치 조정 */
             width: auto;
             font-size: 16px;
-            font-family: "orbitron";
             letter-spacing: 1px;
             color: #eee;
         }
@@ -229,7 +216,6 @@
     </div>
 
     <div class="flex justify-center items-center mt-10 mb-5">
-        <span><i class="fa-solid fa-fire text-3xl text-red-500 mr-2"></i></span>
         <span class="text-center text-3xl">최신 음원</span>
     </div>
     <!-- 최신 음원 10곡 -->
@@ -238,19 +224,21 @@
             <div class="swiper-slide" th:each="song : ${latestSongs}">
                 <div class="inner">
                     <div class="con pt-10">
-                        <div class="image-container">
-                            <img class="border-2" th:src="${song.albumCoverUrl}">
-                        </div>
-                        <div class="flex items-center flex-col mt-3">
-                            <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>
-                            <span class="text-lg font-bold" th:text="${song.artist.username}">아티스트 이름</span>
-                        </div>
-                        <div class="flex justify-end items-center mr-5">
-                            <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
-                            <span th:if="${song.soundThumbsUpSummary == null}">0</span>
-                            <span th:unless="${song.soundThumbsUpSummary == null}"
-                                  th:text="${song.soundThumbsUpSummary.likeCount}"></span>
-                        </div>
+                        <a th:href="@{|/library/soundDetail/${song.id}|}">
+                            <div class="image-container">
+                                <img class="border-2" th:src="${song.albumCoverUrl}">
+                            </div>
+                            <div class="flex items-center flex-col mt-3">
+                                <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>
+                                <span class="text-lg font-bold" th:text="${song.artist.username}">아티스트 이름</span>
+                            </div>
+                            <div class="flex justify-end items-center mr-5">
+                                <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
+                                <span th:if="${song.soundThumbsUpSummary == null}">0</span>
+                                <span th:unless="${song.soundThumbsUpSummary == null}"
+                                      th:text="${song.soundThumbsUpSummary.likeCount}"></span>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -265,7 +253,6 @@
     </div>
 
     <div class="flex justify-center items-center mt-10 mb-5">
-        <span><i class="fa-solid fa-fire text-3xl text-red-500 mr-2"></i></span>
         <span class="text-center text-3xl">인기 음원</span>
     </div>
     <!-- 인기 음원 10곡 -->
