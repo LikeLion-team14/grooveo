@@ -52,9 +52,11 @@
         </div>
         <div>
             <!-- 검색 박스 및 음악 등록 버튼 -->
-            <form th:action="@{|/community/freedomPost/${boardType}/list|}" method="get" id="searchForm" class="flex justify-end items-center mt-5">
+            <form th:action="@{|/community/freedomPost/${boardType}/list|}" method="get" id="searchForm"
+                  class="flex justify-end items-center mt-5">
                 <div class="relative">
-                    <input type="text" placeholder="제목 / 글쓴이 검색" id="search_kw" class="bg-black bg-opacity-10 h-6 w-60 p-4 pr-12"/>
+                    <input type="text" placeholder="제목 / 글쓴이 검색" id="search_kw"
+                           class="bg-black bg-opacity-10 h-6 w-60 p-4 pr-12"/>
                     <a id="btn_search"
                        class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-lg pr-3">
                         <i class="search-Button fas fa-search text-gray-700"></i>
@@ -131,7 +133,7 @@
                     <section class="flex justify-center">
                         <button id="author" onclick="profile_modal.showModal();getProfile(this.textContent)"
                                 class="whitespace-nowrap overflow-x-hidden overflow-ellipsis"
-                        th:text="${freedomPost.author.username}"></button>
+                                th:text="${freedomPost.author.nickName}"></button>
                     </section>
                 </td>
                 <td th:text="${freedomPost.view}"></td>
@@ -175,8 +177,8 @@
                 <img id="profile-image" src="" class="border-2 border-gray-100"
                      style="width: 70px; height: 70px; border-radius: 50%;">
                 <section class="flex flex-col justify-center">
-                    <span class="text-lg" id="modal-username"></span>
-                    <span class="text-sm text-gray-600" id="modal-userNickname"></span>
+                    <span class="text-lg" id="modal-userNickname"></span>
+                    <span class="text-sm text-gray-600" id="modal-username"></span>
                 </section>
             </div>
 
@@ -228,7 +230,7 @@
         });
 
         // 검색 폼에서 엔터 입력 시 submit 처리
-        document.getElementById("search_kw").addEventListener("keypress", function(event) {
+        document.getElementById("search_kw").addEventListener("keypress", function (event) {
             if (event.key === "Enter") {
                 // 기본 동작 방지하지 않음
                 document.getElementById("kw").value = event.target.value; // 검색어 전달
@@ -257,11 +259,11 @@
             }
         });
 
-        function getProfile(username) {
+        function getProfile(userNickName) {
             $.ajax({
                 type: "GET",
                 url: "/api/member/getProfile",
-                data: {username: username},
+                data: {userNickName: userNickName},
                 success: function (response) {
 
                     // 프로필 정보를 성공적으로 가져왔을 때 처리할 로직
@@ -272,6 +274,7 @@
                     const trackCount = response.trackCount;
                     const isFollowing = response.following;
                     const nickName = response.nickName;
+                    const username = response.username;
 
                     // 가져온 프로필 정보를 원하는 대로 처리합니다. (콜백방식)
                     $('#profile-image').attr('src', profileImageUrl);

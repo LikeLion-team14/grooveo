@@ -25,8 +25,8 @@ public class restMemberController {
 
     @GetMapping("/member/getProfile")
     @ResponseBody
-    public MemberProfileDto getProfile(@RequestParam String username) throws Exception {
-        Optional<Member> opFollowingUser = memberService.findByUsername(username);
+    public MemberProfileDto getProfile(@RequestParam String userNickName) throws Exception {
+        Optional<Member> opFollowingUser = memberService.findByUserNickName(userNickName);
 
         if (opFollowingUser.isEmpty()) {
             throw new Exception("존재하지 않는 User 입니다.");

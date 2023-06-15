@@ -170,4 +170,8 @@ public class MemberService {
     public void saveProfileImage(Member actor, String fileUrl) {
         actor.updateProfileImageUrl(fileUrl);
     }
+
+    public Optional<Member> findByUserNickName(String userNickName) {
+        return memberRepository.findByNickName(userNickName);
+    }
 }
