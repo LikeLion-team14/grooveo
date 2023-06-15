@@ -19,4 +19,11 @@ public class SoundTrackForm {
     private MultipartFile soundFile;
 
     private MultipartFile albumCover;
+
+    public SoundTrackForm(String title, String description, MultipartFile soundFile, MultipartFile albumCover) {
+        this.title = title;
+        this.description = description;
+        this.soundFile = soundFile;
+        this.albumCover = albumCover;
+    }
 }

@@ -31,7 +31,8 @@ public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
     @Query("SELECT fi " +
             "FROM FileInfo fi " +
             "JOIN fi.soundThumbsUpSummary stu " +
-            "ORDER BY stu.likeCount DESC")
+            "ORDER BY stu.likeCount DESC " +
+            "LIMIT 10")
     List<FileInfo> findTop10ByHighestLikeCount();
 
     List<FileInfo> findAllByOrderByIdDesc();
