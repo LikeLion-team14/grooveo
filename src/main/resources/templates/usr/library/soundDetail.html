@@ -121,7 +121,8 @@
 
                 <!-- 게시글 내용 -->
                 <div class="content mt-4">
-                    <div class="text-content" id="text-content" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
+                    <div class="text-content" id="text-content"
+                         style="white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word">
                         <p th:text="${fileInfo.description}"></p>
                     </div>
                     <div class="fade-out" id="fade-out"></div>
