@@ -54,27 +54,18 @@ public class FreedomPostService {
                 Join<FreedomPost, Member> u1 = postRoot.join("author", JoinType.LEFT);
                 /* author 필드를 기준으로 FreedomPost 엔티티와 Member 엔티티를 조인. LEFT 조인을 사용하므로, FreedomPost 와 연관된 Member 가 없는 경우에도 결과가 반환됨
                    u1은 조인한 결과를 나타내는 객체 */
-                Join<FreedomPost, FreedomPostComment> a = postRoot.join("commentList", JoinType.LEFT);
-                /* commentList 필드를 기준으로 FreedomPost 엔티티와 FreedomPostComment 엔티티를 조인. LEFT 조인을 사용하므로, FreedomPost 와 연관된 FreedomPostComment 가 없는 경우에도 결과가 반환됨
-                   a는 조인한 결과를 나타내는 객체 */
-                Join<FreedomPostComment, Member> u2 = postRoot.join("author", JoinType.LEFT);
-                /* author 필드를 기준으로 FreedomPostComment 엔티티와 Member 엔티티를 조인. LEFT 조인을 사용하므로, FreedomPostComment 와 연관된 Member 가 없는 경우에도 결과가 반환됨
-                   u2는 조인한 결과를 나타내는 객체 */
+
                 if (category != null && category.equals("")) {
                     return cb.and(cb.equal(postRoot.get("boardType"), boardType),
                             cb.or(cb.like(postRoot.get("title"), "%" + kw + "%"),
                                     cb.like(postRoot.get("content"), "%" + kw + "%"),
-                                    cb.like(u1.get("username"), "%" + kw + "%"),
-                                    cb.like(a.get("content"), "%" + kw + "%"),
-                                    cb.like(u2.get("username"), "%" + kw + "%")));
+                                    cb.like(u1.get("nickName"), "%" + kw + "%")));
                 }
                 return cb.and(cb.equal(postRoot.get("boardType"), boardType),
                         cb.and(cb.equal(postRoot.get("category"), category),
                                 cb.or(cb.like(postRoot.get("title"), "%" + kw + "%"),
                                         cb.like(postRoot.get("content"), "%" + kw + "%"),
-                                        cb.like(u1.get("username"), "%" + kw + "%"),
-                                        cb.like(a.get("content"), "%" + kw + "%"),
-                                        cb.like(u2.get("username"), "%" + kw + "%"))));
+                                        cb.like(u1.get("nickname"), "%" + kw + "%"))));
                 /* 검색어를 기반으로 다양한 조건을 or 연산자로 묶어서 반환
                    cb는 CritierBuider 객체로, JPA Critier API를 사용하여 쿼리를 생성할 때 사용
                    cb.like() 메서드로 각 필드에서 검색어를 포함하는 경우를 찾음 -> 각 조건은 or연산자로 묶여 있으므로, 하나 이상의 조건이 true인 경우에 해당하는 엔티티가 검색 결과로 반환 */

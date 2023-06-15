@@ -78,7 +78,7 @@
                                             <img th:src="${fileInfo.getAlbumCoverUrl()}" alt="" class="w-16 h-16 object-cover">
                                             <a class="play-button flex items-center justify-center p-3 hover:text-gray-300 mr-4"
                                                th:onclick="playMusic(/*[[${fileInfo.getSoundUrl()}]]*/ null, /*[[${fileInfo.getAlbumCoverUrl()}]]*/ null,
-                                               /*[[${fileInfo.title}]]*/ null, /*[[${fileInfo.artist.username}]]*/ null, this)">
+                                               /*[[${fileInfo.title}]]*/ null, /*[[${fileInfo.artist.nickName}]]*/ null, this)">
                                                 <i class="fas fa-play text-5xl"></i>
                                             </a>
                                         </div>
