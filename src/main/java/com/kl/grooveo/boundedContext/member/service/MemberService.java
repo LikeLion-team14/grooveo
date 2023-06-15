@@ -54,6 +54,10 @@ public class MemberService {
 
         memberRepository.save(actor);
 
+        if(!actor.getProviderTypeCode().equals("GROOVEO")) {
+            actor.updateNickName("User_%s".formatted(actor.getId()));
+        }
+
         if (actor.getEmail() != null) {
             emailService.sendRegistrationEmail(actor);
         }
