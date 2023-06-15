@@ -76,55 +76,55 @@ public class NotProd {
                     fileInfoService.saveFileInfo(fileInfo);
                 }
 
-//                FileInfo fileInfo = FileInfo.builder()
-//                        .title("Five")
-//                        .artist(memberUser3)
-//                        .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
-//                        .description("Marcel Pequel")
-//                        .createDate(LocalDateTime.now())
-//                        .soundUrl("http://cdn.atrera.com/audio/Marcel_Pequel_-_05_-_Five.mp3")
-//                        .build();
-//                fileInfoService.saveFileInfo(fileInfo);
-//                FileInfo fileInfo2 = FileInfo.builder()
-//                        .title("Six")
-//                        .artist(memberUser3)
-//                        .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
-//                        .description("Marcel Pequel")
-//                        .createDate(LocalDateTime.now())
-//                        .soundUrl("http://cdn.atrera.com/audio/Marcel_Pequel_-_06_-_Six.mp3")
-//                        .build();
-//                fileInfoService.saveFileInfo(fileInfo2);
-//                FileInfo fileInfo3 = FileInfo.builder()
-//                        .title("Seven")
-//                        .artist(memberUser3)
-//                        .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
-//                        .description("Marcel Pequel")
-//                        .createDate(LocalDateTime.now())
-//                        .soundUrl("http://cdn.atrera.com/audio/Marcel_Pequel_-_07_-_Seven.mp3")
-//                        .build();
-//                fileInfoService.saveFileInfo(fileInfo3);
+                FileInfo fileInfo = FileInfo.builder()
+                        .title("Five")
+                        .artist(memberUser3)
+                        .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
+                        .description("Marcel Pequel")
+                        .createDate(LocalDateTime.now())
+                        .soundUrl("http://cdn.atrera.com/audio/Marcel_Pequel_-_05_-_Five.mp3")
+                        .build();
+                fileInfoService.saveFileInfo(fileInfo);
+                FileInfo fileInfo2 = FileInfo.builder()
+                        .title("Six")
+                        .artist(memberUser3)
+                        .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
+                        .description("Marcel Pequel")
+                        .createDate(LocalDateTime.now())
+                        .soundUrl("http://cdn.atrera.com/audio/Marcel_Pequel_-_06_-_Six.mp3")
+                        .build();
+                fileInfoService.saveFileInfo(fileInfo2);
+                FileInfo fileInfo3 = FileInfo.builder()
+                        .title("Seven")
+                        .artist(memberUser3)
+                        .albumCoverUrl("//cdn.atrera.com/images/cover_yz2mak.jpg")
+                        .description("Marcel Pequel")
+                        .createDate(LocalDateTime.now())
+                        .soundUrl("http://cdn.atrera.com/audio/Marcel_Pequel_-_07_-_Seven.mp3")
+                        .build();
+                fileInfoService.saveFileInfo(fileInfo3);
 
-//                soundThumbsUpService.likePost(1L, memberUser2.getId());
-//                soundThumbsUpService.likePost(2L, memberUser2.getId());
-//                soundThumbsUpService.likePost(3L, memberUser2.getId());
-//                soundThumbsUpService.likePost(4L, memberUser2.getId());
-//                soundThumbsUpService.likePost(5L, memberUser2.getId());
-//                soundThumbsUpService.likePost(6L, memberUser2.getId());
-//                soundThumbsUpService.likePost(7L, memberUser2.getId());
-//                soundThumbsUpService.likePost(12L, memberUser2.getId());
-//                soundThumbsUpService.likePost(13L, memberUser3.getId());
-//                soundThumbsUpService.likePost(14L, memberUser3.getId());
-//
-//                soundThumbsUpSummaryService.updateLikeCount(1L, 17);
-//                soundThumbsUpSummaryService.updateLikeCount(2L, 16);
-//                soundThumbsUpSummaryService.updateLikeCount(3L, 15);
-//                soundThumbsUpSummaryService.updateLikeCount(4L, 13);
-//                soundThumbsUpSummaryService.updateLikeCount(5L, 12);
-//                soundThumbsUpSummaryService.updateLikeCount(6L, 1);
-//                soundThumbsUpSummaryService.updateLikeCount(7L, 50);
-//                soundThumbsUpSummaryService.updateLikeCount(12L, 20);
-//                soundThumbsUpSummaryService.updateLikeCount(13L, 100);
-//                soundThumbsUpSummaryService.updateLikeCount(14L, 10);
+                soundThumbsUpService.likePost(1L, memberUser2.getId());
+                soundThumbsUpService.likePost(2L, memberUser2.getId());
+                soundThumbsUpService.likePost(3L, memberUser2.getId());
+                soundThumbsUpService.likePost(4L, memberUser2.getId());
+                soundThumbsUpService.likePost(5L, memberUser2.getId());
+                soundThumbsUpService.likePost(6L, memberUser2.getId());
+                soundThumbsUpService.likePost(7L, memberUser2.getId());
+                soundThumbsUpService.likePost(12L, memberUser2.getId());
+                soundThumbsUpService.likePost(13L, memberUser3.getId());
+                soundThumbsUpService.likePost(14L, memberUser3.getId());
+
+                soundThumbsUpSummaryService.updateLikeCount(1L, 17);
+                soundThumbsUpSummaryService.updateLikeCount(2L, 16);
+                soundThumbsUpSummaryService.updateLikeCount(3L, 15);
+                soundThumbsUpSummaryService.updateLikeCount(4L, 13);
+                soundThumbsUpSummaryService.updateLikeCount(5L, 12);
+                soundThumbsUpSummaryService.updateLikeCount(6L, 1);
+                soundThumbsUpSummaryService.updateLikeCount(7L, 50);
+                soundThumbsUpSummaryService.updateLikeCount(12L, 20);
+                soundThumbsUpSummaryService.updateLikeCount(13L, 100);
+                soundThumbsUpSummaryService.updateLikeCount(14L, 10);
             }
         };
     }
