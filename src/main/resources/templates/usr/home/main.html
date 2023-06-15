@@ -193,6 +193,14 @@
             }
         }
 
+        .fade-in {
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .show {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -252,42 +260,81 @@
         <div class="swiper-pagination"></div>
     </div>
 
-    <div class="flex justify-center items-center mt-10 mb-5">
-        <span class="text-center text-3xl">인기 음원</span>
+    <div class="w-screen mt-20">
+        <img class="fade-in" src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/front/피아노스포이드.png" alt="">
     </div>
-    <!-- 인기 음원 10곡 -->
-    <div class="wrap">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide" th:each="song : ${popularSongs}">
-                <div class="inner">
-                    <div class="con pt-10">
-                        <div class="image-container">
-                            <img class="border-2" th:src="${song.albumCoverUrl}">
-                        </div>
-                        <div class="flex items-center flex-col mt-3">
-                            <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>
-                            <span class="text-lg font-bold" th:text="${song.artist.username}">아티스트 이름</span>
-                        </div>
-                        <div class="flex justify-end items-center mr-5">
-                            <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
-                            <span th:if="${song.soundThumbsUpSummary == null}">0</span>
-                            <span th:unless="${song.soundThumbsUpSummary == null}"
-                                  th:text="${song.soundThumbsUpSummary.likeCount}"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+    <div class="relative w-screen">
+        <img class="fade-in" src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/front/테두리2.png" alt="">
+        <div class="absolute bottom-5 right-5 transform-gpu" style="bottom: 15%; right: 13%;">
+            <button class="w-40 md:w-60 lg:w-72">
+                <img src="https://cdn.jsdelivr.net/gh/LeeYulhee/projectlion_img/front/업로드하러가기.png" alt="">
+            </button>
         </div>
-
-        <!-- 좌우버튼 -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-
-        <!-- 페이징 버튼 -->
-        <div class="swiper-pagination"></div>
     </div>
+
+<!--    <div class="flex justify-center items-center mt-10 mb-5">-->
+<!--        <span class="text-center text-3xl">인기 음원</span>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; 인기 음원 10곡 &ndash;&gt;-->
+<!--    <div class="wrap">-->
+<!--        <div class="swiper-wrapper">-->
+<!--            <div class="swiper-slide" th:each="song : ${popularSongs}">-->
+<!--                <div class="inner">-->
+<!--                    <div class="con pt-10">-->
+<!--                        <div class="image-container">-->
+<!--                            <img class="border-2" th:src="${song.albumCoverUrl}">-->
+<!--                        </div>-->
+<!--                        <div class="flex items-center flex-col mt-3">-->
+<!--                            <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>-->
+<!--                            <span class="text-lg font-bold" th:text="${song.artist.username}">아티스트 이름</span>-->
+<!--                        </div>-->
+<!--                        <div class="flex justify-end items-center mr-5">-->
+<!--                            <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>-->
+<!--                            <span th:if="${song.soundThumbsUpSummary == null}">0</span>-->
+<!--                            <span th:unless="${song.soundThumbsUpSummary == null}"-->
+<!--                                  th:text="${song.soundThumbsUpSummary.likeCount}"></span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; 좌우버튼 &ndash;&gt;-->
+<!--        <div class="swiper-button-next"></div>-->
+<!--        <div class="swiper-button-prev"></div>-->
+
+<!--        &lt;!&ndash; 페이징 버튼 &ndash;&gt;-->
+<!--        <div class="swiper-pagination"></div>-->
+<!--    </div>-->
 
     <script>
+        var fadeImages = document.querySelectorAll('.fade-in');
+        var windowHeight = window.innerHeight;
+
+        function fadeInOnScroll() {
+            fadeImages.forEach(function (image) {
+                var imagePosition = image.getBoundingClientRect().top;
+
+                if (imagePosition < windowHeight - 200) {
+                    image.classList.add('show');
+                } else {
+                    image.classList.remove('show');
+                }
+            });
+        }
+
+        function fadeInOnScrollLoop() {
+            fadeInOnScroll();
+            window.requestAnimationFrame(fadeInOnScrollLoop);
+        }
+
+        window.addEventListener('scroll', fadeInOnScrollLoop);
+        window.addEventListener('resize', function () {
+            windowHeight = window.innerHeight;
+            fadeInOnScroll();
+        });
+
         const swiper = new Swiper('.wrap', {
             direction: "horizontal",
             loop: true,
