@@ -48,7 +48,7 @@ public class SoundTrackService {
                 Join<FileInfo, Member> u1 = postRoot.join("artist", JoinType.LEFT);
 
                 return cb.or(cb.like(postRoot.get("title"), "%" + kw + "%"),
-                        cb.like(u1.get("username"), "%" + kw + "%"));
+                        cb.like(u1.get("nickName"), "%" + kw + "%"));
             }
         };
     }
