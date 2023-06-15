@@ -264,7 +264,7 @@
                                 </div>
                                 <div class="flex items-center flex-col mt-3">
                                     <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>
-                                    <span class="text-lg font-bold" th:text="${song.artist.username}">아티스트 이름</span>
+                                    <span class="text-lg font-bold" th:text="${song.artist.nickName}">아티스트 이름</span>
                                 </div>
                                 <div class="flex justify-end items-center mr-5">
                                     <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
@@ -324,7 +324,7 @@
                             </div>
                         </td>
                         <td>
-                            <span th:text="${song.artist.username}"></span>
+                            <span th:text="${song.artist.nickName}"></span>
                         </td>
                         <td>
                             <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
