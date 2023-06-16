@@ -360,9 +360,13 @@
             window.addEventListener('resize', adjustSize);
 
             function adjustSize() {
-                const imageWidth = document.querySelector('.fade-in').getBoundingClientRect().width;
+                const fadeElement = document.querySelector('.fade-in');
                 const tableContainer = document.querySelector('.table-container');
-                tableContainer.style.width = `${imageWidth}px`;
+
+                if (fadeElement && tableContainer) {
+                    const imageWidth = fadeElement.getBoundingClientRect().width;
+                    tableContainer.style.width = `${imageWidth}px`;
+                }
             }
         });
 
