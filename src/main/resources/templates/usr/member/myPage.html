@@ -136,8 +136,8 @@
                                   class="text-xs text-gray-500 whitespace-nowrap overflow-x-hidden overflow-ellipsis"></span>
                         </div>
                         <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
-                                type="button" onclick="delete_follow(this)">
-                            <span id="delete-follower-text" class="text-center">삭제</span>
+                                type="button" th:data-username="${follower.follower.username}" onclick="delete_follow(this)">
+                            <span th:data-user-text="${follower.follower.username}" class="text-center">삭제</span>
                         </button>
                     </div>
                 </div>
@@ -170,8 +170,8 @@
                                   class="text-xs text-gray-500 whitespace-nowrap overflow-x-hidden overflow-ellipsis"></span>
                         </div>
                         <button class="bg-black bg-opacity-10 h-10 p-4 w-16 text-sm flex items-center justify-center hover:bg-opacity-30"
-                                type="button" onclick="delete_following(this)">
-                            <span id="delete-follow-text" class="text-center">삭제</span>
+                                type="button" th:data-username="${following.following.username}" onclick="delete_following(this)">
+                            <span class="text-center">삭제</span>
                         </button>
                     </div>
                 </div>
@@ -269,8 +269,7 @@
 
         // Delete Follower
         function delete_follow(button) {
-            var username = document.getElementById('follower-username').textContent;
-            var text = document.getElementById('delete-follower-text');
+            var username = button.getAttribute('data-username');
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             // 확인 메시지 표시
@@ -286,8 +285,8 @@
                     success: function (result) {
                         // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
                         button.disabled = true;
-                        text.textContent = "삭제됨";
-                        text.style.opacity = '0.5';
+                        button.querySelector('span').textContent = "삭제됨";
+                        button.querySelector('span').style.opacity = '0.5';
 
                         // 팔로워수 업데이트
                         updateFollowerCount();
@@ -315,8 +314,7 @@
 
         // Delete Following
         function delete_following(button) {
-            var username = document.getElementById('follow-user').textContent;
-            var text = document.getElementById('delete-follow-text');
+            var username = button.getAttribute('data-username');
 
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
@@ -334,8 +332,8 @@
                     success: function (result) {
                         // 삭제가 성공한 경우 버튼 비활성화 및 텍스트 변경
                         button.disabled = true;
-                        text.textContent = "언팔로잉";
-                        text.style.opacity = '0.5';
+                        button.querySelector('span').textContent = "언팔로잉";
+                        button.querySelector('span').style.opacity = '0.5';
 
                         // 팔로잉 숫자 업데이트
                         updateFollowingCount();
