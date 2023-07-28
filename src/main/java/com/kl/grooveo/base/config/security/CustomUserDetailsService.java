@@ -1,4 +1,4 @@
-package com.kl.grooveo.base.security;
+package com.kl.grooveo.base.config.security;
 
 import java.util.ArrayList;
 import java.util.List;
