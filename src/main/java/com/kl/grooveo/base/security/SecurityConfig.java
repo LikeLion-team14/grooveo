@@ -1,7 +1,5 @@
 package com.kl.grooveo.base.security;
 
-import com.kl.grooveo.base.handler.UserLoginFailHandler;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.kl.grooveo.base.handler.UserLoginFailHandler;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -20,37 +21,38 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final UserLoginFailHandler userLoginFailHandler;
+	private final UserLoginFailHandler userLoginFailHandler;
 
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .formLogin(
-                        formLogin -> formLogin
-                                .loginPage("/usr/member/login")
-                                .failureHandler(userLoginFailHandler)
-                                .defaultSuccessUrl("/")
-                )
+	@Bean
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http
+			.formLogin(
+				formLogin -> formLogin
+					.loginPage("/usr/member/login")
+					.failureHandler(userLoginFailHandler)
+					.defaultSuccessUrl("/")
+			)
 
-                .oauth2Login(
-                        oauth2Login -> oauth2Login
-                                .loginPage("/usr/member/login")
-                )
-                .logout(
-                        logout -> logout
-                                .logoutUrl("/usr/member/logout")
-                );
+			.oauth2Login(
+				oauth2Login -> oauth2Login
+					.loginPage("/usr/member/login")
+			)
+			.logout(
+				logout -> logout
+					.logoutUrl("/usr/member/logout")
+			);
 
-        return http.build();
-    }
+		return http.build();
+	}
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+	@Bean
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws
+		Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 }
