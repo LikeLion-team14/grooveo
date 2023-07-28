@@ -1,4 +1,4 @@
-package com.kl.grooveo.boundedContext.library;
+package com.kl.grooveo.base.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

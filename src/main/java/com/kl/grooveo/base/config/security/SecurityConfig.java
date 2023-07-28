@@ -1,4 +1,4 @@
-package com.kl.grooveo.base.security;
+package com.kl.grooveo.base.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
