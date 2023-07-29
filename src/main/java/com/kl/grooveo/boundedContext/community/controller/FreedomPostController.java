@@ -64,7 +64,7 @@ public class FreedomPostController {
 		ReplyFormDTO replyFormDTO,
 		HttpServletRequest request, HttpServletResponse response) {
 
-		freedomPostService.updateView(request, response, id);
+		freedomPostService.updateViewCount(request, response, id);
 
 		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
 

@@ -120,7 +120,7 @@ public class FreedomPostService {
 	}
 
 	@Transactional
-	public void updateView(HttpServletRequest request, HttpServletResponse response, Long id) {
+	public void updateViewCount(HttpServletRequest request, HttpServletResponse response, Long id) {
 		// 조회수 관련 로직
 		Cookie oldCookie = null;
 		Cookie[] cookies = request.getCookies();
