@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FileInfoForm {
+public class FileInfoFormDTO {
 	@NotEmpty(message = "The description is required.")
 	private String description;
 }

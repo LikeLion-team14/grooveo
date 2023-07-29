@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.kl.grooveo.base.rq.Rq;
-import com.kl.grooveo.boundedContext.comment.dto.CommentForm;
+import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
-import com.kl.grooveo.boundedContext.community.dto.FreedomPostForm;
+import com.kl.grooveo.boundedContext.community.dto.FreedomPostFormDTO;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
-import com.kl.grooveo.boundedContext.reply.dto.ReplyForm;
+import com.kl.grooveo.boundedContext.reply.dto.ReplyFormDTO;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -63,8 +63,8 @@ public class FreedomPostController {
 	@GetMapping(value = "/detail/{id}")
 	public String showMoreDetail(Model model, @PathVariable("id") Long id,
 		@RequestParam(value = "so", defaultValue = "create") String so,
-		@RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm,
-		ReplyForm replyForm,
+		@RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentFormDTO commentForm,
+		ReplyFormDTO replyForm,
 		HttpServletRequest request, HttpServletResponse response) {
 		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
 
@@ -113,13 +113,14 @@ public class FreedomPostController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/create")
-	public String freedomPostCreate(Model model, FreedomPostForm freedomPostForm) {
+	public String freedomPostCreate(Model model, FreedomPostFormDTO freedomPostForm) {
 		return "usr/community/freedomPost/form";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create")
-	public String freedomPostCreate(Model model, @Valid FreedomPostForm freedomPostForm, BindingResult bindingResult) {
+	public String freedomPostCreate(Model model, @Valid FreedomPostFormDTO freedomPostForm,
+		BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "usr/community/freedomPost/form";
 		}
@@ -144,7 +145,7 @@ public class FreedomPostController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/modify/{id}")
-	public String freedomPostModify(FreedomPostForm freedomPostForm, @PathVariable("id") Long id) {
+	public String freedomPostModify(FreedomPostFormDTO freedomPostForm, @PathVariable("id") Long id) {
 		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
 
 		if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
@@ -159,7 +160,7 @@ public class FreedomPostController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/modify/{id}")
-	public String freedomPostModify(@Valid FreedomPostForm freedomPostForm, BindingResult bindingResult,
+	public String freedomPostModify(@Valid FreedomPostFormDTO freedomPostForm, BindingResult bindingResult,
 		@PathVariable("id") Long id) {
 		if (bindingResult.hasErrors()) {
 			return "usr/community/freedomPost/form";

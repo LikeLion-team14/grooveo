@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.kl.grooveo.base.rq.Rq;
-import com.kl.grooveo.boundedContext.comment.dto.CommentForm;
+import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
-import com.kl.grooveo.boundedContext.reply.dto.ReplyForm;
+import com.kl.grooveo.boundedContext.reply.dto.ReplyFormDTO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class SoundPostCommentController {
 	public String create(Model model, @PathVariable("id") Long id,
 		@RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
 		@RequestParam(value = "so", defaultValue = "create") String so,
-		@Valid CommentForm commentForm, BindingResult bindingResult, ReplyForm replyForm) {
+		@Valid CommentFormDTO commentForm, BindingResult bindingResult, ReplyFormDTO replyForm) {
 
 		FileInfo fileInfo = soundTrackService.getSoundTrack(id);
 		Member member = memberService.findByUsername(rq.getMember().getUsername()).orElseThrow();
