@@ -3,7 +3,7 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title th:text="${freedomPost.title}"></title>
+    <title th:text="${freedomPostDTO.title}"></title>
 
     <script>
         function commentForm__submit(form) {
@@ -50,25 +50,25 @@
         <div class="posts-box mt-8 w-full mx-10">
             <div class="flex justify-center"
                  style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
-                <span class="text-3xl font-bold" th:text="${freedomPost.title}"></span>
+                <span class="text-3xl font-bold" th:text="${freedomPostDTO.title}"></span>
             </div>
 
             <!-- 작성자 부분 -->
             <div class="flex mt-7 justify-between border-b border-gray-400">
                 <div class="flex justify-start items-center">
-                    <img th:src="${freedomPost.getAuthor().getProfileImageUrl()}" alt=""
+                    <img th:src="${freedomPostDTO.profileImageUrl}" alt=""
                          class="w-11 h-11 object-cover m-3 rounded-full border-2 border-gray-100">
                     <div>
                         <div class="flex items-center mb-1">
-                            <span class="font-bold" th:text="${freedomPost.getAuthor().nickName}"></span>
+                            <span class="font-bold" th:text="${freedomPostDTO.authorNickname}"></span>
                             <div class="bg-black bg-opacity-10 h-7 ml-2 p-1 w-16 text-xs flex items-center justify-center">
-                                <span th:text="${freedomPost.categoryDisplayName()}"></span>
+                                <span th:text="${freedomPostDTO.categoryDisplayName}"></span>
                             </div>
                         </div>
 
                         <div class="flex">
                             <div class="text-gray-500 text-xs mr-2"><span
-                                    th:text="${#temporals.format(freedomPost.createDate, 'yyyy.MM.dd HH:mm')}"></span>
+                                    th:text="${#temporals.format(freedomPostDTO.createDate, 'yyyy.MM.dd HH:mm')}"></span>
                             </div>
                             <div class="text-xs mr-1">조회수</div>
                             <div class="text-xs"><span id="viewCnt"></span></div>
@@ -86,21 +86,21 @@
 
             <!-- 게시글 내용 -->
             <div class="m-4" style="word-break: break-word; overflow-wrap: break-word; white-space: normal;"
-                 th:utext="${freedomPost.content}"></div>
+                 th:utext="${freedomPostDTO.content}"></div>
 
             <!-- 수정/삭제 버튼 -->
             <div class="flex justify-end mt-6">
                 <button class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30"
-                        th:onclick="|location.href='@{/community/freedomPost/modify/} + ${freedomPost.id}'|"
-                        th:if="${freedomPost.author != null and #authentication.getPrincipal().getUsername() == freedomPost.author.username}">
+                        th:onclick="|location.href='@{/community/freedomPost/modify/} + ${freedomPostDTO.postId}'|"
+                        th:if="${#authentication.getPrincipal().getUsername() == freedomPostDTO.authorName}">
                     <span class="text-center">수정</span>
                 </button>
                 <button class="bg-black bg-opacity-10 h-7 p-4 w-20 ml-4 mr-2 text-sm flex items-center justify-center hover:bg-opacity-30"
-                        th:if="${freedomPost.author != null and #authentication.getPrincipal().getUsername() == freedomPost.author.username}"
+                        th:if="${#authentication.getPrincipal().getUsername() == freedomPostDTO.authorName}"
                         onclick="if(confirm('정말로 삭제하시겠습니까?')) $(this).next().submit();">
                     <span class="text-center">삭제</span>
                 </button>
-                <form hidden th:action="@{|/community/freedomPost/${freedomPost.id}|}" method="POST">
+                <form hidden th:action="@{|/community/freedomPost/${freedomPostDTO.postId}|}" method="POST">
                     <input type="hidden" name="_method" value="delete">
                 </form>
             </div>
@@ -111,7 +111,7 @@
                     <div class="text-gray-600 ml-2">
                         COMMENT
                     </div>
-                    <div class="text-gray-600 ml-3"><span th:text="${#lists.size(freedomPost.commentList)}"></span>
+                    <div class="text-gray-600 ml-3"><span th:text="${freedomPostDTO.commentCnt}"></span>
                     </div>
                     <div class="flex-grow"></div>
                     <div class="flex-shrink-0">
@@ -254,13 +254,14 @@
                 <!-- 페이징처리 끝 -->
 
                 <!-- 댓글 페이징처리 끝 -->
-                <form th:action="@{|/community/freedomPost/detail/${freedomPost.id}}" method="get" id="commentForm">
+                <form th:action="@{|/community/freedomPost/detail/${freedomPostDTO.postId}}" method="get"
+                      id="commentForm">
                     <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">
                     <input type="hidden" id="so" name="so" th:value="${so}">
                 </form>
 
                 <!-- 댓글 입력칸 -->
-                <form th:action="@{|/comment/create/${freedomPost.id}?commentPage=${commentPaging.number}&so=${so}|}"
+                <form th:action="@{|/comment/create/${freedomPostDTO.postId}?commentPage=${commentPaging.number}&so=${so}|}"
                       th:object="${commentFormDTO}" method="post" onsubmit="commentForm__submit(this); return false;">
                     <div class="flex items-center justify-center">
                         <textarea cols="95" rows="2" placeholder="댓글을 남겨보세요"
@@ -306,7 +307,7 @@
             $(document).ajaxSend(function (e, xhr, options) {
                 xhr.setRequestHeader(header, token);
             });
-            const postId = /*[[${freedomPost.id}]]*/ null;
+            const postId = /*[[${freedomPostDTO.postId}]]*/ null;
             if (postId) {
 
                 const likeButton = $('#likeBtn');
@@ -351,7 +352,7 @@
             // 페이지가 로드될 때 실행되는 코드
             // Ajax 를 사용하여 데이터를 가져오는 등의 작업을 수행
 
-            const postId = /*[[${freedomPost.id}]]*/ null;
+            const postId = /*[[${freedomPostDTO.postId}]]*/ null;
             if (postId) {
                 const likeButton = $('#likeBtn');
                 $.ajax({

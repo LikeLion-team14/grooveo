@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kl.grooveo.base.exception.DataNotFoundException;
+import com.kl.grooveo.boundedContext.community.dto.FreedomPostDTO;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.repository.FreedomPostRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -173,4 +174,19 @@ public class FreedomPostService {
 		return freedomPost.map(FreedomPost::getView).orElse(-1);
 	}
 
+	public FreedomPostDTO convertToFreedomPostDTO(Long id) {
+		FreedomPost freedomPost = getFreedomPost(id);
+
+		return FreedomPostDTO.builder()
+			.postId(id)
+			.title(freedomPost.getTitle())
+			.authorName(freedomPost.getAuthor().getUsername())
+			.authorNickname(freedomPost.getAuthor().getNickName())
+			.categoryDisplayName(freedomPost.categoryDisplayName())
+			.commentCnt(freedomPost.getCommentList().size())
+			.createDate(freedomPost.getCreateDate())
+			.content(freedomPost.getContent())
+			.profileImageUrl(freedomPost.getAuthor().getProfileImageUrl())
+			.build();
+	}
 }

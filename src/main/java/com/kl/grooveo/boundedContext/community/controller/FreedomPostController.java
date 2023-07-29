@@ -19,6 +19,7 @@ import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
+import com.kl.grooveo.boundedContext.community.dto.FreedomPostDTO;
 import com.kl.grooveo.boundedContext.community.dto.FreedomPostFormDTO;
 import com.kl.grooveo.boundedContext.community.entity.Category;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
@@ -45,7 +46,7 @@ public class FreedomPostController {
 		@RequestParam(value = "page", defaultValue = "0") int page,
 		@RequestParam(value = "kw", defaultValue = "") String kw,
 		@RequestParam(value = "category", required = false, defaultValue = "all") String selectedCategoryCode) {
-		Page<FreedomPost> paging = this.freedomPostService.getList(boardType, selectedCategoryCode, kw, page);
+		Page<FreedomPost> paging = freedomPostService.getList(boardType, selectedCategoryCode, kw, page);
 		model.addAttribute("boardType", boardType);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
@@ -66,12 +67,14 @@ public class FreedomPostController {
 
 		freedomPostService.updateViewCount(request, response, id);
 
-		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
+		FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
 
-		Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage, so);
+		FreedomPostDTO freedomPostDTO = freedomPostService.convertToFreedomPostDTO(id);
+
+		Page<FreedomPostComment> commentPaging = freedomPostCommentService.getList(freedomPost, commentPage, so);
 
 		model.addAttribute("commentPaging", commentPaging);
-		model.addAttribute("freedomPost", freedomPost);
+		model.addAttribute("freedomPostDTO", freedomPostDTO);
 		model.addAttribute("so", so);
 
 		return "usr/community/freedomPost/detail";
@@ -99,7 +102,7 @@ public class FreedomPostController {
 	@PreAuthorize("isAuthenticated()")
 	@DeleteMapping("/{id}")
 	public String freedomPostDelete(@PathVariable("id") Long id) {
-		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
+		FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
 
 		if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
@@ -112,7 +115,7 @@ public class FreedomPostController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/modify/{id}")
 	public String freedomPostModify(FreedomPostFormDTO freedomPostForm, @PathVariable("id") Long id) {
-		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
+		FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
 
 		if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
@@ -131,13 +134,13 @@ public class FreedomPostController {
 		if (bindingResult.hasErrors()) {
 			return "usr/community/freedomPost/form";
 		}
-		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
+		FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
 
 		if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
 
-		this.freedomPostService.modify(freedomPost, freedomPostForm.getTitle(), freedomPostForm.getCategory(),
+		freedomPostService.modify(freedomPost, freedomPostForm.getTitle(), freedomPostForm.getCategory(),
 			freedomPostForm.getContent());
 		return String.format("redirect:/community/freedomPost/detail/%s", id);
 	}
