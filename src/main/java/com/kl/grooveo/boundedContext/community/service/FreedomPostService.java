@@ -61,7 +61,7 @@ public class FreedomPostService {
                 /* author 필드를 기준으로 FreedomPost 엔티티와 Member 엔티티를 조인. LEFT 조인을 사용하므로, FreedomPost 와 연관된 Member 가 없는 경우에도 결과가 반환됨
                    u1은 조인한 결과를 나타내는 객체 */
 
-				if (category != null && category.equals("")) {
+				if (category != null && category.equals("all")) {
 					return cb.and(cb.equal(postRoot.get("boardType"), boardType),
 						cb.or(cb.like(postRoot.get("title"), "%" + kw + "%"),
 							cb.like(postRoot.get("content"), "%" + kw + "%"),

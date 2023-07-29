@@ -45,7 +45,7 @@ public class FreedomPostController {
 	public String showList(Model model, @PathVariable("boardType") Integer boardType,
 		@RequestParam(value = "page", defaultValue = "0") int page,
 		@RequestParam(value = "kw", defaultValue = "") String kw,
-		@RequestParam(value = "category", required = false, defaultValue = "") String selectedCategoryCode) {
+		@RequestParam(value = "category", required = false, defaultValue = "all") String selectedCategoryCode) {
 		Page<FreedomPost> paging = this.freedomPostService.getList(boardType, selectedCategoryCode, kw, page);
 		model.addAttribute("boardType", boardType);
 		model.addAttribute("paging", paging);

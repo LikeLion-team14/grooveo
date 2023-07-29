@@ -33,10 +33,10 @@
                     const urlParams = new URL(location.href).searchParams;
                     const selectedCode = urlParams.get('category');
                     const categories = {
-                        "c2": "MUSIC",
-                        "c3": "REVIEW",
-                        "c4": "LYRICS",
-                        "c5": "CERTIFY",
+                        "music": "MUSIC",
+                        "review": "REVIEW",
+                        "lyrics": "LYRICS",
+                        "certify": "CERTIFY",
                     };
                     const selectedRadioButtonID = categories[selectedCode] || "ALL";
 
