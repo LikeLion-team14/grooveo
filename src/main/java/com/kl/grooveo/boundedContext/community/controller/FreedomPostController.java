@@ -20,6 +20,7 @@ import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.dto.FreedomPostFormDTO;
+import com.kl.grooveo.boundedContext.community.entity.Category;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.reply.dto.ReplyFormDTO;
@@ -29,7 +30,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @RequestMapping("/community/freedomPost")
 @RequiredArgsConstructor
@@ -44,19 +44,17 @@ public class FreedomPostController {
 	@PreAuthorize("isAuthenticated()")
 	public String showList(Model model, @PathVariable("boardType") Integer boardType,
 		@RequestParam(value = "page", defaultValue = "0") int page,
-		@RequestParam(value = "kw", defaultValue = "") String kw, CategoryForm categoryForm) {
-		Page<FreedomPost> paging = this.freedomPostService.getList(boardType, categoryForm.options, kw, page);
+		@RequestParam(value = "kw", defaultValue = "") String kw,
+		@RequestParam(value = "category", required = false, defaultValue = "") String selectedCategoryCode) {
+		Page<FreedomPost> paging = this.freedomPostService.getList(boardType, selectedCategoryCode, kw, page);
 		model.addAttribute("boardType", boardType);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
+		model.addAttribute("categories", Category.values());
+		model.addAttribute("selectedCategoryCode", selectedCategoryCode);
 		boardTypeCode = boardType;
 
 		return "usr/community/freedomPost/list";
-	}
-
-	@Setter
-	public static class CategoryForm {
-		private String options = "";
 	}
 
 	@PreAuthorize("isAuthenticated()")
