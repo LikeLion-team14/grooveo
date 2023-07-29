@@ -1,4 +1,4 @@
-package com.kl.grooveo.boundedContext.form;
+package com.kl.grooveo.boundedContext.reply.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;

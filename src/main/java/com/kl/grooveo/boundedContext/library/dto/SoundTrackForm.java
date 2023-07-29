@@ -1,4 +1,4 @@
-package com.kl.grooveo.boundedContext.form;
+package com.kl.grooveo.boundedContext.library.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 

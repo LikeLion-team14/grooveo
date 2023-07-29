@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.comment.dto.CommentForm;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
+import com.kl.grooveo.boundedContext.community.dto.FreedomPostForm;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
-import com.kl.grooveo.boundedContext.form.CommentForm;
-import com.kl.grooveo.boundedContext.form.FreedomPostForm;
-import com.kl.grooveo.boundedContext.form.ReplyForm;
+import com.kl.grooveo.boundedContext.reply.dto.ReplyForm;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

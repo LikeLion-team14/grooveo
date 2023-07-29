@@ -1,4 +1,4 @@
-package com.kl.grooveo.boundedContext.response;
+package com.kl.grooveo.boundedContext.thumbsUp.dto;
 
 import lombok.Data;
 

@@ -15,13 +15,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.comment.dto.CommentForm;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
-import com.kl.grooveo.boundedContext.form.CommentForm;
-import com.kl.grooveo.boundedContext.form.ReplyForm;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
+import com.kl.grooveo.boundedContext.reply.dto.ReplyForm;
 import com.kl.grooveo.boundedContext.reply.entity.FreedomPostReply;
 import com.kl.grooveo.boundedContext.reply.service.FreedomPostReplyService;
 

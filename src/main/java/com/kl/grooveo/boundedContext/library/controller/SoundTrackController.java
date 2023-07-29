@@ -27,13 +27,13 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.comment.dto.CommentForm;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
-import com.kl.grooveo.boundedContext.form.CommentForm;
-import com.kl.grooveo.boundedContext.form.ReplyForm;
-import com.kl.grooveo.boundedContext.form.SoundTrackForm;
+import com.kl.grooveo.boundedContext.library.dto.SoundTrackForm;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
+import com.kl.grooveo.boundedContext.reply.dto.ReplyForm;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

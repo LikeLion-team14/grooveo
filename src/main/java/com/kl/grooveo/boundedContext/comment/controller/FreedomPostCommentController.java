@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.comment.dto.CommentForm;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
-import com.kl.grooveo.boundedContext.form.CommentForm;
-import com.kl.grooveo.boundedContext.form.ReplyForm;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
+import com.kl.grooveo.boundedContext.reply.dto.ReplyForm;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
