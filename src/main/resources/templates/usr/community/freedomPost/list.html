@@ -56,6 +56,7 @@
                        class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-lg pr-3">
                         <i class="search-Button fas fa-search text-gray-700"></i>
                     </a>
+                    <input type="hidden" id="category" name="category" th:value="${selectedCategoryCode}">
                     <input type="hidden" id="kw" name="kw" th:value="${kw}">
                     <input type="hidden" id="page" name="page" th:value="${paging.number}">
                 </div>
@@ -186,9 +187,11 @@
 
     <script th:inline="javascript">
         const page_elements = document.getElementsByClassName("page-link");
+        const selectedCategory = /*[[${selectedCategoryCode}]]*/ null;
         Array.from(page_elements).forEach(function (element) {
             element.addEventListener('click', function () {
                 document.getElementById('page').value = this.dataset.page;
+                document.getElementById('category').value = selectedCategory;
                 document.getElementById('searchForm').submit();
             });
         });
@@ -205,6 +208,7 @@
             if (event.key === "Enter") {
                 // 기본 동작 방지하지 않음
                 document.getElementById("kw").value = event.target.value; // 검색어 전달
+                document.getElementById('page').value = 0;
                 document.getElementById("searchForm").submit(); // 검색 폼 제출
             }
         });
