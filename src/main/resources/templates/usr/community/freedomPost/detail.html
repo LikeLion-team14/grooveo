@@ -214,7 +214,7 @@
                         <!-- 답글 등록 창-->
                         <div class="form-floating comment_box">
                             <form th:action="@{|/reply/create/${comment.id}?commentPage=${commentPaging.number}&so=${so}|}"
-                                  th:object="${replyForm}" method="post"
+                                  th:object="${replyFormDTO}" method="post"
                                   onsubmit="replyForm__submit(this); return false;"
                                   class="my-3">
                                 <div class="flex items-center justify-center">
@@ -261,7 +261,7 @@
 
                 <!-- 댓글 입력칸 -->
                 <form th:action="@{|/comment/create/${freedomPost.id}?commentPage=${commentPaging.number}&so=${so}|}"
-                      th:object="${commentForm}" method="post" onsubmit="commentForm__submit(this); return false;">
+                      th:object="${commentFormDTO}" method="post" onsubmit="commentForm__submit(this); return false;">
                     <div class="flex items-center justify-center">
                         <textarea cols="95" rows="2" placeholder="댓글을 남겨보세요"
                                   class="border border-gray-300 resize-none p-4 mr-5" th:field="*{content}"></textarea>

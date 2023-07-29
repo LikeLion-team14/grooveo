@@ -111,20 +111,20 @@ public class FreedomPostController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/create")
-	public String freedomPostCreate(Model model, FreedomPostFormDTO freedomPostForm) {
+	public String freedomPostCreate(FreedomPostFormDTO freedomPostFormDTO) {
 		return "usr/community/freedomPost/form";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create")
-	public String freedomPostCreate(Model model, @Valid FreedomPostFormDTO freedomPostForm,
+	public String freedomPostCreate(@Valid FreedomPostFormDTO freedomPostFormDTO,
 		BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "usr/community/freedomPost/form";
 		}
 
-		this.freedomPostService.create(boardTypeCode, freedomPostForm.getTitle(), freedomPostForm.getCategory(),
-			freedomPostForm.getContent(), rq.getMember());
+		this.freedomPostService.create(boardTypeCode, freedomPostFormDTO.getTitle(), freedomPostFormDTO.getCategory(),
+			freedomPostFormDTO.getContent(), rq.getMember());
 		return String.format("redirect:/community/freedomPost/%d/list", boardTypeCode);
 	}
 
