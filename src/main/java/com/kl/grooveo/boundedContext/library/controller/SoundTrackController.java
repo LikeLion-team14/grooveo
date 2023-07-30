@@ -147,7 +147,7 @@ public class SoundTrackController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
 
-		model.addAttribute("soundTrackForm",
+		model.addAttribute("soundTrackFormDTO",
 			new SoundTrackFormDTO(fileInfo.getTitle(), fileInfo.getDescription(), null, null));
 		model.addAttribute("albumCoverUrl", fileInfo.getAlbumCoverUrl());
 		model.addAttribute("soundUrl", fileInfo.getSoundUrl());
