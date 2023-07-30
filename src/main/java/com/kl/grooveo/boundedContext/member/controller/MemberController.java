@@ -28,13 +28,13 @@ import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
+import com.kl.grooveo.boundedContext.member.dto.FindPasswordFormDTO;
+import com.kl.grooveo.boundedContext.member.dto.FindUsernameFormDTO;
+import com.kl.grooveo.boundedContext.member.dto.JoinFormDTO;
+import com.kl.grooveo.boundedContext.member.dto.ModifyEmailFormDTO;
+import com.kl.grooveo.boundedContext.member.dto.ModifyNickNameFormDTO;
+import com.kl.grooveo.boundedContext.member.dto.ModifyPasswordFormDTO;
 import com.kl.grooveo.boundedContext.member.entity.Member;
-import com.kl.grooveo.boundedContext.member.form.FindPasswordForm;
-import com.kl.grooveo.boundedContext.member.form.FindUsernameForm;
-import com.kl.grooveo.boundedContext.member.form.JoinForm;
-import com.kl.grooveo.boundedContext.member.form.ModifyEmailForm;
-import com.kl.grooveo.boundedContext.member.form.ModifyNickNameForm;
-import com.kl.grooveo.boundedContext.member.form.ModifyPasswordForm;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,15 +65,15 @@ public class MemberController {
 	}
 
 	@PostMapping("/join")
-	public String join(@Valid JoinForm joinForm, HttpServletRequest request) {
+	public String join(@Valid JoinFormDTO joinFormDTO, HttpServletRequest request) {
 		RsData emailVerified = memberService.isEmailVerified(request);
 
 		if (emailVerified.isFail()) {
 			return rq.historyBack(emailVerified);
 		}
 
-		RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(),
-			joinForm.getName(), joinForm.getNickName(), joinForm.getEmail());
+		RsData<Member> joinRs = memberService.join(joinFormDTO.getUsername(), joinFormDTO.getPassword(),
+			joinFormDTO.getName(), joinFormDTO.getNickName(), joinFormDTO.getEmail());
 
 		if (joinRs.isFail()) {
 			return rq.historyBack(joinRs);
@@ -88,6 +88,7 @@ public class MemberController {
 		Model model) {
 		model.addAttribute("error", error);
 		model.addAttribute("exception", exception);
+
 		return "usr/member/login";
 	}
 
@@ -97,8 +98,8 @@ public class MemberController {
 	}
 
 	@PostMapping("/findUsername")
-	public String findId(@Valid FindUsernameForm findUsernameForm) {
-		RsData findIdRs = memberService.findUsername(findUsernameForm.getEmail());
+	public String findId(@Valid FindUsernameFormDTO findUsernameFormDTO) {
+		RsData findIdRs = memberService.findUsername(findUsernameFormDTO.getEmail());
 
 		if (findIdRs.isFail()) {
 			return rq.historyBack(findIdRs);
@@ -113,9 +114,9 @@ public class MemberController {
 	}
 
 	@PostMapping("/findPassword")
-	public String findPassword(@Valid FindPasswordForm findPasswordForm) {
-		RsData findPasswordRs = memberService.findUserPassword(findPasswordForm.getUsername(),
-			findPasswordForm.getEmail());
+	public String findPassword(@Valid FindPasswordFormDTO findPasswordFormDTO) {
+		RsData findPasswordRs = memberService.findUserPassword(findPasswordFormDTO.getUsername(),
+			findPasswordFormDTO.getEmail());
 
 		if (findPasswordRs.isFail()) {
 			return rq.historyBack(findPasswordRs);
@@ -136,8 +137,10 @@ public class MemberController {
 		Member member = rq.getMember();
 		List<FreedomPost> freedomPosts = member.getFreedomPosts();
 		Page<FreedomPost> paging = freedomPostService.getList(member.getId(), page);
+
 		model.addAttribute("paging", paging);
 		model.addAttribute("freedomPosts", freedomPosts);
+
 		return "usr/member/myPage/post";
 	}
 
@@ -147,8 +150,10 @@ public class MemberController {
 		Member member = rq.getMember();
 		List<FreedomPostComment> freedomPostComments = member.getFreedomPostComments();
 		Page<FreedomPostComment> paging = freedomPostCommentService.getCommentList(member.getId(), page);
+
 		model.addAttribute("paging", paging);
 		model.addAttribute("freedomPostComments", freedomPostComments);
+
 		return "usr/member/myPage/comment";
 	}
 
@@ -156,8 +161,8 @@ public class MemberController {
 	@GetMapping("/myPage/library")
 	public String showMyLibrary(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
 		String username = rq.getMember().getUsername();
-
 		Page<FileInfo> paging = this.soundTrackService.getMemberUploads(username, page);
+
 		model.addAttribute("paging", paging);
 
 		return "usr/member/myPage/library";
@@ -171,9 +176,10 @@ public class MemberController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/myPage/modifyPassword")
-	public String modifyPassword(@Valid ModifyPasswordForm modifyPasswordForm, HttpSession session) {
-		RsData<Member> member = memberService.modifyPassword(rq.getMember(), modifyPasswordForm.getPreviousPassword(),
-			modifyPasswordForm.getNewPassword(), modifyPasswordForm.getConfirmNewPassword());
+	public String modifyPassword(@Valid ModifyPasswordFormDTO modifyPasswordFormDTO, HttpSession session) {
+		RsData<Member> member = memberService.modifyPassword(rq.getMember(),
+			modifyPasswordFormDTO.getPreviousPassword(),
+			modifyPasswordFormDTO.getNewPassword(), modifyPasswordFormDTO.getConfirmNewPassword());
 
 		if (member.isFail()) {
 			return rq.historyBack(member);
@@ -192,8 +198,8 @@ public class MemberController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/myPage/modifyNickName")
-	public String modifyInfo(@Valid ModifyNickNameForm modifyInfoForm) {
-		RsData<Member> member = memberService.modifyNickName(rq.getMember(), modifyInfoForm.getNickName());
+	public String modifyInfo(@Valid ModifyNickNameFormDTO modifyNickNameFormDTO) {
+		RsData<Member> member = memberService.modifyNickName(rq.getMember(), modifyNickNameFormDTO.getNickName());
 
 		if (member.isFail()) {
 			return rq.historyBack(member);
@@ -210,8 +216,8 @@ public class MemberController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/myPage/modifyEmail")
-	public String modifyEmail(@Valid ModifyEmailForm modifyEmailForm) {
-		RsData<Member> member = memberService.modifyEmail(rq.getMember(), modifyEmailForm.getEmail());
+	public String modifyEmail(@Valid ModifyEmailFormDTO modifyEmailFormDTO) {
+		RsData<Member> member = memberService.modifyEmail(rq.getMember(), modifyEmailFormDTO.getEmail());
 
 		if (member.isFail()) {
 			return rq.historyBack(member);
@@ -235,8 +241,8 @@ public class MemberController {
 		try {
 			String fileName = "profileImage_userId_" + actor.getId();
 			String profileUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/profileImages/" + fileName;
-
 			ObjectMetadata metadata = new ObjectMetadata();
+
 			metadata.setContentType(profileImage.getContentType());
 			metadata.setContentLength(profileImage.getSize());
 

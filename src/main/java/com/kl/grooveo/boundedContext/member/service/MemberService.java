@@ -96,7 +96,7 @@ public class MemberService {
 	public RsData findUserPassword(String username, String email) {
 		Optional<Member> opActor = memberRepository.findByUsernameAndEmail(username, email);
 		if (opActor.isEmpty()) {
-			return RsData.of("F-1", "등록된 아이디를 찾을 수 없습니다.");
+			return RsData.of("F-1", "등록된 아이디를 <br> 찾을 수 없습니다.");
 		}
 		Member actor = opActor.get();
 		// 임시비밀번호
@@ -106,7 +106,7 @@ public class MemberService {
 		// 임시비밀번호로 비밀번호 변경
 		actor.updatePassword(password);
 
-		return RsData.of("S-1", "등록하신 이메일로 임시비밀번호를 발송했습니다.");
+		return RsData.of("S-1", "등록하신 이메일로 <br> 임시비밀번호를 발송했습니다.");
 	}
 
 	public RsData isEmailVerified(HttpServletRequest request) {
