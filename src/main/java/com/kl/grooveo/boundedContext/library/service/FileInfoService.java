@@ -61,26 +61,33 @@ public class FileInfoService {
 		fileInfoRepository.delete(fileInfo);
 	}
 
-	public List<FileInfo> getLatestSongs() {
+	private List<FileInfo> getLatestSongs() {
 		return fileInfoRepository.findTop10ByOrderByCreateDateDesc();
+	}
+
+	public List<FileInfoDTO> convertLatestSongsToDTO() {
+		return getLatestSongs().stream().map(this::convertToFileInfoDTO).collect(Collectors.toList());
 	}
 
 	private List<FileInfo> getPopularSongs() {
 		return fileInfoRepository.findTop10ByHighestLikeCount();
 	}
 
-	private FileInfoDTO convertToPopularSongDTO(FileInfo fileInfo) {
+	private FileInfoDTO convertToFileInfoDTO(FileInfo fileInfo) {
+		int thumbsUpSummaryCount =
+			(fileInfo.getSoundThumbsUpSummary() != null) ? fileInfo.getSoundThumbsUpSummary().getLikeCount() : 0;
+
 		return FileInfoDTO.builder()
 			.id(fileInfo.getId())
 			.albumCoverUrl(fileInfo.getAlbumCoverUrl())
 			.title(fileInfo.getTitle())
 			.artistNickname(fileInfo.getArtist().getNickName())
 			.soundThumbsUpSummary(fileInfo.getSoundThumbsUpSummary())
-			.thumbsUpSummaryCount(fileInfo.getSoundThumbsUpSummary().getLikeCount())
+			.thumbsUpSummaryCount(thumbsUpSummaryCount)
 			.build();
 	}
 
 	public List<FileInfoDTO> convertToPopularSongTop10DTO() {
-		return getPopularSongs().stream().map(this::convertToPopularSongDTO).collect(Collectors.toList());
+		return getPopularSongs().stream().map(this::convertToFileInfoDTO).collect(Collectors.toList());
 	}
 }
