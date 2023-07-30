@@ -264,13 +264,13 @@
                                 </div>
                                 <div class="flex items-center flex-col mt-3">
                                     <span class="text-3xl font-bold mb-3" th:text="${song.title}">노래 제목</span>
-                                    <span class="text-lg font-bold" th:text="${song.artist.nickName}">아티스트 이름</span>
+                                    <span class="text-lg font-bold" th:text="${song.artistNickname}">아티스트 이름</span>
                                 </div>
                                 <div class="flex justify-end items-center mr-5">
                                     <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
                                     <span th:if="${song.soundThumbsUpSummary == null}">0</span>
                                     <span th:unless="${song.soundThumbsUpSummary == null}"
-                                          th:text="${song.soundThumbsUpSummary.likeCount}"></span>
+                                          th:text="${song.thumbsUpSummaryCount}"></span>
                                 </div>
                             </a>
                         </div>
