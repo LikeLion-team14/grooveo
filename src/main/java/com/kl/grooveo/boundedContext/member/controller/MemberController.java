@@ -88,6 +88,7 @@ public class MemberController {
 		Model model) {
 		model.addAttribute("error", error);
 		model.addAttribute("exception", exception);
+
 		return "usr/member/login";
 	}
 
@@ -136,8 +137,10 @@ public class MemberController {
 		Member member = rq.getMember();
 		List<FreedomPost> freedomPosts = member.getFreedomPosts();
 		Page<FreedomPost> paging = freedomPostService.getList(member.getId(), page);
+
 		model.addAttribute("paging", paging);
 		model.addAttribute("freedomPosts", freedomPosts);
+
 		return "usr/member/myPage/post";
 	}
 
@@ -147,8 +150,10 @@ public class MemberController {
 		Member member = rq.getMember();
 		List<FreedomPostComment> freedomPostComments = member.getFreedomPostComments();
 		Page<FreedomPostComment> paging = freedomPostCommentService.getCommentList(member.getId(), page);
+
 		model.addAttribute("paging", paging);
 		model.addAttribute("freedomPostComments", freedomPostComments);
+
 		return "usr/member/myPage/comment";
 	}
 
@@ -156,8 +161,8 @@ public class MemberController {
 	@GetMapping("/myPage/library")
 	public String showMyLibrary(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
 		String username = rq.getMember().getUsername();
-
 		Page<FileInfo> paging = this.soundTrackService.getMemberUploads(username, page);
+
 		model.addAttribute("paging", paging);
 
 		return "usr/member/myPage/library";
@@ -236,8 +241,8 @@ public class MemberController {
 		try {
 			String fileName = "profileImage_userId_" + actor.getId();
 			String profileUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/profileImages/" + fileName;
-
 			ObjectMetadata metadata = new ObjectMetadata();
+
 			metadata.setContentType(profileImage.getContentType());
 			metadata.setContentLength(profileImage.getSize());
 
