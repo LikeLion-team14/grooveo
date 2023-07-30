@@ -1,13 +1,13 @@
-package com.kl.grooveo.boundedContext.member.form;
+package com.kl.grooveo.boundedContext.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
-public class ModifyNickNameForm {
+@Setter
+public class ModifyNickNameFormDTO {
 
 	@NotBlank
 	@Size(min = 2, max = 10)

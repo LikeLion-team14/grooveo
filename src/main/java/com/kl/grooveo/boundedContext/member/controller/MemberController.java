@@ -32,8 +32,8 @@ import com.kl.grooveo.boundedContext.member.dto.FindPasswordFormDTO;
 import com.kl.grooveo.boundedContext.member.dto.FindUsernameFormDTO;
 import com.kl.grooveo.boundedContext.member.dto.JoinFormDTO;
 import com.kl.grooveo.boundedContext.member.dto.ModifyEmailFormDTO;
+import com.kl.grooveo.boundedContext.member.dto.ModifyNickNameFormDTO;
 import com.kl.grooveo.boundedContext.member.entity.Member;
-import com.kl.grooveo.boundedContext.member.form.ModifyNickNameForm;
 import com.kl.grooveo.boundedContext.member.form.ModifyPasswordForm;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 
@@ -192,8 +192,8 @@ public class MemberController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/myPage/modifyNickName")
-	public String modifyInfo(@Valid ModifyNickNameForm modifyInfoForm) {
-		RsData<Member> member = memberService.modifyNickName(rq.getMember(), modifyInfoForm.getNickName());
+	public String modifyInfo(@Valid ModifyNickNameFormDTO modifyNickNameFormDTO) {
+		RsData<Member> member = memberService.modifyNickName(rq.getMember(), modifyNickNameFormDTO.getNickName());
 
 		if (member.isFail()) {
 			return rq.historyBack(member);
