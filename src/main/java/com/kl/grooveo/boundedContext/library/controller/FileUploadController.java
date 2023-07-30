@@ -3,15 +3,12 @@ package com.kl.grooveo.boundedContext.library.controller;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,13 +42,13 @@ public class FileUploadController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/soundupload")
-	public String showSoundUpload(Model model, SoundTrackFormDTO soundTrackForm) {
+	public String showSoundUpload(SoundTrackFormDTO soundTrackForm) {
 		return "usr/library/soundUpload";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/soundupload")
-	public String uploadFiles(Model model, @Valid SoundTrackFormDTO soundTrackForm, BindingResult bindingResult) {
+	public String uploadFiles(@Valid SoundTrackFormDTO soundTrackForm, BindingResult bindingResult) {
 		try {
 			if (soundTrackForm.getAlbumCover().isEmpty() || soundTrackForm.getSoundFile().isEmpty()) {
 				bindingResult.rejectValue("file", "required", "음원과 앨범 등록은 필수입니다.");
@@ -89,17 +86,15 @@ public class FileUploadController {
 				new PutObjectRequest(bucket, "sound/" + soundName, soundTrackForm.getSoundFile().getInputStream(),
 					soundMetadata));
 
-			FileInfo fileInfo = new FileInfo();
-			fileInfo.setTitle(soundTrackForm.getTitle());
-			fileInfo.setArtist(rq.getMember());
-			fileInfo.setDescription(soundTrackForm.getDescription());
-			fileInfo.setAlbumCoverUrl(albumCoverUrl);
-			fileInfo.setSoundUrl(soundUrl);
-			fileInfo.setCreateDate(LocalDateTime.now());
-			fileInfoService.saveFileInfo(fileInfo);
+			FileInfo fileInfo = FileInfo.builder()
+				.title(soundTrackForm.getTitle())
+				.artist(rq.getMember())
+				.description(soundTrackForm.getDescription())
+				.albumCoverUrl(albumCoverUrl)
+				.soundUrl(soundUrl)
+				.build();
 
-			System.out.println(
-				ResponseEntity.ok("업로드 성공하였습니다. 앨범커버 URL : " + albumCoverUrl + ", 음원 URL : " + soundUrl));
+			fileInfoService.saveFileInfo(fileInfo);
 
 			return "redirect:/library/soundDetail/" + fileInfo.getId();
 		} catch (IOException e) {
