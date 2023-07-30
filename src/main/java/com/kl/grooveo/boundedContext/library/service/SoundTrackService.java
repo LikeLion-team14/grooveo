@@ -2,7 +2,6 @@ package com.kl.grooveo.boundedContext.library.service;
 
 import static java.util.stream.Collectors.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kl.grooveo.boundedContext.library.dto.SoundTrackFormDTO;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -82,12 +82,12 @@ public class SoundTrackService {
 		fileInfoRepository.delete(fileInfo);
 	}
 
-	public void modify(FileInfo fileInfo, String title, String description, String albumCover, String soundFile) {
-		fileInfo.setTitle(title);
-		fileInfo.setModifyDate(LocalDateTime.now());
-		fileInfo.setSoundUrl(soundFile);
-		fileInfo.setAlbumCoverUrl(albumCover);
-		fileInfo.setDescription(description);
+	public void modify(FileInfo fileInfo, SoundTrackFormDTO soundTrackFormDTO, String albumCover, String soundUrl) {
+		fileInfo.updateTitle(soundTrackFormDTO.getTitle());
+		fileInfo.updateDescription(soundTrackFormDTO.getDescription());
+		fileInfo.updateSoundUrl(soundUrl);
+		fileInfo.updateAlbumCoverUrl(albumCover);
+		
 		this.fileInfoRepository.save(fileInfo);
 	}
 

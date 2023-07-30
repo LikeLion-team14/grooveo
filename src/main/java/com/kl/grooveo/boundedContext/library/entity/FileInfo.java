@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kl.grooveo.base.baseEntity.BaseEntity;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp;
@@ -16,31 +17,21 @@ import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp_summary;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Getter
-@Setter
 @Entity
-@Table(name = "file_info")
 @SuperBuilder
-@NoArgsConstructor
-public class FileInfo {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class FileInfo extends BaseEntity {
 	private String title;
 
 	@ManyToOne
@@ -52,6 +43,10 @@ public class FileInfo {
 	@Column(columnDefinition = "integer default 0", nullable = false)
 	private int view; // 조회수
 
+	private String albumCoverUrl;
+
+	private String soundUrl;
+
 	@OneToMany(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
 	private List<SoundPostComment> commentList = new ArrayList<>();
 
@@ -60,12 +55,6 @@ public class FileInfo {
 
 	@OneToOne(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
 	private SoundThumbsUp_summary soundThumbsUpSummary;
-
-	private String albumCoverUrl;
-	private String soundUrl;
-
-	private LocalDateTime createDate;
-	private LocalDateTime modifyDate;
 
 	public String getAfterPost() {
 		long diff = ChronoUnit.SECONDS.between(getCreateDate(), LocalDateTime.now());
@@ -95,5 +84,21 @@ public class FileInfo {
 
 	public boolean getExtra_actor_hasIn() {
 		return getExtra_actor_fileInfo() == null;
+	}
+
+	public void updateTitle(String title) {
+		this.title = title;
+	}
+
+	public void updateDescription(String description) {
+		this.description = description;
+	}
+
+	public void updateSoundUrl(String soundUrl) {
+		this.soundUrl = soundUrl;
+	}
+
+	public void updateAlbumCoverUrl(String albumCoverUrl) {
+		this.albumCoverUrl = albumCoverUrl;
 	}
 }
