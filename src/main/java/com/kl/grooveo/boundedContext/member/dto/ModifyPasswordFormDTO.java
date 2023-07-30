@@ -1,13 +1,13 @@
-package com.kl.grooveo.boundedContext.member.form;
+package com.kl.grooveo.boundedContext.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
-public class ModifyPasswordForm {
+@Setter
+public class ModifyPasswordFormDTO {
 
 	@NotBlank
 	@Size(min = 3, max = 30)

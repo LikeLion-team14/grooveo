@@ -33,8 +33,8 @@ import com.kl.grooveo.boundedContext.member.dto.FindUsernameFormDTO;
 import com.kl.grooveo.boundedContext.member.dto.JoinFormDTO;
 import com.kl.grooveo.boundedContext.member.dto.ModifyEmailFormDTO;
 import com.kl.grooveo.boundedContext.member.dto.ModifyNickNameFormDTO;
+import com.kl.grooveo.boundedContext.member.dto.ModifyPasswordFormDTO;
 import com.kl.grooveo.boundedContext.member.entity.Member;
-import com.kl.grooveo.boundedContext.member.form.ModifyPasswordForm;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -171,9 +171,10 @@ public class MemberController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/myPage/modifyPassword")
-	public String modifyPassword(@Valid ModifyPasswordForm modifyPasswordForm, HttpSession session) {
-		RsData<Member> member = memberService.modifyPassword(rq.getMember(), modifyPasswordForm.getPreviousPassword(),
-			modifyPasswordForm.getNewPassword(), modifyPasswordForm.getConfirmNewPassword());
+	public String modifyPassword(@Valid ModifyPasswordFormDTO modifyPasswordFormDTO, HttpSession session) {
+		RsData<Member> member = memberService.modifyPassword(rq.getMember(),
+			modifyPasswordFormDTO.getPreviousPassword(),
+			modifyPasswordFormDTO.getNewPassword(), modifyPasswordFormDTO.getConfirmNewPassword());
 
 		if (member.isFail()) {
 			return rq.historyBack(member);
