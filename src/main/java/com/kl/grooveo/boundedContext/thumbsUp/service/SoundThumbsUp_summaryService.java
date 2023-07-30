@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
-import com.kl.grooveo.boundedContext.response.ThumbsUpDTO;
+import com.kl.grooveo.boundedContext.thumbsUp.dto.ThumbsUpDTO;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp_summary;
 import com.kl.grooveo.boundedContext.thumbsUp.repository.SoundThumbsUp_summaryRepository;
 

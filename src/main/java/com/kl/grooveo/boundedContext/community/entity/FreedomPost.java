@@ -68,10 +68,9 @@ public class FreedomPost {
 
 	public String categoryDisplayName() {
 		return switch (category) {
-			case "" -> "전체";
-			case "c2" -> "음악";
-			case "c3" -> "리뷰";
-			case "c4" -> "가사 해석";
+			case "music" -> "음악";
+			case "review" -> "리뷰";
+			case "lyrics" -> "가사 해석";
 			default -> "인증/후기";
 		};
 	}

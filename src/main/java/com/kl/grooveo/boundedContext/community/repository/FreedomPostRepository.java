@@ -17,5 +17,5 @@ public interface FreedomPostRepository extends JpaRepository<FreedomPost, Long> 
 
 	@Modifying
 	@Query("update FreedomPost fp set fp.view = fp.view + 1 where fp.id = :id")
-	int updateView(@Param("id") Long id);
+	void updateView(@Param("id") Long id);
 }
