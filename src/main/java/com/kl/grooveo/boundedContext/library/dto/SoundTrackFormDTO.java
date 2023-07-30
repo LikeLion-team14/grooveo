@@ -1,4 +1,4 @@
-package com.kl.grooveo.boundedContext.form;
+package com.kl.grooveo.boundedContext.library.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SoundTrackForm {
+public class SoundTrackFormDTO {
 	@NotEmpty(message = "제목은 필수항목입니다.")
 	@Size(max = 200)
 	private String title;
@@ -21,7 +21,7 @@ public class SoundTrackForm {
 
 	private MultipartFile albumCover;
 
-	public SoundTrackForm(String title, String description, MultipartFile soundFile, MultipartFile albumCover) {
+	public SoundTrackFormDTO(String title, String description, MultipartFile soundFile, MultipartFile albumCover) {
 		this.title = title;
 		this.description = description;
 		this.soundFile = soundFile;

@@ -17,60 +17,30 @@
         <div class="mt-3">
             <form th:action>
                 <div class="flex justify-center">
-                    <input type="radio" name="options" id="all" class="peer hidden rounded-full" value=""
-                           onclick="$(this).closest('form').submit();"/>
-                    <label for="all"
-                           class="cursor-pointer bg-black bg-opacity-10 h-10 p-4 w-24 text-sm flex items-center justify-center hover:bg-opacity-5">
-                        전체
-                    </label>
-                    <input type="radio" name="options" id="music" class="peer hidden rounded-full" value="c2"
-                           onclick="$(this).closest('form').submit();"/>
-                    <label for="music"
-                           class="cursor-pointer bg-black bg-opacity-10 h-10 p-4 w-24 ml-4 text-sm flex items-center justify-center hover:bg-opacity-5">
-                        음악
-                    </label>
-                    <input type="radio" name="options" id="review" class="peer hidden rounded-full" value="c3"
-                           onclick="$(this).closest('form').submit();"/>
-                    <label for="review"
-                           class="cursor-pointer bg-black bg-opacity-10 h-10 p-4 w-24 ml-4 text-sm flex items-center justify-center hover:bg-opacity-5">
-                        리뷰
-                    </label>
-                    <input type="radio" name="options" id="lyrics" class="peer hidden rounded-full" value="c4"
-                           onclick="$(this).closest('form').submit();"/>
-                    <label for="lyrics"
-                           class="cursor-pointer bg-black bg-opacity-10 h-10 p-4 w-24 ml-4 text-sm flex items-center justify-center hover:bg-opacity-5">
-                        가사 해석
-                    </label>
-                    <input type="radio" name="options" id="certify" class="peer hidden rounded-full" value="c5"
-                           onclick="$(this).closest('form').submit();"/>
-                    <label for="certify"
-                           class="cursor-pointer bg-black bg-opacity-10 h-10 p-4 w-24 ml-4 text-sm flex items-center justify-center hover:bg-opacity-5">
-                        인증/후기
-                    </label>
+                    <th:block th:each="category : ${categories}">
+                        <input type="radio" name="category" th:id="${category.name}"
+                               class="peer hidden rounded-full" th:value="${category.code}"
+                               onclick="$(this).closest('form').submit();"/>
+                        <label th:for="${category.name}"
+                               class="cursor-pointer bg-black bg-opacity-10 h-10 p-4 w-24 text-sm flex items-center justify-center hover:bg-opacity-5"
+                               th:text="${category.displayName}"></label>
+                    </th:block>
                 </div>
             </form>
 
             <script>
                 window.onload = function () {
                     const urlParams = new URL(location.href).searchParams;
-                    let options = urlParams.get('options');
-                    switch (options) {
-                        case "c2":
-                            $('#music').prop("checked", true);
-                            break;
-                        case "c3":
-                            $('#review').prop("checked", true);
-                            break;
-                        case "c4":
-                            $('#lyrics').prop("checked", true);
-                            break;
-                        case "c5":
-                            $('#certify').prop("checked", true);
-                            break;
-                        default:
-                            $('#all').prop("checked", true);
-                            break;
-                    }
+                    const selectedCode = urlParams.get('category');
+                    const categories = {
+                        "music": "MUSIC",
+                        "review": "REVIEW",
+                        "lyrics": "LYRICS",
+                        "certify": "CERTIFY",
+                    };
+                    const selectedRadioButtonID = categories[selectedCode] || "ALL";
+
+                    document.getElementById(selectedRadioButtonID).checked = true;
                 }
             </script>
         </div>
@@ -86,6 +56,7 @@
                        class="absolute right-0 top-0 bottom-0 flex items-center justify-center text-black text-lg pr-3">
                         <i class="search-Button fas fa-search text-gray-700"></i>
                     </a>
+                    <input type="hidden" id="category" name="category" th:value="${selectedCategoryCode}">
                     <input type="hidden" id="kw" name="kw" th:value="${kw}">
                     <input type="hidden" id="page" name="page" th:value="${paging.number}">
                 </div>
@@ -216,9 +187,11 @@
 
     <script th:inline="javascript">
         const page_elements = document.getElementsByClassName("page-link");
+        const selectedCategory = /*[[${selectedCategoryCode}]]*/ null;
         Array.from(page_elements).forEach(function (element) {
             element.addEventListener('click', function () {
                 document.getElementById('page').value = this.dataset.page;
+                document.getElementById('category').value = selectedCategory;
                 document.getElementById('searchForm').submit();
             });
         });
@@ -235,6 +208,7 @@
             if (event.key === "Enter") {
                 // 기본 동작 방지하지 않음
                 document.getElementById("kw").value = event.target.value; // 검색어 전달
+                document.getElementById('page').value = 0;
                 document.getElementById("searchForm").submit(); // 검색 폼 제출
             }
         });

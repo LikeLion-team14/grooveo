@@ -33,7 +33,7 @@
         }
 
         window.onload = function () {
-            $('#ct').val("c2");
+            $('#ct').val("music");
         }
 
         function copyEditorContentToTextarea() {
@@ -54,15 +54,15 @@
 <main layout:fragment="main">
     <div class="flex flex-col align-center mx-auto max-w-7xl w-full my-3">
         <span class="text-3xl text-center font-bold mt-8">게시글 등록</span>
-        <form th:action th:object="${freedomPostForm}" method="post"
+        <form th:action th:object="${freedomPostFormDTO}" method="post"
               onsubmit="copyEditorContentToTextarea(); PostForm__submit(this); return false;">
             <div class="flex flex-col mt-2">
                 <span class="badge badge-lg rounded-pill badge-neutral my-2">카테고리</span>
                 <select class="select select-bordered select-sm w-full max-w-xs" id="category" onchange="changeFn()">
-                    <option value="c2" selected>음악</option>
-                    <option value="c3">리뷰</option>
-                    <option value="c4">가사 해석</option>
-                    <option value="c5">인증/후기</option>
+                    <option value="music" selected>음악</option>
+                    <option value="review">리뷰</option>
+                    <option value="lyrics">가사 해석</option>
+                    <option value="certify">인증/후기</option>
                 </select>
                 <input type="hidden" id="ct" th:field="*{category}">
             </div>

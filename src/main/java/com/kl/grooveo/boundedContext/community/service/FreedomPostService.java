@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kl.grooveo.base.exception.DataNotFoundException;
+import com.kl.grooveo.boundedContext.community.dto.FreedomPostDTO;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.repository.FreedomPostRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -25,6 +26,9 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -61,7 +65,7 @@ public class FreedomPostService {
                 /* author 필드를 기준으로 FreedomPost 엔티티와 Member 엔티티를 조인. LEFT 조인을 사용하므로, FreedomPost 와 연관된 Member 가 없는 경우에도 결과가 반환됨
                    u1은 조인한 결과를 나타내는 객체 */
 
-				if (category != null && category.equals("")) {
+				if (category != null && category.equals("all")) {
 					return cb.and(cb.equal(postRoot.get("boardType"), boardType),
 						cb.or(cb.like(postRoot.get("title"), "%" + kw + "%"),
 							cb.like(postRoot.get("content"), "%" + kw + "%"),
@@ -116,10 +120,46 @@ public class FreedomPostService {
 		this.freedomPostRepository.save(freedomPost);
 	}
 
-	// 조회수 카운트
 	@Transactional
-	public int updateView(Long id) {
-		return this.freedomPostRepository.updateView(id);
+	public void updateViewCount(HttpServletRequest request, HttpServletResponse response, Long id) {
+		// 조회수 관련 로직
+		Cookie oldCookie = null;
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {   // 쿠키가 null 인지 검사
+			// null 이 아니라면 "postView" 라는 이름의 쿠키가 있는지 검사
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("postView")) {
+					oldCookie = cookie;
+				}
+			}
+		}
+
+		if (oldCookie != null) {
+			// "postView" 가 존재한다면
+			// value 가 현재 접근한 게시글의 id 를 포함하고 있는지 검사
+			if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
+				// 포함하고 있지 않으면 조회수 증가
+				updateView(id);
+				oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+				oldCookie.setPath("/");
+				oldCookie.setMaxAge(60 * 60 * 24);                            // 쿠키 시간
+				response.addCookie(oldCookie);
+			}
+		} else {
+			// "postView" 가 존재하지 않는다면
+			// 게시글의 id 를 포함하는 쿠키를 만들고
+			// 마찬가지로 조회수 증가
+			updateView(id);
+			Cookie newCookie = new Cookie("postView", "[" + id + "]");
+			newCookie.setPath("/");
+			newCookie.setMaxAge(60 * 60 * 24);                                // 쿠키 시간
+			response.addCookie(newCookie);
+		}
+	}
+
+	// 조회수 카운트
+	public void updateView(Long id) {
+		freedomPostRepository.updateView(id);
 	}
 
 	public Page<FreedomPost> getList(Long userId, int page) {
@@ -132,5 +172,21 @@ public class FreedomPostService {
 	public int getViewCnt(Long postId) {
 		Optional<FreedomPost> freedomPost = freedomPostRepository.findById(postId);
 		return freedomPost.map(FreedomPost::getView).orElse(-1);
+	}
+
+	public FreedomPostDTO convertToFreedomPostDTO(Long id) {
+		FreedomPost freedomPost = getFreedomPost(id);
+
+		return FreedomPostDTO.builder()
+			.postId(id)
+			.title(freedomPost.getTitle())
+			.authorName(freedomPost.getAuthor().getUsername())
+			.authorNickname(freedomPost.getAuthor().getNickName())
+			.categoryDisplayName(freedomPost.categoryDisplayName())
+			.commentCnt(freedomPost.getCommentList().size())
+			.createDate(freedomPost.getCreateDate())
+			.content(freedomPost.getContent())
+			.profileImageUrl(freedomPost.getAuthor().getProfileImageUrl())
+			.build();
 	}
 }

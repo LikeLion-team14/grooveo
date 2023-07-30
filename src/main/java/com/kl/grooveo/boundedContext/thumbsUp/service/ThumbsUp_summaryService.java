@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
-import com.kl.grooveo.boundedContext.response.ThumbsUpDTO;
+import com.kl.grooveo.boundedContext.thumbsUp.dto.ThumbsUpDTO;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.ThumbsUp_summary;
 import com.kl.grooveo.boundedContext.thumbsUp.repository.ThumbsUp_summaryRepository;
 

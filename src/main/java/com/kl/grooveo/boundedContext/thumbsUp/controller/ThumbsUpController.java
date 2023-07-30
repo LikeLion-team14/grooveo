@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kl.grooveo.base.rq.Rq;
-import com.kl.grooveo.boundedContext.response.ThumbsUpDTO;
+import com.kl.grooveo.boundedContext.thumbsUp.dto.ThumbsUpDTO;
 import com.kl.grooveo.boundedContext.thumbsUp.service.ThumbsUpService;
 import com.kl.grooveo.boundedContext.thumbsUp.service.ThumbsUp_summaryService;
 

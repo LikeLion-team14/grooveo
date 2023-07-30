@@ -15,13 +15,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
-import com.kl.grooveo.boundedContext.form.CommentForm;
-import com.kl.grooveo.boundedContext.form.ReplyForm;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
+import com.kl.grooveo.boundedContext.reply.dto.ReplyFormDTO;
 import com.kl.grooveo.boundedContext.reply.entity.FreedomPostReply;
 import com.kl.grooveo.boundedContext.reply.service.FreedomPostReplyService;
 
@@ -41,9 +41,9 @@ public class FreedomPostReplyController {
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create/{id}")
 	public String create(Model model, @PathVariable("id") Long id,
-		@Valid ReplyForm replyForm, @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
+		@Valid ReplyFormDTO replyForm, @RequestParam(value = "commentPage", defaultValue = "0") int commentPage,
 		@RequestParam(value = "so", defaultValue = "create") String so,
-		BindingResult bindingResult, CommentForm commentForm) {
+		BindingResult bindingResult, CommentFormDTO commentForm) {
 
 		FreedomPostComment freedomPostComment = this.freedomPostCommentService.getComment(id);
 		Member member = this.memberService.findByUsername(rq.getMember().getUsername()).orElseThrow(

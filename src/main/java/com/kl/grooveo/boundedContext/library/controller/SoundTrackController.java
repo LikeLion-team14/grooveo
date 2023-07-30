@@ -27,13 +27,13 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
-import com.kl.grooveo.boundedContext.form.CommentForm;
-import com.kl.grooveo.boundedContext.form.ReplyForm;
-import com.kl.grooveo.boundedContext.form.SoundTrackForm;
+import com.kl.grooveo.boundedContext.library.dto.SoundTrackFormDTO;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
+import com.kl.grooveo.boundedContext.reply.dto.ReplyFormDTO;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -77,8 +77,8 @@ public class SoundTrackController {
 	@GetMapping(value = "/soundDetail/{id}")
 	public String showMoreDetail(Model model, @PathVariable("id") Long id,
 		@RequestParam(value = "so", defaultValue = "create") String so,
-		@RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm,
-		ReplyForm replyForm,
+		@RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentFormDTO commentForm,
+		ReplyFormDTO replyForm,
 		HttpServletRequest request, HttpServletResponse response) {
 		FileInfo fileInfo = this.soundTrackService.getSoundTrack(id);
 
@@ -148,7 +148,7 @@ public class SoundTrackController {
 		}
 
 		model.addAttribute("soundTrackForm",
-			new SoundTrackForm(fileInfo.getTitle(), fileInfo.getDescription(), null, null));
+			new SoundTrackFormDTO(fileInfo.getTitle(), fileInfo.getDescription(), null, null));
 		model.addAttribute("albumCoverUrl", fileInfo.getAlbumCoverUrl());
 		model.addAttribute("soundUrl", fileInfo.getSoundUrl());
 
@@ -157,7 +157,7 @@ public class SoundTrackController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/soundTrack/modify/{id}")
-	public String soundTrackModify(@Valid SoundTrackForm soundTrackForm, BindingResult bindingResult,
+	public String soundTrackModify(@Valid SoundTrackFormDTO soundTrackForm, BindingResult bindingResult,
 		@PathVariable("id") Long id) {
 		if (bindingResult.hasErrors()) {
 			return "usr/library/soundUpload";

@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.kl.grooveo.base.rq.Rq;
+import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
+import com.kl.grooveo.boundedContext.community.dto.FreedomPostDTO;
+import com.kl.grooveo.boundedContext.community.dto.FreedomPostFormDTO;
+import com.kl.grooveo.boundedContext.community.entity.Category;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
-import com.kl.grooveo.boundedContext.form.CommentForm;
-import com.kl.grooveo.boundedContext.form.FreedomPostForm;
-import com.kl.grooveo.boundedContext.form.ReplyForm;
+import com.kl.grooveo.boundedContext.reply.dto.ReplyFormDTO;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @RequestMapping("/community/freedomPost")
 @RequiredArgsConstructor
@@ -44,68 +44,37 @@ public class FreedomPostController {
 	@PreAuthorize("isAuthenticated()")
 	public String showList(Model model, @PathVariable("boardType") Integer boardType,
 		@RequestParam(value = "page", defaultValue = "0") int page,
-		@RequestParam(value = "kw", defaultValue = "") String kw, CategoryForm categoryForm) {
-		Page<FreedomPost> paging = this.freedomPostService.getList(boardType, categoryForm.options, kw, page);
+		@RequestParam(value = "kw", defaultValue = "") String kw,
+		@RequestParam(value = "category", required = false, defaultValue = "all") String selectedCategoryCode) {
+		Page<FreedomPost> paging = freedomPostService.getList(boardType, selectedCategoryCode, kw, page);
 		model.addAttribute("boardType", boardType);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
+		model.addAttribute("categories", Category.values());
+		model.addAttribute("selectedCategoryCode", selectedCategoryCode);
 		boardTypeCode = boardType;
 
 		return "usr/community/freedomPost/list";
-	}
-
-	@Setter
-	public static class CategoryForm {
-		private String options = "";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping(value = "/detail/{id}")
 	public String showMoreDetail(Model model, @PathVariable("id") Long id,
 		@RequestParam(value = "so", defaultValue = "create") String so,
-		@RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentForm commentForm,
-		ReplyForm replyForm,
+		@RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentFormDTO commentFormDTO,
+		ReplyFormDTO replyFormDTO,
 		HttpServletRequest request, HttpServletResponse response) {
-		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
 
-		// 조회수 관련 로직
-		Cookie oldCookie = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {   // 쿠키가 null 인지 검사
-			// null 이 아니라면 "postView" 라는 이름의 쿠키가 있는지 검사
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("postView")) {
-					oldCookie = cookie;
-				}
-			}
-		}
+		freedomPostService.updateViewCount(request, response, id);
 
-		if (oldCookie != null) {
-			// "postView" 가 존재한다면
-			// value 가 현재 접근한 게시글의 id 를 포함하고 있는지 검사
-			if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
-				// 포함하고 있지 않으면 조회수 증가
-				this.freedomPostService.updateView(id);
-				oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
-				oldCookie.setPath("/");
-				oldCookie.setMaxAge(60 * 60 * 24);                            // 쿠키 시간
-				response.addCookie(oldCookie);
-			}
-		} else {
-			// "postView" 가 존재하지 않는다면
-			// 게시글의 id 를 포함하는 쿠키를 만들고
-			// 마찬가지로 조회수 증가
-			this.freedomPostService.updateView(id);
-			Cookie newCookie = new Cookie("postView", "[" + id + "]");
-			newCookie.setPath("/");
-			newCookie.setMaxAge(60 * 60 * 24);                                // 쿠키 시간
-			response.addCookie(newCookie);
-		}
+		FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
 
-		Page<FreedomPostComment> commentPaging = this.freedomPostCommentService.getList(freedomPost, commentPage, so);
+		FreedomPostDTO freedomPostDTO = freedomPostService.convertToFreedomPostDTO(id);
+
+		Page<FreedomPostComment> commentPaging = freedomPostCommentService.getList(freedomPost, commentPage, so);
 
 		model.addAttribute("commentPaging", commentPaging);
-		model.addAttribute("freedomPost", freedomPost);
+		model.addAttribute("freedomPostDTO", freedomPostDTO);
 		model.addAttribute("so", so);
 
 		return "usr/community/freedomPost/detail";
@@ -113,26 +82,27 @@ public class FreedomPostController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/create")
-	public String freedomPostCreate(Model model, FreedomPostForm freedomPostForm) {
+	public String freedomPostCreate(FreedomPostFormDTO freedomPostFormDTO) {
 		return "usr/community/freedomPost/form";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/create")
-	public String freedomPostCreate(Model model, @Valid FreedomPostForm freedomPostForm, BindingResult bindingResult) {
+	public String freedomPostCreate(@Valid FreedomPostFormDTO freedomPostFormDTO,
+		BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "usr/community/freedomPost/form";
 		}
 
-		this.freedomPostService.create(boardTypeCode, freedomPostForm.getTitle(), freedomPostForm.getCategory(),
-			freedomPostForm.getContent(), rq.getMember());
+		this.freedomPostService.create(boardTypeCode, freedomPostFormDTO.getTitle(), freedomPostFormDTO.getCategory(),
+			freedomPostFormDTO.getContent(), rq.getMember());
 		return String.format("redirect:/community/freedomPost/%d/list", boardTypeCode);
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@DeleteMapping("/{id}")
 	public String freedomPostDelete(@PathVariable("id") Long id) {
-		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
+		FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
 
 		if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
@@ -144,8 +114,8 @@ public class FreedomPostController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/modify/{id}")
-	public String freedomPostModify(FreedomPostForm freedomPostForm, @PathVariable("id") Long id) {
-		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
+	public String freedomPostModify(FreedomPostFormDTO freedomPostForm, @PathVariable("id") Long id) {
+		FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
 
 		if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
@@ -159,18 +129,18 @@ public class FreedomPostController {
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/modify/{id}")
-	public String freedomPostModify(@Valid FreedomPostForm freedomPostForm, BindingResult bindingResult,
+	public String freedomPostModify(@Valid FreedomPostFormDTO freedomPostForm, BindingResult bindingResult,
 		@PathVariable("id") Long id) {
 		if (bindingResult.hasErrors()) {
 			return "usr/community/freedomPost/form";
 		}
-		FreedomPost freedomPost = this.freedomPostService.getFreedomPost(id);
+		FreedomPost freedomPost = freedomPostService.getFreedomPost(id);
 
 		if (!freedomPost.getAuthor().getUsername().equals(rq.getMember().getUsername())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
 
-		this.freedomPostService.modify(freedomPost, freedomPostForm.getTitle(), freedomPostForm.getCategory(),
+		freedomPostService.modify(freedomPost, freedomPostForm.getTitle(), freedomPostForm.getCategory(),
 			freedomPostForm.getContent());
 		return String.format("redirect:/community/freedomPost/detail/%s", id);
 	}

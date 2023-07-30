@@ -21,7 +21,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.base.rq.Rq;
-import com.kl.grooveo.boundedContext.form.SoundTrackForm;
+import com.kl.grooveo.boundedContext.library.dto.SoundTrackFormDTO;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 
@@ -45,13 +45,13 @@ public class FileUploadController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/soundupload")
-	public String showSoundUpload(Model model, SoundTrackForm soundTrackForm) {
+	public String showSoundUpload(Model model, SoundTrackFormDTO soundTrackForm) {
 		return "usr/library/soundUpload";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/soundupload")
-	public String uploadFiles(Model model, @Valid SoundTrackForm soundTrackForm, BindingResult bindingResult) {
+	public String uploadFiles(Model model, @Valid SoundTrackFormDTO soundTrackForm, BindingResult bindingResult) {
 		try {
 			if (soundTrackForm.getAlbumCover().isEmpty() || soundTrackForm.getSoundFile().isEmpty()) {
 				bindingResult.rejectValue("file", "required", "음원과 앨범 등록은 필수입니다.");
