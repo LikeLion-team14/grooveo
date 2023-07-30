@@ -3,6 +3,7 @@ package com.kl.grooveo.boundedContext.library.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.kl.grooveo.base.event.EventAfterUpload;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.follow.service.FollowService;
+import com.kl.grooveo.boundedContext.library.dto.FileInfoDTO;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
@@ -19,13 +21,11 @@ public class FileInfoService {
 
 	private final FileInfoRepository fileInfoRepository;
 	private final ApplicationEventPublisher publisher;
-	private final FollowService followService;
 
 	public FileInfoService(FileInfoRepository fileInfoRepository, ApplicationEventPublisher publisher,
 		FollowService followService) {
 		this.fileInfoRepository = fileInfoRepository;
 		this.publisher = publisher;
-		this.followService = followService;
 	}
 
 	public FileInfo saveFileInfo(FileInfo fileInfo) {
@@ -65,7 +65,22 @@ public class FileInfoService {
 		return fileInfoRepository.findTop10ByOrderByCreateDateDesc();
 	}
 
-	public List<FileInfo> getPopularSongs() {
+	private List<FileInfo> getPopularSongs() {
 		return fileInfoRepository.findTop10ByHighestLikeCount();
+	}
+
+	private FileInfoDTO convertToPopularSongDTO(FileInfo fileInfo) {
+		return FileInfoDTO.builder()
+			.id(fileInfo.getId())
+			.albumCoverUrl(fileInfo.getAlbumCoverUrl())
+			.title(fileInfo.getTitle())
+			.artistNickname(fileInfo.getArtist().getNickName())
+			.soundThumbsUpSummary(fileInfo.getSoundThumbsUpSummary())
+			.thumbsUpSummaryCount(fileInfo.getSoundThumbsUpSummary().getLikeCount())
+			.build();
+	}
+
+	public List<FileInfoDTO> convertToPopularSongTop10DTO() {
+		return getPopularSongs().stream().map(this::convertToPopularSongDTO).collect(Collectors.toList());
 	}
 }
