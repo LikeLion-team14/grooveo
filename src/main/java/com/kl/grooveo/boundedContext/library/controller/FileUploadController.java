@@ -43,14 +43,13 @@ public class FileUploadController {
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/soundupload")
-	public String showSoundUpload(Model model) {
-		model.addAttribute("soundTrackForm", new SoundTrackFormDTO());
+	public String showSoundUpload(Model model, SoundTrackFormDTO soundTrackForm) {
 		return "usr/library/soundUpload";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/soundupload")
-	public String uploadFiles(@Valid SoundTrackFormDTO soundTrackFormDTO, BindingResult bindingResult) {
+	public String uploadFiles(Model model, @Valid SoundTrackFormDTO soundTrackFormDTO, BindingResult bindingResult) {
 		try {
 			if (soundTrackFormDTO.getAlbumCover().isEmpty() || soundTrackFormDTO.getSoundFile().isEmpty()) {
 				bindingResult.rejectValue("file", "required", "음원과 앨범 등록은 필수입니다.");
