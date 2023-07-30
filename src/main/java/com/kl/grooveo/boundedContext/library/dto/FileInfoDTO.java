@@ -13,5 +13,5 @@ public class FileInfoDTO {
 	private String title;
 	private String artistNickname;
 	private SoundThumbsUp_summary soundThumbsUpSummary;
-	private int thumbsUpSummaryCount;
+	private int soundThumbsUpSummaryCount;
 }

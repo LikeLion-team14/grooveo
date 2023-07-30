@@ -65,7 +65,7 @@ public class FileInfoService {
 	}
 
 	private FileInfoDTO convertToFileInfoDTO(FileInfo fileInfo) {
-		int thumbsUpSummaryCount =
+		int soundThumbsUpSummaryCount =
 			(fileInfo.getSoundThumbsUpSummary() != null) ? fileInfo.getSoundThumbsUpSummary().getLikeCount() : 0;
 
 		return FileInfoDTO.builder()
@@ -74,7 +74,7 @@ public class FileInfoService {
 			.title(fileInfo.getTitle())
 			.artistNickname(fileInfo.getArtist().getNickName())
 			.soundThumbsUpSummary(fileInfo.getSoundThumbsUpSummary())
-			.thumbsUpSummaryCount(thumbsUpSummaryCount)
+			.soundThumbsUpSummaryCount(soundThumbsUpSummaryCount)
 			.build();
 	}
 

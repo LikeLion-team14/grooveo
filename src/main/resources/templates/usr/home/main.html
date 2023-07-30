@@ -270,7 +270,7 @@
                                     <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
                                     <span th:if="${song.soundThumbsUpSummary == null}">0</span>
                                     <span th:unless="${song.soundThumbsUpSummary == null}"
-                                          th:text="${song.thumbsUpSummaryCount}"></span>
+                                          th:text="${song.soundThumbsUpSummaryCount}"></span>
                                 </div>
                             </a>
                         </div>
@@ -330,7 +330,7 @@
                             <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
                             <span th:if="${song.soundThumbsUpSummary == null}">0</span>
                             <span th:unless="${song.soundThumbsUpSummary == null}"
-                                  th:text="${song.thumbsUpSummaryCount}"></span>
+                                  th:text="${song.soundThumbsUpSummaryCount}"></span>
                         </td>
                     </tr>
                 </table>
