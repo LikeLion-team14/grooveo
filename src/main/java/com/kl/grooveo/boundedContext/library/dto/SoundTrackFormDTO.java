@@ -5,12 +5,10 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class SoundTrackFormDTO {
 	@NotEmpty(message = "제목은 필수항목입니다.")
 	@Size(max = 200)
