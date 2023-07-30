@@ -1,4 +1,4 @@
-package com.kl.grooveo.boundedContext.home.controller;
+package com.kl.gro경oveo.boundedContext.home.controller;
 
 import java.util.List;
 
@@ -19,10 +19,10 @@ public class MainController {
 
 	@GetMapping("/")
 	public String main(Model model) {
-		List<FileInfoDTO> latestSongs = fileInfoService.convertLatestSongsToDTO();
+		List<FileInfoDTO> latestSongsDTOS = fileInfoService.convertLatestSongsToDTO();
 		List<FileInfoDTO> popularSongDTOS = fileInfoService.convertToPopularSongTop10DTO();
 
-		model.addAttribute("latestSongs", latestSongs);
+		model.addAttribute("latestSongsDTOS", latestSongsDTOS);
 		model.addAttribute("popularSongDTOS", popularSongDTOS);
 
 		return "usr/home/main";

@@ -255,7 +255,7 @@
         <!-- 최신 음원 10곡 -->
         <div class="wrap">
             <div class="swiper-wrapper">
-                <div class="swiper-slide" th:each="song : ${latestSongs}">
+                <div class="swiper-slide" th:each="song : ${latestSongsDTOS}">
                     <div class="inner">
                         <div class="con pt-10">
                             <a th:href="@{|/library/soundDetail/${song.id}|}">
