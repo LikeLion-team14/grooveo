@@ -1,4 +1,4 @@
-package com.kl.gro경oveo.boundedContext.home.controller;
+package com.kl.grooveo.boundedContext.home.controller;
 
 import java.util.List;
 
