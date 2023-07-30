@@ -47,12 +47,18 @@
 
 <body>
 <main layout:fragment="main">
-    <div class="flex flex-col align-center mx-auto max-w-7xl w-full my-3">
+    <div class="flex flex-col align-center mx-auto max-w-4xl w-full my-3">
         <span class="text-3xl text-center font-bold mt-8">음원 등록</span>
         <form th:action th:object="${soundTrackFormDTO}" method="POST" class="flex flex-col gap-6"
               enctype="multipart/form-data" onsubmit="PostForm__submit(this); return false;">
-            <div class="flex justify-center">
-                <div class="mt-10 flex justify-center">
+            <div class="flex flex-col">
+                <div class="mt-10">
+                    <!-- 저작권 경고 문구 -->
+                    <div class="mx-16 mb-2 text-sm text-gray-500">
+                        <span>⚠️ 저작권 경고: 본 음원 파일 및 앨범 커버의 저작권은 해당 저작권자에게 있습니다. 저작권자의 사전 동의 없이 복제, 배포, 전송, 공개, 대여, 공연 및 방송할 수 없으며 이를 어길 시 법적 책임을 질 수 있습니다.</span>
+                    </div>
+                </div>
+                <div class="flex justify-center">
                     <div class="flex flex-col">
                         <!-- 음원 등록 버튼-->
                         <div class="flex items-center">
