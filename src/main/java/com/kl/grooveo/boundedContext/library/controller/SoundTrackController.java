@@ -189,8 +189,7 @@ public class SoundTrackController {
 			amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName,
 				soundTrackForm.getAlbumCover().getInputStream(), albumCoverMetadata));
 
-			this.soundTrackService.modify(fileInfo, soundTrackForm.getTitle(), soundTrackForm.getDescription(),
-				albumCoverUrl, fileInfo.getSoundUrl());
+			soundTrackService.modify(fileInfo, soundTrackForm, albumCoverUrl, fileInfo.getSoundUrl());
 			return String.format("redirect:/library/soundDetail/%s", id);
 		} catch (IOException e) {
 			e.printStackTrace();
