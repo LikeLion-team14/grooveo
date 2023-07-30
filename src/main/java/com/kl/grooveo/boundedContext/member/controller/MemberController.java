@@ -28,8 +28,8 @@ import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
 import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
+import com.kl.grooveo.boundedContext.member.dto.FindPasswordFormDTO;
 import com.kl.grooveo.boundedContext.member.entity.Member;
-import com.kl.grooveo.boundedContext.member.form.FindPasswordForm;
 import com.kl.grooveo.boundedContext.member.form.FindUsernameForm;
 import com.kl.grooveo.boundedContext.member.form.JoinForm;
 import com.kl.grooveo.boundedContext.member.form.ModifyEmailForm;
@@ -113,9 +113,9 @@ public class MemberController {
 	}
 
 	@PostMapping("/findPassword")
-	public String findPassword(@Valid FindPasswordForm findPasswordForm) {
-		RsData findPasswordRs = memberService.findUserPassword(findPasswordForm.getUsername(),
-			findPasswordForm.getEmail());
+	public String findPassword(@Valid FindPasswordFormDTO findPasswordFormDTO) {
+		RsData findPasswordRs = memberService.findUserPassword(findPasswordFormDTO.getUsername(),
+			findPasswordFormDTO.getEmail());
 
 		if (findPasswordRs.isFail()) {
 			return rq.historyBack(findPasswordRs);

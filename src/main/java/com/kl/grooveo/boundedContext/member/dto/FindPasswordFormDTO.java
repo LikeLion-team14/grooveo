@@ -1,19 +1,19 @@
-package com.kl.grooveo.boundedContext.member.form;
+package com.kl.grooveo.boundedContext.member.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-@AllArgsConstructor
 @Getter
-public class FindPasswordForm {
+@Setter
+public class FindPasswordFormDTO {
 
 	@NotBlank
 	@Size(min = 4, max = 30)
-	private final String username;
+	private String username;
 
 	@NotBlank
 	@Size(min = 4, max = 30)
-	private final String email;
+	private String email;
 }
