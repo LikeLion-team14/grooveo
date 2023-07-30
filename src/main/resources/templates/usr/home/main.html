@@ -306,7 +306,7 @@
                     </thead>
                     <tbody>
                     <!-- row 1 -->
-                    <tr class="hover text-center" th:each="song, loop : ${popularSongs}"
+                    <tr class="hover text-center" th:each="song, loop : ${popularSongDTOS}"
                         th:onclick="|location.href='@{/library/soundDetail/} + ${song.id}'|" style="cursor:pointer;">
                         <th>
                             <span th:text="|${loop.index + 1}|"></span>
@@ -324,13 +324,13 @@
                             </div>
                         </td>
                         <td>
-                            <span th:text="${song.artist.nickName}"></span>
+                            <span th:text="${song.artistNickname}"></span>
                         </td>
                         <td>
                             <i class="fa-solid fa-heart mr-2" style="color: #e60f2f;"></i>
                             <span th:if="${song.soundThumbsUpSummary == null}">0</span>
                             <span th:unless="${song.soundThumbsUpSummary == null}"
-                                  th:text="${song.soundThumbsUpSummary.likeCount}"></span>
+                                  th:text="${song.thumbsUpSummaryCount}"></span>
                         </td>
                     </tr>
                 </table>
