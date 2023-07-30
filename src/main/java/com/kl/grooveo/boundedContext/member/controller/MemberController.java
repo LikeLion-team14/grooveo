@@ -30,8 +30,8 @@ import com.kl.grooveo.boundedContext.library.entity.FileInfo;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
 import com.kl.grooveo.boundedContext.member.dto.FindPasswordFormDTO;
 import com.kl.grooveo.boundedContext.member.dto.FindUsernameFormDTO;
+import com.kl.grooveo.boundedContext.member.dto.JoinFormDTO;
 import com.kl.grooveo.boundedContext.member.entity.Member;
-import com.kl.grooveo.boundedContext.member.form.JoinForm;
 import com.kl.grooveo.boundedContext.member.form.ModifyEmailForm;
 import com.kl.grooveo.boundedContext.member.form.ModifyNickNameForm;
 import com.kl.grooveo.boundedContext.member.form.ModifyPasswordForm;
@@ -65,15 +65,15 @@ public class MemberController {
 	}
 
 	@PostMapping("/join")
-	public String join(@Valid JoinForm joinForm, HttpServletRequest request) {
+	public String join(@Valid JoinFormDTO joinFormDTO, HttpServletRequest request) {
 		RsData emailVerified = memberService.isEmailVerified(request);
 
 		if (emailVerified.isFail()) {
 			return rq.historyBack(emailVerified);
 		}
 
-		RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(),
-			joinForm.getName(), joinForm.getNickName(), joinForm.getEmail());
+		RsData<Member> joinRs = memberService.join(joinFormDTO.getUsername(), joinFormDTO.getPassword(),
+			joinFormDTO.getName(), joinFormDTO.getNickName(), joinFormDTO.getEmail());
 
 		if (joinRs.isFail()) {
 			return rq.historyBack(joinRs);
