@@ -43,6 +43,10 @@ public class FileInfo extends BaseEntity {
 	@Column(columnDefinition = "integer default 0", nullable = false)
 	private int view; // 조회수
 
+	private String albumCoverUrl;
+
+	private String soundUrl;
+
 	@OneToMany(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
 	private List<SoundPostComment> commentList = new ArrayList<>();
 
@@ -51,9 +55,6 @@ public class FileInfo extends BaseEntity {
 
 	@OneToOne(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
 	private SoundThumbsUp_summary soundThumbsUpSummary;
-
-	private String albumCoverUrl;
-	private String soundUrl;
 
 	public String getAfterPost() {
 		long diff = ChronoUnit.SECONDS.between(getCreateDate(), LocalDateTime.now());
@@ -83,5 +84,21 @@ public class FileInfo extends BaseEntity {
 
 	public boolean getExtra_actor_hasIn() {
 		return getExtra_actor_fileInfo() == null;
+	}
+
+	public void updateTitle(String title) {
+		this.title = title;
+	}
+
+	public void updateDescription(String description) {
+		this.description = description;
+	}
+
+	public void updateSoundUrl(String soundUrl) {
+		this.soundUrl = soundUrl;
+	}
+
+	public void updateAlbumCoverUrl(String albumCoverUrl) {
+		this.albumCoverUrl = albumCoverUrl;
 	}
 }
