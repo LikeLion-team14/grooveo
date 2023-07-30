@@ -3,25 +3,7 @@
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <style>
-        /* 커스텀 */
-        html {
-            background-color: white;
-        }
 
-        input:focus {
-            outline: none;
-        }
-
-        button[type="submit"] {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-        button[type="submit"]:hover {
-            background-color: rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-        }
-    </style>
     <script>
 
         function PostForm__submit(form) {
@@ -71,22 +53,7 @@
               enctype="multipart/form-data" onsubmit="PostForm__submit(this); return false;">
             <div class="flex justify-center">
                 <div class="mt-10 flex justify-center">
-
-                    <!-- 앨범 커버 등록 -->
-                    <div>
-                        <input type="file" id="album-file" accept="image/*" style="display:none;"
-                               th:field="*{albumCover}">
-                        <button id="custom-img-button"
-                                class="cursor-pointer bg-black bg-opacity-10 h-10 p-2 w-32 text-sm flex items-center justify-center hover:bg-opacity-30 mb-5">
-                            Upload AlbumCover
-                        </button>
-                        <div class="w-52 h-52 border border-black border-opacity-10 flex items-end justify-center">
-                            <div id="image-preview"></div>
-                        </div>
-                    </div>
-
-                    <!-- 음원 등록 및 제목 입력 부분-->
-                    <div class="flex flex-col ml-4">
+                    <div class="flex flex-col">
                         <!-- 음원 등록 버튼-->
                         <div class="file-upload-container flex items-center">
                             <input type="file" id="sound-file" accept="audio/*" style="display:none;"
@@ -100,8 +67,24 @@
                                   style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 7px; text-align: center;">선택된 파일 없음</span>
                         </div>
 
+                        <!-- 앨범 커버 등록 -->
+                        <div class="mt-5">
+                            <input type="file" id="album-file" accept="image/*" style="display:none;"
+                                   th:field="*{albumCover}">
+                            <button id="custom-img-button"
+                                    class="cursor-pointer bg-black bg-opacity-10 h-10 p-2 w-32 text-sm flex items-center justify-center hover:bg-opacity-30 mb-5">
+                                Upload AlbumCover
+                            </button>
+                            <div class="w-52 h-52 border border-black border-opacity-10 flex items-end justify-center">
+                                <div id="image-preview"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 음원 등록 및 제목 입력 부분-->
+                    <div class="flex flex-col ml-4">
                         <!-- 제목 -->
-                        <div class="mt-6 text-gray-500 font-semibold">
+                        <div class="text-gray-500 font-semibold">
                             Title
                         </div>
                         <!-- 제목 입력 -->
