@@ -87,7 +87,7 @@ public class SoundTrackService {
 		fileInfo.updateDescription(soundTrackFormDTO.getDescription());
 		fileInfo.updateSoundUrl(soundUrl);
 		fileInfo.updateAlbumCoverUrl(albumCover);
-		
+
 		this.fileInfoRepository.save(fileInfo);
 	}
 
