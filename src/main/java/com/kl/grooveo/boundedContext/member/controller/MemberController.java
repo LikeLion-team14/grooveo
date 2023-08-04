@@ -26,7 +26,7 @@ import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.comment.service.FreedomPostCommentService;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.community.service.FreedomPostService;
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
 import com.kl.grooveo.boundedContext.member.dto.FindPasswordFormDTO;
 import com.kl.grooveo.boundedContext.member.dto.FindUsernameFormDTO;
@@ -161,7 +161,7 @@ public class MemberController {
 	@GetMapping("/myPage/library")
 	public String showMyLibrary(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
 		String username = rq.getMember().getUsername();
-		Page<FileInfo> paging = this.soundTrackService.getMemberUploads(username, page);
+		Page<SoundTrack> paging = this.soundTrackService.getMemberUploads(username, page);
 
 		model.addAttribute("paging", paging);
 

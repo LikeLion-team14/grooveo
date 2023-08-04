@@ -10,22 +10,22 @@ import org.springframework.stereotype.Service;
 import com.kl.grooveo.base.event.EventAfterUpload;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.library.dto.FileInfoDTO;
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
-import com.kl.grooveo.boundedContext.library.repository.FileInfoRepository;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
+import com.kl.grooveo.boundedContext.library.repository.SoundTrackRepository;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 
 @Service
 public class FileInfoService {
 
-	private final FileInfoRepository fileInfoRepository;
+	private final SoundTrackRepository fileInfoRepository;
 	private final ApplicationEventPublisher publisher;
 
-	public FileInfoService(FileInfoRepository fileInfoRepository, ApplicationEventPublisher publisher) {
+	public FileInfoService(SoundTrackRepository fileInfoRepository, ApplicationEventPublisher publisher) {
 		this.fileInfoRepository = fileInfoRepository;
 		this.publisher = publisher;
 	}
 
-	public FileInfo saveFileInfo(FileInfo fileInfo) {
+	public SoundTrack saveFileInfo(SoundTrack fileInfo) {
 		Member actor = fileInfo.getArtist();
 		List<Follow> followerList = actor.getFollowingPeople();
 
@@ -37,22 +37,22 @@ public class FileInfoService {
 		return fileInfoRepository.save(fileInfo);
 	}
 
-	public FileInfo findById(Long id) {
-		Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(id);
+	public SoundTrack findById(Long id) {
+		Optional<SoundTrack> optionalFileInfo = fileInfoRepository.findById(id);
 		return optionalFileInfo.orElse(null);
 	}
 
-	public FileInfo getFileInfo(Long id) {
-		Optional<FileInfo> optionalFileInfo = fileInfoRepository.findById(id);
+	public SoundTrack getFileInfo(Long id) {
+		Optional<SoundTrack> optionalFileInfo = fileInfoRepository.findById(id);
 		return optionalFileInfo.get();
 	}
 
 	public void delete(Long id) {
-		FileInfo fileInfo = getFileInfo(id);
+		SoundTrack fileInfo = getFileInfo(id);
 		fileInfoRepository.delete(fileInfo);
 	}
 
-	private List<FileInfo> getLatestSongs() {
+	private List<SoundTrack> getLatestSongs() {
 		return fileInfoRepository.findTop10ByOrderByCreateDateDesc();
 	}
 
@@ -60,11 +60,11 @@ public class FileInfoService {
 		return getLatestSongs().stream().map(this::convertToFileInfoDTO).collect(Collectors.toList());
 	}
 
-	private List<FileInfo> getPopularSongs() {
+	private List<SoundTrack> getPopularSongs() {
 		return fileInfoRepository.findTop10ByHighestLikeCount();
 	}
 
-	private FileInfoDTO convertToFileInfoDTO(FileInfo fileInfo) {
+	private FileInfoDTO convertToFileInfoDTO(SoundTrack fileInfo) {
 		int soundThumbsUpSummaryCount =
 			(fileInfo.getSoundThumbsUpSummary() != null) ? fileInfo.getSoundThumbsUpSummary().getLikeCount() : 0;
 

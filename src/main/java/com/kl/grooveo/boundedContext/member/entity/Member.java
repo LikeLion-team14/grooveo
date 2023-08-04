@@ -10,7 +10,7 @@ import com.kl.grooveo.base.baseEntity.BaseEntity;
 import com.kl.grooveo.boundedContext.comment.entity.FreedomPostComment;
 import com.kl.grooveo.boundedContext.community.entity.FreedomPost;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -90,9 +90,9 @@ public class Member extends BaseEntity {
 
 	@OneToMany(mappedBy = "artist", cascade = {CascadeType.ALL})
 	@Builder.Default
-	private List<FileInfo> fileInfos = new ArrayList<>();
+	private List<SoundTrack> fileInfos = new ArrayList<>();
 
-	public List<FileInfo> getFileInfos() {
+	public List<SoundTrack> getFileInfos() {
 		return this.fileInfos;
 	}
 }

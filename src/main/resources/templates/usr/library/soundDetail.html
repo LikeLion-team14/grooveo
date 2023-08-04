@@ -50,17 +50,17 @@
         <div class="posts-box mt-8 w-full mx-10">
             <div class="flex justify-center"
                  style="word-break: break-word; overflow-wrap: break-word; white-space: normal;">
-                <span class="text-3xl font-bold" th:text="${fileInfo.title}"></span>
+                <span class="text-3xl font-bold" th:text="${soundTrack.title}"></span>
             </div>
 
             <!-- 작성자 부분 -->
             <div class="flex mt-7 justify-between border-b border-gray-400">
                 <div class="flex justify-start items-center">
-                    <img th:src="${fileInfo.artist.getProfileImageUrl()}" alt=""
+                    <img th:src="${soundTrack.artist.getProfileImageUrl()}" alt=""
                          class="w-11 h-11 object-cover m-3 rounded-full border-2 border-gray-100">
                     <div>
                         <div class="flex items-center mb-1">
-                            <span id="nickName" class="font-bold" th:text="${fileInfo.getArtist().nickName}"></span>
+                            <span id="nickName" class="font-bold" th:text="${soundTrack.getArtist().nickName}"></span>
                             <button th:if="${@rq.login}" id="follow-button" type="button"
                                     class="followBtn bg-black bg-opacity-10 h-7 ml-2 p-1 w-16 text-xs flex items-center justify-center hover:bg-opacity-30">
                             </button>
@@ -68,7 +68,7 @@
 
                         <div class="flex">
                             <div class="text-gray-500 text-xs mr-2"><span
-                                    th:text="${#temporals.format(fileInfo.createDate, 'yyyy.MM.dd HH:mm')}"></span>
+                                    th:text="${#temporals.format(soundTrack.createDate, 'yyyy.MM.dd HH:mm')}"></span>
                             </div>
                             <div class="text-xs mr-1">조회수</div>
                             <div class="text-xs"><span id="viewCnt"></span></div>
@@ -92,12 +92,13 @@
                     <!-- 플레이어 부분 -->
                     <div class="shadow-xl flex flex-col items-center border-2" style="width:384px; height:600px;">
                         <div class="mb-2">
-                            <img th:src="${fileInfo.albumCoverUrl}" alt="Album Cover" class="w-96 h-96"/>
+                            <img th:src="${soundTrack.albumCoverUrl}" alt="Album Cover" class="w-96 h-96"/>
                         </div>
                         <div class="flex flex-col justify-center items-center w-full">
                             <div class="flex flex-col text-center mt-4">
-                                <span class="text-2xl font-bold" th:text="${fileInfo.title}"></span>
-                                <span class="text-lg mt-2 font-bold" th:text="${fileInfo.getArtist().nickName}"></span>
+                                <span class="text-2xl font-bold" th:text="${soundTrack.title}"></span>
+                                <span class="text-lg mt-2 font-bold"
+                                      th:text="${soundTrack.getArtist().nickName}"></span>
                             </div>
                             <div class="flex items-center mt-4 mx-2 justify-center">
                                 <span id="currentTime" class="text-sm mr-2">0:00</span>
@@ -115,7 +116,7 @@
 
                     <!-- 오디오 올린 음원-->
                     <audio id="audio" style="display:none;">
-                        <source th:src="${fileInfo.soundUrl}" type="audio/mpeg">
+                        <source th:src="${soundTrack.soundUrl}" type="audio/mpeg">
                     </audio>
                 </div>
 
@@ -123,7 +124,7 @@
                 <div class="content">
                     <div class="text-content" id="text-content"
                          style="word-break: break-word; overflow-wrap: break-word; white-space: pre-wrap;">
-                        <p class="-mt-8" th:text="${fileInfo.description}"></p>
+                        <p class="-mt-8" th:text="${soundTrack.description}"></p>
                     </div>
                     <div class="fade-out" id="fade-out"></div>
                     <div class="button-container">
@@ -138,16 +139,16 @@
             <!-- 수정/삭제 버튼 -->
             <div class="flex justify-end mt-6">
                 <button class="bg-black bg-opacity-10 h-7 p-4 w-20 text-sm flex items-center justify-center hover:bg-opacity-30"
-                        th:onclick="|location.href='@{/library/soundTrack/modify/} + ${fileInfo.id}'|"
-                        th:if="${fileInfo.artist != null and #authentication.getPrincipal().getUsername() == fileInfo.artist.username}">
+                        th:onclick="|location.href='@{/library/soundTrack/modify/} + ${soundTrack.id}'|"
+                        th:if="${soundTrack.artist != null and #authentication.getPrincipal().getUsername() == soundTrack.artist.username}">
                     <span class="text-center">수정</span>
                 </button>
                 <button class="bg-black bg-opacity-10 h-7 p-4 w-20 ml-4 mr-2 text-sm flex items-center justify-center hover:bg-opacity-30"
-                        th:if="${fileInfo.artist != null and #authentication.getPrincipal().getUsername() == fileInfo.artist.username}"
+                        th:if="${soundTrack.artist != null and #authentication.getPrincipal().getUsername() == soundTrack.artist.username}"
                         onclick="if(confirm('정말로 삭제하시겠습니까?')) $(this).next().submit();">
                     <span class="text-center">삭제</span>
                 </button>
-                <form hidden th:action="@{|/library/soundTrack/${fileInfo.id}|}" method="POST">
+                <form hidden th:action="@{|/library/soundTrack/${soundTrack.id}|}" method="POST">
                     <input type="hidden" name="_method" value="delete">
                 </form>
             </div>
@@ -158,7 +159,7 @@
                     <div class="text-gray-600 ml-2">
                         COMMENT
                     </div>
-                    <div class="text-gray-600 ml-3"><span th:text="${#lists.size(fileInfo.commentList)}"></span></div>
+                    <div class="text-gray-600 ml-3"><span th:text="${#lists.size(soundTrack.commentList)}"></span></div>
                     <div class="flex-grow"></div>
                     <div class="flex-shrink-0">
                         <a id="so_btn1" class="so-link hover:underline mr-3 text-xs" style="cursor: pointer"
@@ -300,13 +301,13 @@
                 <!-- 페이징처리 끝 -->
 
                 <!-- 댓글 페이징처리 끝 -->
-                <form th:action="@{|/library/soundDetail/${fileInfo.id}}" method="get" id="commentForm">
+                <form th:action="@{|/library/soundDetail/${soundTrack.id}}" method="get" id="commentForm">
                     <input type="hidden" id="commentPage" name="commentPage" th:value="${commentPaging.number}">
                     <input type="hidden" id="so" name="so" th:value="${so}">
                 </form>
 
                 <!-- 댓글 입력칸 -->
-                <form th:action="@{|/library/comment/create/${fileInfo.id}?commentPage=${commentPaging.number}&so=${so}|}"
+                <form th:action="@{|/library/comment/create/${soundTrack.id}?commentPage=${commentPaging.number}&so=${so}|}"
                       th:object="${commentFormDTO}" method="post"
                       onsubmit="commentForm__submit(this); return false;">
                     <div class="flex items-center justify-center">
@@ -353,7 +354,7 @@
             $(document).ajaxSend(function (e, xhr, options) {
                 xhr.setRequestHeader(header, token);
             });
-            const postId = /*[[${fileInfo.id}]]*/ null;
+            const postId = /*[[${soundTrack.id}]]*/ null;
             if (postId) {
                 const likeButton = $('#likeBtn');
                 $.ajax({
@@ -391,7 +392,7 @@
             // 페이지가 로드될 때 실행되는 코드
             // Ajax 를 사용하여 데이터를 가져오는 등의 작업을 수행
 
-            const postId = /*[[${fileInfo.id}]]*/ null;
+            const postId = /*[[${soundTrack.id}]]*/ null;
             if (postId) {
                 const likeButton = $('#likeBtn');
                 $.ajax({

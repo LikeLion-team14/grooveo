@@ -17,7 +17,7 @@ import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
@@ -42,24 +42,24 @@ public class SoundPostCommentController {
 		@RequestParam(value = "so", defaultValue = "create") String so,
 		@Valid CommentFormDTO commentForm, BindingResult bindingResult, ReplyFormDTO replyForm) {
 
-		FileInfo fileInfo = soundTrackService.getSoundTrack(id);
+		SoundTrack soundTrack = soundTrackService.getSoundTrack(id);
 		Member member = memberService.findByUsername(rq.getMember().getUsername()).orElseThrow();
-		Page<SoundPostComment> commentPaging = getCommentPaging(fileInfo, commentPage, "create");
+		Page<SoundPostComment> commentPaging = getCommentPaging(soundTrack, commentPage, "create");
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("fileInfo", fileInfo);
+			model.addAttribute("soundTrack", soundTrack);
 			model.addAttribute("commentPaging", commentPaging);
 			return "usr/library/soundDetail";
 		}
 
-		SoundPostComment soundPostComment = createSoundPostComment(fileInfo, commentForm.getContent(), member);
-		commentPaging = getCommentPaging(fileInfo, commentPage, so);
+		SoundPostComment soundPostComment = createSoundPostComment(soundTrack, commentForm.getContent(), member);
+		commentPaging = getCommentPaging(soundTrack, commentPage, so);
 
 		if (so.equals("recent")) {
-			return createRedirectUrl(soundPostComment.getFileInfo().getId(), 0, so, soundPostComment.getId());
+			return createRedirectUrl(soundPostComment.getSoundTrack().getId(), 0, so, soundPostComment.getId());
 		}
 
-		return createRedirectUrl(soundPostComment.getFileInfo().getId(), commentPaging.getTotalPages() - 1, so,
+		return createRedirectUrl(soundPostComment.getSoundTrack().getId(), commentPaging.getTotalPages() - 1, so,
 			soundPostComment.getId());
 	}
 
@@ -73,15 +73,15 @@ public class SoundPostCommentController {
 		}
 
 		soundPostCommentService.delete(soundPostComment);
-		return createDetailRedirectUrl(soundPostComment.getFileInfo().getId());
+		return createDetailRedirectUrl(soundPostComment.getSoundTrack().getId());
 	}
 
-	private Page<SoundPostComment> getCommentPaging(FileInfo fileInfo, int commentPage, String so) {
-		return soundPostCommentService.getList(fileInfo, commentPage, so);
+	private Page<SoundPostComment> getCommentPaging(SoundTrack soundTrack, int commentPage, String so) {
+		return soundPostCommentService.getList(soundTrack, commentPage, so);
 	}
 
-	private SoundPostComment createSoundPostComment(FileInfo fileInfo, String content, Member member) {
-		return soundPostCommentService.create(fileInfo, content, member);
+	private SoundPostComment createSoundPostComment(SoundTrack soundTrack, String content, Member member) {
+		return soundPostCommentService.create(soundTrack, content, member);
 	}
 
 	private String createRedirectUrl(Long postId, int commentPage, String so, Long commentId) {

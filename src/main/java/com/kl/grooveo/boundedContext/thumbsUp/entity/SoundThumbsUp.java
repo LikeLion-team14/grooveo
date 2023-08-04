@@ -2,7 +2,7 @@ package com.kl.grooveo.boundedContext.thumbsUp.entity;
 
 import java.time.LocalDateTime;
 
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ public class SoundThumbsUp {
 	private Long id;
 
 	@ManyToOne
-	private FileInfo fileInfo;
+	private SoundTrack soundTrack;
 
 	@ManyToOne
 	private Member member;

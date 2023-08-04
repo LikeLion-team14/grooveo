@@ -1,6 +1,6 @@
 package com.kl.grooveo.boundedContext.thumbsUp.entity;
 
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,8 +21,8 @@ public class SoundThumbsUp_summary {
 	private Long id;
 
 	@OneToOne
-	@JoinColumn(name = "file_info_id")
-	FileInfo fileInfo;
+	@JoinColumn(name = "sound_track_id")
+	SoundTrack soundTrack;
 
 	@Column(nullable = false)
 	private int likeCount = 0;

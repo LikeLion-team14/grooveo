@@ -31,7 +31,7 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FileInfo extends BaseEntity {
+public class SoundTrack extends BaseEntity {
 	private String title;
 
 	@ManyToOne
@@ -47,13 +47,13 @@ public class FileInfo extends BaseEntity {
 
 	private String soundUrl;
 
-	@OneToMany(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "soundTrack", cascade = CascadeType.REMOVE)
 	private List<SoundPostComment> commentList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "soundTrack", cascade = CascadeType.REMOVE)
 	private List<SoundThumbsUp> soundThumbsUpList = new ArrayList<>();
 
-	@OneToOne(mappedBy = "fileInfo", cascade = CascadeType.REMOVE)
+	@OneToOne(mappedBy = "soundTrack", cascade = CascadeType.REMOVE)
 	private SoundThumbsUp_summary soundThumbsUpSummary;
 
 	public String getAfterPost() {
@@ -72,18 +72,18 @@ public class FileInfo extends BaseEntity {
 	@Builder.Default
 	private Map<String, Object> extra = new LinkedHashMap<>();
 
-	public SoundThumbsUp getExtra_actor_fileInfo() {
+	public SoundThumbsUp getExtra_actor_soundTrack() {
 		Map<String, Object> extra = getExtra();
 
-		if (!extra.containsKey("actor_fileInfo")) {
+		if (!extra.containsKey("actor_soundTrack")) {
 			return null;
 		}
 
-		return (SoundThumbsUp)extra.get("actor_fileInfo");
+		return (SoundThumbsUp)extra.get("actor_soundTrack");
 	}
 
 	public boolean getExtra_actor_hasIn() {
-		return getExtra_actor_fileInfo() == null;
+		return getExtra_actor_soundTrack() == null;
 	}
 
 	public void updateTitle(String title) {

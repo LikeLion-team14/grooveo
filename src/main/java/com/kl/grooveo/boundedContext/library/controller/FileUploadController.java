@@ -20,7 +20,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.boundedContext.library.dto.SoundTrackFormDTO;
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 
 import jakarta.validation.Valid;
@@ -87,7 +87,7 @@ public class FileUploadController {
 				new PutObjectRequest(bucket, "sound/" + soundName, soundTrackFormDTO.getSoundFile().getInputStream(),
 					soundMetadata));
 
-			FileInfo fileInfo = FileInfo.builder()
+			SoundTrack fileInfo = SoundTrack.builder()
 				.title(soundTrackFormDTO.getTitle())
 				.artist(rq.getMember())
 				.description(soundTrackFormDTO.getDescription())
