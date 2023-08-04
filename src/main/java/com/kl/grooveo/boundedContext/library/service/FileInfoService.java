@@ -9,14 +9,13 @@ import com.kl.grooveo.boundedContext.library.dto.FileInfoDTO;
 import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.library.repository.SoundTrackRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class FileInfoService {
 
 	private final SoundTrackRepository soundTrackRepository;
-
-	public FileInfoService(SoundTrackRepository soundTrackRepository) {
-		this.soundTrackRepository = soundTrackRepository;
-	}
 
 	private List<SoundTrack> getLatestSongs() {
 		return soundTrackRepository.findTop10ByOrderByCreateDateDesc();

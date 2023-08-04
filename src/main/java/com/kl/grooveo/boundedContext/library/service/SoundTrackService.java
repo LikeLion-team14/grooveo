@@ -165,7 +165,7 @@ public class SoundTrackService {
 		Optional<SoundTrack> soundTrack = soundTrackRepository.findById(postId);
 		return soundTrack.map(SoundTrack::getView).orElse(-1);
 	}
-	
+
 	@Transactional
 	public void updateViewCount(HttpServletRequest request, HttpServletResponse response, Long id) {
 		// 조회수 관련 로직

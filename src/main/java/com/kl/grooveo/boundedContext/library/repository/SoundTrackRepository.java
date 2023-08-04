@@ -21,7 +21,7 @@ public interface SoundTrackRepository extends JpaRepository<SoundTrack, Long> {
 
 	@Modifying
 	@Query("update SoundTrack fi set fi.view = fi.view + 1 where fi.id = :id")
-	int updateView(@Param("id") Long id);
+	void updateView(@Param("id") Long id);
 
 	Page<SoundTrack> findAllByArtistId(Long username, Pageable pageable);
 
