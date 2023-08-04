@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kl.grooveo.base.event.EventAfterUpload;
+import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.library.dto.SoundTrackFormDTO;
 import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.library.repository.SoundTrackRepository;
@@ -37,12 +40,25 @@ public class SoundTrackService {
 	private final SoundTrackRepository soundTrackRepository;
 	private final MemberRepository memberRepository;
 	private final SoundThumbsUpService soundThumbsUpService;
+	private final ApplicationEventPublisher publisher;
 
 	public SoundTrackService(SoundTrackRepository soundTrackRepository, MemberRepository memberRepository,
-		@Lazy SoundThumbsUpService soundThumbsUpService) {
+		@Lazy SoundThumbsUpService soundThumbsUpService, ApplicationEventPublisher publisher) {
 		this.soundTrackRepository = soundTrackRepository;
 		this.memberRepository = memberRepository;
 		this.soundThumbsUpService = soundThumbsUpService;
+		this.publisher = publisher;
+	}
+
+	public void saveSoundTrack(SoundTrack soundTrack) {
+		Member actor = soundTrack.getArtist();
+		List<Follow> followerList = actor.getFollowingPeople();
+
+		for (Follow follower : followerList) {
+			publisher.publishEvent(new EventAfterUpload(this, follower));
+		}
+
+		soundTrackRepository.save(soundTrack);
 	}
 
 	private Specification<SoundTrack> search(String kw) {
@@ -93,8 +109,8 @@ public class SoundTrackService {
 
 	// 조회수 카운트
 	@Transactional
-	public int updateView(Long id) {
-		return soundTrackRepository.updateView(id);
+	public void updateView(Long id) {
+		soundTrackRepository.updateView(id);
 	}
 
 	public int getViewCnt(Long postId) {

@@ -32,7 +32,6 @@ import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
 import com.kl.grooveo.boundedContext.library.dto.SoundTrackFormDTO;
 import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
-import com.kl.grooveo.boundedContext.library.service.FileInfoService;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
 import com.kl.grooveo.boundedContext.reply.dto.ReplyFormDTO;
 
@@ -47,7 +46,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SoundTrackController {
 	private final SoundTrackService soundTrackService;
-	private final FileInfoService fileInfoService;
 	private final SoundPostCommentService soundPostCommentService;
 	private final Rq rq;
 	private final AmazonS3 amazonS3Client;
@@ -121,7 +119,7 @@ public class SoundTrackController {
 				new PutObjectRequest(bucket, "sound/" + soundName, soundTrackFormDTO.getSoundFile().getInputStream(),
 					soundMetadata));
 
-			SoundTrack fileInfo = SoundTrack.builder()
+			SoundTrack soundTrack = SoundTrack.builder()
 				.title(soundTrackFormDTO.getTitle())
 				.artist(rq.getMember())
 				.description(soundTrackFormDTO.getDescription())
@@ -129,9 +127,9 @@ public class SoundTrackController {
 				.soundUrl(soundUrl)
 				.build();
 
-			fileInfoService.saveFileInfo(fileInfo);
+			soundTrackService.saveSoundTrack(soundTrack);
 
-			return "redirect:/library/soundDetail/" + fileInfo.getId();
+			return "redirect:/library/soundDetail/" + soundTrack.getId();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return "redirect:/library/soundUpload";
