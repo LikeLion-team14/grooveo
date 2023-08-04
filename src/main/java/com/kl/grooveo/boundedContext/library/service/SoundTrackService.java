@@ -2,11 +2,17 @@ package com.kl.grooveo.boundedContext.library.service;
 
 import static java.util.stream.Collectors.*;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -18,7 +24,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.base.event.EventAfterUpload;
+import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.boundedContext.follow.entity.Follow;
 import com.kl.grooveo.boundedContext.library.dto.SoundTrackFormDTO;
 import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
@@ -44,24 +54,78 @@ public class SoundTrackService {
 	private final MemberRepository memberRepository;
 	private final SoundThumbsUpService soundThumbsUpService;
 	private final ApplicationEventPublisher publisher;
+	private final AmazonS3 amazonS3Client;
+
+	@Value("${cloud.aws.s3.bucket}")
+	private String bucket;
+
+	@Value("${cloud.aws.region.static}")
+	private String region;
 
 	public SoundTrackService(SoundTrackRepository soundTrackRepository, MemberRepository memberRepository,
-		@Lazy SoundThumbsUpService soundThumbsUpService, ApplicationEventPublisher publisher) {
+		@Lazy SoundThumbsUpService soundThumbsUpService, ApplicationEventPublisher publisher, AmazonS3 amazonS3Client) {
 		this.soundTrackRepository = soundTrackRepository;
 		this.memberRepository = memberRepository;
 		this.soundThumbsUpService = soundThumbsUpService;
 		this.publisher = publisher;
+		this.amazonS3Client = amazonS3Client;
+	}
+
+	@Transactional
+	public Long uploadSoundTrack(SoundTrackFormDTO soundTrackFormDTO, Member artist) throws IOException {
+		String albumCoverExtension = FilenameUtils.getExtension(
+			soundTrackFormDTO.getAlbumCover().getOriginalFilename());
+		String albumCoverName = UUID.randomUUID().toString() + "." + albumCoverExtension;
+		String albumCoverUrl =
+			"https://s3." + region + ".amazonaws.com/" + bucket + "/albumCover/" + albumCoverName;
+
+		String soundExtension = FilenameUtils.getExtension(soundTrackFormDTO.getSoundFile().getOriginalFilename());
+		String soundName = UUID.randomUUID().toString() + "." + soundExtension;
+		String soundUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/sound/" + soundName;
+
+		String title = URLEncoder.encode(soundTrackFormDTO.getTitle(), StandardCharsets.UTF_8);
+		String description = URLEncoder.encode(soundTrackFormDTO.getDescription(), StandardCharsets.UTF_8);
+
+		ObjectMetadata albumCoverMetadata = new ObjectMetadata();
+		albumCoverMetadata.setContentType(soundTrackFormDTO.getAlbumCover().getContentType());
+		albumCoverMetadata.setContentLength(soundTrackFormDTO.getAlbumCover().getSize());
+		albumCoverMetadata.addUserMetadata("title", title);
+		albumCoverMetadata.addUserMetadata("description", description);
+
+		ObjectMetadata soundMetadata = new ObjectMetadata();
+		soundMetadata.setContentType(soundTrackFormDTO.getSoundFile().getContentType());
+		soundMetadata.setContentLength(soundTrackFormDTO.getSoundFile().getSize());
+		soundMetadata.addUserMetadata("title", title);
+		soundMetadata.addUserMetadata("description", description);
+
+		amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName,
+			soundTrackFormDTO.getAlbumCover().getInputStream(), albumCoverMetadata));
+		amazonS3Client.putObject(
+			new PutObjectRequest(bucket, "sound/" + soundName, soundTrackFormDTO.getSoundFile().getInputStream(),
+				soundMetadata));
+
+		SoundTrack soundTrack = SoundTrack.builder()
+			.title(soundTrackFormDTO.getTitle())
+			.artist(artist)
+			.description(soundTrackFormDTO.getDescription())
+			.albumCoverUrl(albumCoverUrl)
+			.soundUrl(soundUrl)
+			.build();
+
+		saveSoundTrack(soundTrack);
+
+		return soundTrack.getId();
 	}
 
 	public void saveSoundTrack(SoundTrack soundTrack) {
 		Member actor = soundTrack.getArtist();
 		List<Follow> followerList = actor.getFollowingPeople();
 
+		soundTrackRepository.save(soundTrack);
+
 		for (Follow follower : followerList) {
 			publisher.publishEvent(new EventAfterUpload(this, follower));
 		}
-
-		soundTrackRepository.save(soundTrack);
 	}
 
 	private Specification<SoundTrack> search(String kw) {
@@ -101,11 +165,45 @@ public class SoundTrackService {
 		soundTrackRepository.delete(soundTrack);
 	}
 
-	public void modify(SoundTrack soundTrack, SoundTrackFormDTO soundTrackFormDTO, String albumCover, String soundUrl) {
+	public void modifySoundTrack(SoundTrackFormDTO soundTrackFormDTO, Long soundTrackId) throws IOException {
+		String albumCoverExtension = FilenameUtils.getExtension(
+			soundTrackFormDTO.getAlbumCover().getOriginalFilename());
+		String albumCoverName = UUID.randomUUID().toString() + "." + albumCoverExtension;
+		String albumCoverUrl =
+			"https://s3." + region + ".amazonaws.com/" + bucket + "/albumCover/" + albumCoverName;
+
+		String soundExtension = FilenameUtils.getExtension(soundTrackFormDTO.getSoundFile().getOriginalFilename());
+		String soundName = UUID.randomUUID().toString() + "." + soundExtension;
+		String soundUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/sound/" + soundName;
+
+		String title = URLEncoder.encode(soundTrackFormDTO.getTitle(), StandardCharsets.UTF_8);
+		String description = URLEncoder.encode(soundTrackFormDTO.getDescription(), StandardCharsets.UTF_8);
+
+		ObjectMetadata albumCoverMetadata = new ObjectMetadata();
+		albumCoverMetadata.setContentType(soundTrackFormDTO.getAlbumCover().getContentType());
+		albumCoverMetadata.setContentLength(soundTrackFormDTO.getAlbumCover().getSize());
+		albumCoverMetadata.addUserMetadata("title", title);
+		albumCoverMetadata.addUserMetadata("description", description);
+
+		ObjectMetadata soundMetadata = new ObjectMetadata();
+		soundMetadata.setContentType(soundTrackFormDTO.getSoundFile().getContentType());
+		soundMetadata.setContentLength(soundTrackFormDTO.getSoundFile().getSize());
+		soundMetadata.addUserMetadata("title", title);
+		soundMetadata.addUserMetadata("description", description);
+
+		amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName,
+			soundTrackFormDTO.getAlbumCover().getInputStream(), albumCoverMetadata));
+		amazonS3Client.putObject(
+			new PutObjectRequest(bucket, "sound/" + soundName, soundTrackFormDTO.getSoundFile().getInputStream(),
+				soundMetadata));
+
+		SoundTrack soundTrack = soundTrackRepository.findById(soundTrackId)
+			.orElseThrow(() -> new DataNotFoundException("해당 음원을 찾을 수 없습니다."));
+
 		soundTrack.updateTitle(soundTrackFormDTO.getTitle());
 		soundTrack.updateDescription(soundTrackFormDTO.getDescription());
 		soundTrack.updateSoundUrl(soundUrl);
-		soundTrack.updateAlbumCoverUrl(albumCover);
+		soundTrack.updateAlbumCoverUrl(albumCoverUrl);
 
 		soundTrackRepository.save(soundTrack);
 	}
