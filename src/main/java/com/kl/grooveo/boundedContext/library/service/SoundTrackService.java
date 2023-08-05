@@ -23,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -83,26 +84,12 @@ public class SoundTrackService {
 		String soundName = UUID.randomUUID().toString() + "." + soundExtension;
 		String soundUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/sound/" + soundName;
 
-		String title = URLEncoder.encode(soundTrackFormDTO.getTitle(), StandardCharsets.UTF_8);
-		String description = URLEncoder.encode(soundTrackFormDTO.getDescription(), StandardCharsets.UTF_8);
+		String titleEncoded = URLEncoder.encode(soundTrackFormDTO.getTitle(), StandardCharsets.UTF_8);
+		String descriptionEncoded = URLEncoder.encode(soundTrackFormDTO.getDescription(), StandardCharsets.UTF_8);
 
-		ObjectMetadata albumCoverMetadata = new ObjectMetadata();
-		albumCoverMetadata.setContentType(soundTrackFormDTO.getAlbumCover().getContentType());
-		albumCoverMetadata.setContentLength(soundTrackFormDTO.getAlbumCover().getSize());
-		albumCoverMetadata.addUserMetadata("title", title);
-		albumCoverMetadata.addUserMetadata("description", description);
-
-		ObjectMetadata soundMetadata = new ObjectMetadata();
-		soundMetadata.setContentType(soundTrackFormDTO.getSoundFile().getContentType());
-		soundMetadata.setContentLength(soundTrackFormDTO.getSoundFile().getSize());
-		soundMetadata.addUserMetadata("title", title);
-		soundMetadata.addUserMetadata("description", description);
-
-		amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName,
-			soundTrackFormDTO.getAlbumCover().getInputStream(), albumCoverMetadata));
-		amazonS3Client.putObject(
-			new PutObjectRequest(bucket, "sound/" + soundName, soundTrackFormDTO.getSoundFile().getInputStream(),
-				soundMetadata));
+		uploadFileToS3(soundTrackFormDTO.getAlbumCover(), "albumCover/" + albumCoverName, titleEncoded,
+			descriptionEncoded);
+		uploadFileToS3(soundTrackFormDTO.getSoundFile(), "sound/" + soundName, titleEncoded, descriptionEncoded);
 
 		SoundTrack soundTrack = SoundTrack.builder()
 			.title(soundTrackFormDTO.getTitle())
@@ -115,6 +102,19 @@ public class SoundTrackService {
 		saveSoundTrack(soundTrack);
 
 		return soundTrack.getId();
+	}
+
+	private void uploadFileToS3(MultipartFile file, String remotePath, String title, String description) throws
+		IOException {
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentType(file.getContentType());
+		metadata.setContentLength(file.getSize());
+		metadata.addUserMetadata("title", title);
+		metadata.addUserMetadata("description", description);
+
+		amazonS3Client.putObject(
+			new PutObjectRequest(bucket, remotePath, file.getInputStream(), metadata)
+		);
 	}
 
 	public void saveSoundTrack(SoundTrack soundTrack) {
@@ -166,44 +166,24 @@ public class SoundTrackService {
 	}
 
 	public void modifySoundTrack(SoundTrackFormDTO soundTrackFormDTO, Long soundTrackId) throws IOException {
-		String albumCoverExtension = FilenameUtils.getExtension(
-			soundTrackFormDTO.getAlbumCover().getOriginalFilename());
-		String albumCoverName = UUID.randomUUID().toString() + "." + albumCoverExtension;
-		String albumCoverUrl =
-			"https://s3." + region + ".amazonaws.com/" + bucket + "/albumCover/" + albumCoverName;
-
-		String soundExtension = FilenameUtils.getExtension(soundTrackFormDTO.getSoundFile().getOriginalFilename());
-		String soundName = UUID.randomUUID().toString() + "." + soundExtension;
-		String soundUrl = "https://s3." + region + ".amazonaws.com/" + bucket + "/sound/" + soundName;
-
-		String title = URLEncoder.encode(soundTrackFormDTO.getTitle(), StandardCharsets.UTF_8);
-		String description = URLEncoder.encode(soundTrackFormDTO.getDescription(), StandardCharsets.UTF_8);
-
-		ObjectMetadata albumCoverMetadata = new ObjectMetadata();
-		albumCoverMetadata.setContentType(soundTrackFormDTO.getAlbumCover().getContentType());
-		albumCoverMetadata.setContentLength(soundTrackFormDTO.getAlbumCover().getSize());
-		albumCoverMetadata.addUserMetadata("title", title);
-		albumCoverMetadata.addUserMetadata("description", description);
-
-		ObjectMetadata soundMetadata = new ObjectMetadata();
-		soundMetadata.setContentType(soundTrackFormDTO.getSoundFile().getContentType());
-		soundMetadata.setContentLength(soundTrackFormDTO.getSoundFile().getSize());
-		soundMetadata.addUserMetadata("title", title);
-		soundMetadata.addUserMetadata("description", description);
-
-		amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName,
-			soundTrackFormDTO.getAlbumCover().getInputStream(), albumCoverMetadata));
-		amazonS3Client.putObject(
-			new PutObjectRequest(bucket, "sound/" + soundName, soundTrackFormDTO.getSoundFile().getInputStream(),
-				soundMetadata));
-
 		SoundTrack soundTrack = soundTrackRepository.findById(soundTrackId)
 			.orElseThrow(() -> new DataNotFoundException("해당 음원을 찾을 수 없습니다."));
 
+		String[] albumCoverUrl = soundTrack.getAlbumCoverUrl().split("/");
+		String albumCoverName = albumCoverUrl[albumCoverUrl.length - 1];
+
+		String[] soundUrl = soundTrack.getSoundUrl().split("/");
+		String soundName = soundUrl[soundUrl.length - 1];
+
+		String titleEncoded = URLEncoder.encode(soundTrackFormDTO.getTitle(), StandardCharsets.UTF_8);
+		String descriptionEncoded = URLEncoder.encode(soundTrackFormDTO.getDescription(), StandardCharsets.UTF_8);
+
+		uploadFileToS3(soundTrackFormDTO.getAlbumCover(), "albumCover/" + albumCoverName, titleEncoded,
+			descriptionEncoded);
+		uploadFileToS3(soundTrackFormDTO.getSoundFile(), "sound/" + soundName, titleEncoded, descriptionEncoded);
+
 		soundTrack.updateTitle(soundTrackFormDTO.getTitle());
 		soundTrack.updateDescription(soundTrackFormDTO.getDescription());
-		soundTrack.updateSoundUrl(soundUrl);
-		soundTrack.updateAlbumCoverUrl(albumCoverUrl);
 
 		soundTrackRepository.save(soundTrack);
 	}

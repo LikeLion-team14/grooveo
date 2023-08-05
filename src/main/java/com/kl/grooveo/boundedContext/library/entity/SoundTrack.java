@@ -93,12 +93,4 @@ public class SoundTrack extends BaseEntity {
 	public void updateDescription(String description) {
 		this.description = description;
 	}
-
-	public void updateSoundUrl(String soundUrl) {
-		this.soundUrl = soundUrl;
-	}
-
-	public void updateAlbumCoverUrl(String albumCoverUrl) {
-		this.albumCoverUrl = albumCoverUrl;
-	}
 }

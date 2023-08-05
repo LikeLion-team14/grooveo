@@ -121,8 +121,6 @@ public class SoundTrackController {
 
 		model.addAttribute("soundTrackFormDTO",
 			new SoundTrackFormDTO(soundTrack.getTitle(), soundTrack.getDescription(), null, null));
-		model.addAttribute("albumCoverUrl", soundTrack.getAlbumCoverUrl());
-		model.addAttribute("soundUrl", soundTrack.getSoundUrl());
 
 		return "usr/library/soundUpload";
 	}
