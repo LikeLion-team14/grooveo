@@ -45,9 +45,6 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class SoundTrackService {
@@ -235,6 +232,7 @@ public class SoundTrackService {
 	}
 
 	// 조회수 카운트
+	@Transactional
 	public void updateView(Long id) {
 		soundTrackRepository.updateView(id);
 	}
@@ -242,42 +240,5 @@ public class SoundTrackService {
 	public int getViewCnt(Long postId) {
 		Optional<SoundTrack> soundTrack = soundTrackRepository.findById(postId);
 		return soundTrack.map(SoundTrack::getView).orElse(-1);
-	}
-
-	@Transactional
-	public void updateViewCount(HttpServletRequest request, HttpServletResponse response, Long id) {
-		// 조회수 관련 로직
-		Cookie oldCookie = null;
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {   // 쿠키가 null 인지 검사
-			// null 이 아니라면 "soundPostView" 라는 이름의 쿠키가 있는지 검사
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("soundPostView")) {
-					oldCookie = cookie;
-				}
-			}
-		}
-
-		if (oldCookie != null) {
-			// "soundPostView" 가 존재한다면
-			// value 가 현재 접근한 게시글의 id 를 포함하고 있는지 검사
-			if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
-				// 포함하고 있지 않으면 조회수 증가
-				updateView(id);
-				oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
-				oldCookie.setPath("/");
-				oldCookie.setMaxAge(60 * 60 * 24);                            // 쿠키 시간
-				response.addCookie(oldCookie);
-			}
-		} else {
-			// "soundPostView" 가 존재하지 않는다면
-			// 게시글의 id 를 포함하는 쿠키를 만들고
-			// 마찬가지로 조회수 증가
-			updateView(id);
-			Cookie newCookie = new Cookie("soundPostView", "[" + id + "]");
-			newCookie.setPath("/");
-			newCookie.setMaxAge(60 * 60 * 24);                                // 쿠키 시간
-			response.addCookie(newCookie);
-		}
 	}
 }
