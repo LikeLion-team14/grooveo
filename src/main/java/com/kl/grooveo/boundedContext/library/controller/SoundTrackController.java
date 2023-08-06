@@ -1,13 +1,8 @@
 package com.kl.grooveo.boundedContext.library.controller;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.UUID;
 
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,15 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
 import com.kl.grooveo.boundedContext.library.dto.SoundTrackFormDTO;
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
 import com.kl.grooveo.boundedContext.reply.dto.ReplyFormDTO;
 
@@ -48,13 +40,6 @@ public class SoundTrackController {
 	private final SoundTrackService soundTrackService;
 	private final SoundPostCommentService soundPostCommentService;
 	private final Rq rq;
-	private final AmazonS3 amazonS3Client;
-
-	@Value("${cloud.aws.s3.bucket}")
-	private String bucket;
-
-	@Value("${cloud.aws.region.static}")
-	private String region;
 
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/list/{sortCode}")
@@ -62,9 +47,9 @@ public class SoundTrackController {
 		@RequestParam(value = "page", defaultValue = "0") int page,
 		@RequestParam(value = "kw", defaultValue = "") String kw) {
 
-		List<FileInfo> soundTracks = soundTrackService.findAllForPrintByOrderByIdDesc(rq.getMember());
+		List<SoundTrack> soundTracks = soundTrackService.findAllForPrintByOrderByIdDesc(rq.getMember());
 
-		Page<FileInfo> paging = this.soundTrackService.getList(kw, page, sortCode);
+		Page<SoundTrack> paging = soundTrackService.getList(kw, page, sortCode);
 		model.addAttribute("sortCode", sortCode);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);
@@ -74,13 +59,33 @@ public class SoundTrackController {
 	}
 
 	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/soundupload")
+	public String showSoundUpload(Model model, SoundTrackFormDTO soundTrackForm) {
+		return "usr/library/soundUpload";
+	}
+
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping("/soundupload")
+	public String uploadSoundTrack(Model model, @Valid SoundTrackFormDTO soundTrackFormDTO,
+		BindingResult bindingResult) throws IOException {
+		if (soundTrackFormDTO.getAlbumCover().isEmpty() || soundTrackFormDTO.getSoundFile().isEmpty()) {
+			bindingResult.rejectValue("file", "required", "음원과 앨범 등록은 필수입니다.");
+			return "redirect:/library/soundUpload";
+		}
+
+		Long soundTrackId = soundTrackService.uploadSoundTrack(soundTrackFormDTO, rq.getMember());
+
+		return "redirect:/library/soundDetail/" + soundTrackId;
+	}
+
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping(value = "/soundDetail/{id}")
 	public String showMoreDetail(Model model, @PathVariable("id") Long id,
 		@RequestParam(value = "so", defaultValue = "create") String so,
 		@RequestParam(value = "commentPage", defaultValue = "0") int commentPage, CommentFormDTO commentForm,
 		ReplyFormDTO replyForm,
 		HttpServletRequest request, HttpServletResponse response) {
-		FileInfo fileInfo = this.soundTrackService.getSoundTrack(id);
+		SoundTrack soundTrack = soundTrackService.getSoundTrack(id);
 
 		// 조회수 관련 로직
 		Cookie oldCookie = null;
@@ -99,7 +104,7 @@ public class SoundTrackController {
 			// value 가 현재 접근한 게시글의 id 를 포함하고 있는지 검사
 			if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
 				// 포함하고 있지 않으면 조회수 증가
-				this.soundTrackService.updateView(id);
+				soundTrackService.updateView(id);
 				oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
 				oldCookie.setPath("/");
 				oldCookie.setMaxAge(60 * 60 * 24);                            // 쿠키 시간
@@ -109,17 +114,17 @@ public class SoundTrackController {
 			// "soundPostView" 가 존재하지 않는다면
 			// 게시글의 id 를 포함하는 쿠키를 만들고
 			// 마찬가지로 조회수 증가
-			this.soundTrackService.updateView(id);
+			soundTrackService.updateView(id);
 			Cookie newCookie = new Cookie("soundPostView", "[" + id + "]");
 			newCookie.setPath("/");
 			newCookie.setMaxAge(60 * 60 * 24);                                // 쿠키 시간
 			response.addCookie(newCookie);
 		}
 
-		Page<SoundPostComment> commentPaging = this.soundPostCommentService.getList(fileInfo, commentPage, so);
+		Page<SoundPostComment> commentPaging = soundPostCommentService.getList(soundTrack, commentPage, so);
 
 		model.addAttribute("commentPaging", commentPaging);
-		model.addAttribute("fileInfo", fileInfo);
+		model.addAttribute("soundTrack", soundTrack);
 		model.addAttribute("so", so);
 
 		return "usr/library/soundDetail";
@@ -128,7 +133,7 @@ public class SoundTrackController {
 	@PreAuthorize("isAuthenticated()")
 	@DeleteMapping("/soundTrack/{id}")
 	public String soundTrackDelete(@PathVariable("id") Long id) {
-		FileInfo fileInfo = this.soundTrackService.getSoundTrack(id);
+		SoundTrack fileInfo = soundTrackService.getSoundTrack(id);
 
 		if (!fileInfo.getArtist().getUsername().equals(rq.getMember().getUsername())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
@@ -141,60 +146,29 @@ public class SoundTrackController {
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/soundTrack/modify/{id}")
 	public String soundTrackModify(Model model, @PathVariable("id") Long id) {
-		FileInfo fileInfo = this.soundTrackService.getSoundTrack(id);
+		SoundTrack soundTrack = soundTrackService.getSoundTrack(id);
 
-		if (!fileInfo.getArtist().getUsername().equals(rq.getMember().getUsername())) {
+		if (!soundTrack.getArtist().getUsername().equals(rq.getMember().getUsername())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
 		}
 
 		model.addAttribute("soundTrackFormDTO",
-			new SoundTrackFormDTO(fileInfo.getTitle(), fileInfo.getDescription(), null, null));
-		model.addAttribute("albumCoverUrl", fileInfo.getAlbumCoverUrl());
-		model.addAttribute("soundUrl", fileInfo.getSoundUrl());
+			new SoundTrackFormDTO(soundTrack.getTitle(), soundTrack.getDescription(), null, null));
 
 		return "usr/library/soundUpload";
 	}
 
 	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/soundTrack/modify/{id}")
-	public String soundTrackModify(@Valid SoundTrackFormDTO soundTrackForm, BindingResult bindingResult,
-		@PathVariable("id") Long id) {
+	public String soundTrackModify(@Valid SoundTrackFormDTO soundTrackFormDTO, BindingResult bindingResult,
+		@PathVariable("id") Long id) throws IOException {
 		if (bindingResult.hasErrors()) {
 			return "usr/library/soundUpload";
 		}
 
-		FileInfo fileInfo = this.soundTrackService.getSoundTrack(id);
+		soundTrackService.modifySoundTrack(soundTrackFormDTO, id);
 
-		if (!fileInfo.getArtist().getUsername().equals(rq.getMember().getUsername())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-		}
-
-		try {
-			// 앨범 커버 수정 코드 추가
-			String albumCoverExtension = FilenameUtils.getExtension(
-				soundTrackForm.getAlbumCover().getOriginalFilename());
-			String albumCoverName = UUID.randomUUID().toString() + "." + albumCoverExtension;
-			String albumCoverUrl =
-				"https://s3." + region + ".amazonaws.com/" + bucket + "/albumCover/" + albumCoverName;
-
-			String title = URLEncoder.encode(soundTrackForm.getTitle(), StandardCharsets.UTF_8);
-			String description = URLEncoder.encode(soundTrackForm.getDescription(), StandardCharsets.UTF_8);
-
-			ObjectMetadata albumCoverMetadata = new ObjectMetadata();
-			albumCoverMetadata.setContentType(soundTrackForm.getAlbumCover().getContentType());
-			albumCoverMetadata.setContentLength(soundTrackForm.getAlbumCover().getSize());
-			albumCoverMetadata.addUserMetadata("title", title);
-			albumCoverMetadata.addUserMetadata("description", description);
-
-			amazonS3Client.putObject(new PutObjectRequest(bucket, "albumCover/" + albumCoverName,
-				soundTrackForm.getAlbumCover().getInputStream(), albumCoverMetadata));
-
-			soundTrackService.modify(fileInfo, soundTrackForm, albumCoverUrl, fileInfo.getSoundUrl());
-			return String.format("redirect:/library/soundDetail/%s", id);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return "redirect:/library/soundUpload";
-		}
+		return "redirect:/library/soundDetail/" + id;
 	}
 
 	@GetMapping("/getView")

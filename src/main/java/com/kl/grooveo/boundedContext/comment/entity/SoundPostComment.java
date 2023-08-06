@@ -3,7 +3,7 @@ package com.kl.grooveo.boundedContext.comment.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.reply.entity.SoundPostReply;
 
@@ -27,7 +27,7 @@ public class SoundPostComment {
 	private Long id;
 
 	@ManyToOne
-	private FileInfo fileInfo;
+	private SoundTrack soundTrack;
 
 	@ManyToOne
 	private Member author;

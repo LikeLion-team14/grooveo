@@ -3,7 +3,7 @@ package com.kl.grooveo.boundedContext.thumbsUp.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.library.service.SoundTrackService;
 import com.kl.grooveo.boundedContext.thumbsUp.dto.ThumbsUpDTO;
 import com.kl.grooveo.boundedContext.thumbsUp.entity.SoundThumbsUp_summary;
@@ -19,10 +19,10 @@ public class SoundThumbsUp_summaryService {
 
 	@Transactional
 	public void updateLikeCount(Long postId, int num) {
-		FileInfo fileInfo = soundTrackService.getSoundTrack(postId);
-		if (fileInfo == null)
+		SoundTrack soundTrack = soundTrackService.getSoundTrack(postId);
+		if (soundTrack == null)
 			return;
-		SoundThumbsUp_summary soundThumbsUpSummary = soundThumbsUpSummaryRepository.findByFileInfo(fileInfo);
+		SoundThumbsUp_summary soundThumbsUpSummary = soundThumbsUpSummaryRepository.findBySoundTrack(soundTrack);
 		if (soundThumbsUpSummary != null) {
 			soundThumbsUpSummary.setLikeCount(soundThumbsUpSummary.getLikeCount() + num);
 			soundThumbsUpSummaryRepository.save(soundThumbsUpSummary);
@@ -31,8 +31,8 @@ public class SoundThumbsUp_summaryService {
 
 	@Transactional
 	public ThumbsUpDTO getLikeCount(Long postId, int plusNum) {
-		FileInfo fileInfo = soundTrackService.getSoundTrack(postId);
-		SoundThumbsUp_summary soundThumbsUpSummary = soundThumbsUpSummaryRepository.findByFileInfo(fileInfo);
+		SoundTrack soundTrack = soundTrackService.getSoundTrack(postId);
+		SoundThumbsUp_summary soundThumbsUpSummary = soundThumbsUpSummaryRepository.findBySoundTrack(soundTrack);
 		if (soundThumbsUpSummary == null) {
 			return new ThumbsUpDTO("error", -1);
 		}
@@ -42,8 +42,8 @@ public class SoundThumbsUp_summaryService {
 	}
 
 	public int getLikeCount(Long postId) {
-		FileInfo fileInfo = soundTrackService.getSoundTrack(postId);
-		SoundThumbsUp_summary soundThumbsUpSummary = soundThumbsUpSummaryRepository.findByFileInfo(fileInfo);
+		SoundTrack soundTrack = soundTrackService.getSoundTrack(postId);
+		SoundThumbsUp_summary soundThumbsUpSummary = soundThumbsUpSummaryRepository.findBySoundTrack(soundTrack);
 		if (soundThumbsUpSummary == null) {
 			return -1;
 		}

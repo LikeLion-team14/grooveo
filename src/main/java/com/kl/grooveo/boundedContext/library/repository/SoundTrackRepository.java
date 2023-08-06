@@ -12,30 +12,30 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 
 @Repository
-public interface FileInfoRepository extends JpaRepository<FileInfo, Long> {
-	Page<FileInfo> findAll(Specification<FileInfo> spec, Pageable pageable);
+public interface SoundTrackRepository extends JpaRepository<SoundTrack, Long> {
+	Page<SoundTrack> findAll(Specification<SoundTrack> spec, Pageable pageable);
 
 	@Modifying
-	@Query("update FileInfo fi set fi.view = fi.view + 1 where fi.id = :id")
-	int updateView(@Param("id") Long id);
+	@Query("update SoundTrack fi set fi.view = fi.view + 1 where fi.id = :id")
+	void updateView(@Param("id") Long id);
 
-	Page<FileInfo> findAllByArtistId(Long username, Pageable pageable);
+	Page<SoundTrack> findAllByArtistId(Long username, Pageable pageable);
 
-	List<FileInfo> findTop10ByOrderByCreateDateDesc();
+	List<SoundTrack> findTop10ByOrderByCreateDateDesc();
 
-	Page<FileInfo> findAllByArtist(Member member, PageRequest pageRequest);
+	Page<SoundTrack> findAllByArtist(Member member, PageRequest pageRequest);
 
 	@Query("SELECT fi " +
-		"FROM FileInfo fi " +
+		"FROM SoundTrack fi " +
 		"JOIN fi.soundThumbsUpSummary stu " +
 		"ORDER BY stu.likeCount DESC " +
 		"LIMIT 10")
-	List<FileInfo> findTop10ByHighestLikeCount();
+	List<SoundTrack> findTop10ByHighestLikeCount();
 
-	List<FileInfo> findAllByOrderByIdDesc();
+	List<SoundTrack> findAllByOrderByIdDesc();
 
 }

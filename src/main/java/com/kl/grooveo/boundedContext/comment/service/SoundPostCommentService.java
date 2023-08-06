@@ -15,7 +15,7 @@ import com.kl.grooveo.base.event.EventAfterSoundComment;
 import com.kl.grooveo.base.exception.DataNotFoundException;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.repository.SoundPostCommentRepository;
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 
 import lombok.RequiredArgsConstructor;
@@ -26,16 +26,16 @@ public class SoundPostCommentService {
 	private final SoundPostCommentRepository soundPostCommentRepository;
 	private final ApplicationEventPublisher publisher;
 
-	public SoundPostComment create(FileInfo fileInfo, String content, Member author) {
+	public SoundPostComment create(SoundTrack soundTrack, String content, Member author) {
 		SoundPostComment soundPostComment = new SoundPostComment();
 		soundPostComment.setContent(content);
 		soundPostComment.setCreateDate(LocalDateTime.now());
-		soundPostComment.setFileInfo(fileInfo);
+		soundPostComment.setSoundTrack(soundTrack);
 		soundPostComment.setAuthor(author);
 		this.soundPostCommentRepository.save(soundPostComment);
 
 		// 음원 게시글에 댓글 작성 이벤트 발행
-		publisher.publishEvent(new EventAfterSoundComment(this, author, fileInfo.getArtist()));
+		publisher.publishEvent(new EventAfterSoundComment(this, author, soundTrack.getArtist()));
 
 		return soundPostComment;
 	}
@@ -47,10 +47,10 @@ public class SoundPostCommentService {
 	}
 
 	public void delete(SoundPostComment soundPostComment) {
-		this.soundPostCommentRepository.delete(soundPostComment);
+		soundPostCommentRepository.delete(soundPostComment);
 	}
 
-	public Page<SoundPostComment> getList(FileInfo fileInfo, int commentPage, String so) {
+	public Page<SoundPostComment> getList(SoundTrack soundTrack, int commentPage, String so) {
 		List<Sort.Order> sorts = new ArrayList<>();
 		if (so.equals("create")) {
 			sorts.add(Sort.Order.asc("createDate"));
@@ -59,7 +59,7 @@ public class SoundPostCommentService {
 		}
 
 		Pageable pageable = PageRequest.of(commentPage, 5, Sort.by(sorts));
-		return this.soundPostCommentRepository.findAllByFileInfo(fileInfo, pageable);
+		return soundPostCommentRepository.findAllBySoundTrack(soundTrack, pageable);
 	}
 
 	public Page<SoundPostComment> getCommentList(Long userId, int page) {

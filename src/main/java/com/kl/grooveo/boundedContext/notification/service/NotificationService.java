@@ -32,7 +32,7 @@ public class NotificationService {
 		Notification notification = Notification
 			.builder()
 			.fromMember(soundThumbsUp.getMember())
-			.toMember(soundThumbsUp.getFileInfo().getArtist())
+			.toMember(soundThumbsUp.getSoundTrack().getArtist())
 			.typeCode("soundLike")
 			.build();
 

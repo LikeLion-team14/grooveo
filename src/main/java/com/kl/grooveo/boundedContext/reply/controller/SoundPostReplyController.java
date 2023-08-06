@@ -18,7 +18,7 @@ import com.kl.grooveo.base.rq.Rq;
 import com.kl.grooveo.boundedContext.comment.dto.CommentFormDTO;
 import com.kl.grooveo.boundedContext.comment.entity.SoundPostComment;
 import com.kl.grooveo.boundedContext.comment.service.SoundPostCommentService;
-import com.kl.grooveo.boundedContext.library.entity.FileInfo;
+import com.kl.grooveo.boundedContext.library.entity.SoundTrack;
 import com.kl.grooveo.boundedContext.member.entity.Member;
 import com.kl.grooveo.boundedContext.member.service.MemberService;
 import com.kl.grooveo.boundedContext.reply.dto.ReplyFormDTO;
@@ -50,7 +50,7 @@ public class SoundPostReplyController {
 			() -> new DataNotFoundException("해당 유저를 찾을 수 없습니다.")
 		);
 
-		FileInfo fileInfo = soundPostComment.getFileInfo();
+		SoundTrack fileInfo = soundPostComment.getSoundTrack();
 		Page<SoundPostComment> commentPaging = this.soundPostCommentService.getList(fileInfo, commentPage, "create");
 
 		if (bindingResult.hasErrors()) {
@@ -64,7 +64,7 @@ public class SoundPostReplyController {
 		model.addAttribute("fileInfo", fileInfo);
 		model.addAttribute("commentPaging", commentPaging);
 		return String.format("redirect:/library/soundDetail/%s?commentPage=%s&so=%s#reply-%s",
-			soundPostReply.getSoundPostComment().getFileInfo().getId(), commentPage, so,
+			soundPostReply.getSoundPostComment().getSoundTrack().getId(), commentPage, so,
 			soundPostReply.getSoundPostComment().getId());
 	}
 
@@ -81,6 +81,6 @@ public class SoundPostReplyController {
 		}
 
 		this.soundPostReplyService.delete(soundPostReply);
-		return String.format("redirect:/library/soundDetail/%s", soundPostComment.getFileInfo().getId());
+		return String.format("redirect:/library/soundDetail/%s", soundPostComment.getSoundTrack().getId());
 	}
 }
